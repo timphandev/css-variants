@@ -1,0 +1,65 @@
+{
+  "name": "css-variants",
+  "version": "1.0.0",
+  "description": "Variant API for plain class names",
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run --coverage",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build": "rimraf ./dist && yarn build:cjs && yarn build:esm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timphandev/css-variants.git"
+  },
+  "keywords": [
+    "javascript",
+    "typescript",
+    "js",
+    "ts",
+    "css variants",
+    "class variants",
+    "classname variants",
+    "style variants",
+    "cva",
+    "class variance authority"
+  ],
+  "authors": [
+    {
+      "name": "Tim Phan",
+      "email": "timphan.dev@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.12.12",
+    "@vitest/coverage-v8": "^1.6.0",
+    "eslint": "^9.7.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.0",
+    "rimraf": "^5.0.7",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.16.1",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "csstype": "^3.1.3"
+  }
+}
