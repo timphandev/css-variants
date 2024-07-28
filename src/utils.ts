@@ -9,8 +9,8 @@ export const entries = <
 
 export function fromEntries<A extends symbol | string | number, B>(entries: [A, B][]): { [key in A]: B } {
   const result: { [key in A]: B } = {} as { [key in A]: B }
-  for (const [key, value] of entries) {
-    result[key] = value
+  for (let i = 0; i < entries.length; i++) {
+    result[entries[i][0]] = entries[i][1]
   }
   return result
 }
@@ -40,4 +40,11 @@ export const match = <T1 extends object, T2 extends object>(obj1: T1, obj2: T2) 
     }
   }
   return true
+}
+
+export const concat = (arg1: string, arg2: string | number) => {
+  const str1 = arg1.trim()
+  const str2 = typeof arg2 === 'number' ? arg2 + '' : arg2.trim()
+  if (str1 && str2) return str1 + ' ' + str2
+  return str1 + str2
 }

@@ -1,22 +1,21 @@
-import { cx } from './cx'
-import { compact, entries, fromEntries, match } from './utils'
-import { CssProperties, PartialRecord, SlotVariantCreatorFn, VariantStyle } from './types'
+import { compact, concat, entries, fromEntries, match } from './utils'
+import { PartialRecord, SlotVariantCreatorFn, VariantStyle } from './types'
 
 const push = <K extends string>(
-  data: PartialRecord<K, { classNames: string[]; style: CssProperties }>,
+  data: PartialRecord<K, VariantStyle>,
   key: K,
   value?: string | Partial<VariantStyle>
 ) => {
   if (value) {
     if (data[key] === undefined) {
-      data[key] = { classNames: [], style: {} }
+      data[key] = { className: '', style: {} }
     }
 
     if (typeof value === 'string') {
-      data[key].classNames.push(value)
+      data[key].className = concat(data[key].className, value)
     } else {
       if (value.className) {
-        data[key].classNames.push(value.className)
+        data[key].className = concat(data[key].className, value.className)
       }
 
       if (value.style) {
@@ -31,7 +30,7 @@ export const csv: SlotVariantCreatorFn =
   (props) => {
     const { classNames: propClassNames, styles: propStyles, ...rest } = props ?? {}
 
-    const data: PartialRecord<(typeof slots)[number], { classNames: string[]; style: CssProperties }> = {}
+    const data: PartialRecord<(typeof slots)[number], VariantStyle> = {}
 
     const variantProps = { ...defaultVariants, ...compact(rest) }
 
@@ -59,7 +58,7 @@ export const csv: SlotVariantCreatorFn =
       slots.map((slot) => [
         slot,
         {
-          className: cx(data[slot]?.classNames),
+          className: data[slot]?.className ?? '',
           style: data[slot]?.style ?? {},
         },
       ])

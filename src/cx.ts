@@ -1,10 +1,6 @@
-type Arg = string | number | null | undefined | Record<string, boolean>
+import { concat } from './utils'
 
-const concat = (str1: string, str2: string | number) => {
-  const str = typeof str2 === 'number' ? str2.toString() : str2.trim()
-  if (str && str1) return str1 + ' ' + str
-  return str1 || str
-}
+type Arg = string | number | null | undefined | Record<string, boolean>
 
 export const cx = (...args: (Arg | Arg[])[]) => {
   let className = ''
