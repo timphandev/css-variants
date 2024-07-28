@@ -20,7 +20,9 @@ describe('csv', () => {
         color: {
           red: {
             root: 'root-red',
-            title: 'title-red',
+            title: {
+              className: 'title-red',
+            },
           },
         },
       },

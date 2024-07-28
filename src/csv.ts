@@ -1,4 +1,4 @@
-import { compact, concat, entries, fromEntries, match } from './utils'
+import { compact, entries, fromEntries, match } from './utils'
 import { PartialRecord, SlotVariantCreatorFn, VariantStyle } from './types'
 
 const push = <K extends string>(
@@ -12,10 +12,10 @@ const push = <K extends string>(
     }
 
     if (typeof value === 'string') {
-      data[key].className = concat(data[key].className, value)
+      data[key].className += (data[key].className ? ' ' : '') + value.trim()
     } else {
       if (value.className) {
-        data[key].className = concat(data[key].className, value.className)
+        data[key].className += (data[key].className ? ' ' : '') + value.className.trim()
       }
 
       if (value.style) {
@@ -25,9 +25,9 @@ const push = <K extends string>(
   }
 }
 
-export const csv: SlotVariantCreatorFn =
-  ({ slots, base, variants, compoundVariants, defaultVariants, onDone }) =>
-  (props) => {
+export const csv: SlotVariantCreatorFn = (config) => {
+  const { slots, base, variants, compoundVariants, defaultVariants, onDone } = config
+  return (props) => {
     const { classNames: propClassNames, styles: propStyles, ...rest } = props ?? {}
 
     const data: PartialRecord<(typeof slots)[number], VariantStyle> = {}
@@ -68,5 +68,6 @@ export const csv: SlotVariantCreatorFn =
 
     return css
   }
+}
 
 export default csv

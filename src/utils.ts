@@ -5,7 +5,10 @@ export const entries = <
   TEntry extends [TK, TV],
 >(
   obj?: T
-): TEntry[] => (obj ? Object.entries(obj) : []) as TEntry[]
+): TEntry[] => {
+  if (!obj) return []
+  return Object.entries(obj) as TEntry[]
+}
 
 export function fromEntries<A extends symbol | string | number, B>(entries: [A, B][]): { [key in A]: B } {
   const result: { [key in A]: B } = {} as { [key in A]: B }
@@ -15,14 +18,12 @@ export function fromEntries<A extends symbol | string | number, B>(entries: [A, 
   return result
 }
 
-export const compact = <T extends Record<string, unknown>>(obj?: T) => {
+export const compact = <T extends Record<string, unknown>>(obj: T) => {
   const newObj = {} as T
 
-  if (obj) {
-    for (const k in obj) {
-      if (obj[k] !== undefined) {
-        newObj[k] = obj[k]
-      }
+  for (const k in obj) {
+    if (obj[k] !== undefined) {
+      newObj[k] = obj[k]
     }
   }
 
@@ -40,11 +41,4 @@ export const match = <T1 extends object, T2 extends object>(obj1: T1, obj2: T2) 
     }
   }
   return true
-}
-
-export const concat = (arg1: string, arg2: string | number) => {
-  const str1 = arg1.trim()
-  const str2 = typeof arg2 === 'number' ? arg2 + '' : arg2.trim()
-  if (str1 && str2) return str1 + ' ' + str2
-  return str1 + str2
 }

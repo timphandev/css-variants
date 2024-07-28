@@ -1,14 +1,12 @@
-import { compact, concat, entries, match } from './utils'
+import { compact, entries, match } from './utils'
 import { VariantCreatorFn, VariantStyle } from './types'
 
 const push = (data: VariantStyle, value?: string | Partial<VariantStyle>) => {
   if (typeof value === 'string') {
-    if (value.trim()) {
-      data.className = concat(data.className, value)
-    }
+    data.className += (data.className ? ' ' : '') + value.trim()
   } else {
     if (value?.className) {
-      data.className = concat(data.className, value?.className)
+      data.className += (data.className ? ' ' : '') + value.className.trim()
     }
 
     if (value?.style) {
@@ -17,9 +15,9 @@ const push = (data: VariantStyle, value?: string | Partial<VariantStyle>) => {
   }
 }
 
-export const cv: VariantCreatorFn =
-  ({ base, variants, compoundVariants, defaultVariants, onDone }) =>
-  (props) => {
+export const cv: VariantCreatorFn = (config) => {
+  const { base, variants, compoundVariants, defaultVariants, onDone } = config
+  return (props) => {
     const { className: propClassName, style: propStyle, ...rest } = props ?? {}
 
     const css: VariantStyle = { className: '', style: {} }
@@ -31,7 +29,10 @@ export const cv: VariantCreatorFn =
     }
 
     for (const [propKey, propValue] of entries(variantProps)) {
-      push(css, variants?.[propKey]?.[propValue as string])
+      const value = variants?.[propKey]?.[propValue as string]
+      if (value) {
+        push(css, value)
+      }
     }
 
     if (compoundVariants?.length) {
@@ -42,13 +43,18 @@ export const cv: VariantCreatorFn =
       }
     }
 
-    if (propClassName || propStyle) {
-      push(css, { className: propClassName, style: propStyle })
+    if (propClassName) {
+      css.className += (css.className ? ' ' : '') + propClassName
+    }
+
+    if (propStyle) {
+      css.style = { ...css.style, ...propStyle }
     }
 
     if (onDone) return onDone(css)
 
     return css
   }
+}
 
 export default cv

@@ -17,7 +17,7 @@ describe('cv', async () => {
       style: { fontSize: 20 },
     })
 
-    expect(cv({ base: 'base' })()).toEqual({ className: 'base', style: {} })
+    expect(cv({ base: 'base' })({ className: 'class' })).toEqual({ className: 'base class', style: {} })
   })
 
   it('variants', () => {
