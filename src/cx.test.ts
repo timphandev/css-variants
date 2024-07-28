@@ -11,7 +11,7 @@ describe('cx', async () => {
   })
 
   it('null / undefined', () => {
-    expect(cx('c1', null, undefined, 0)).toEqual('c1 0')
+    expect(cx('c1', null, undefined, 0, 1)).toEqual('c1 1')
   })
 
   it('object', () => {
@@ -19,7 +19,7 @@ describe('cx', async () => {
   })
 
   it('array', () => {
-    expect(cx(0, [1, 2, 3])).toEqual('0 1 2 3')
+    expect(cx('class', [1, 2, 3])).toEqual('class 1 2 3')
     expect(cx([1, 'c1', ' c2  ', { c3: true, c4: false }])).toEqual('1 c1 c2 c3')
   })
 })
