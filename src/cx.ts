@@ -10,7 +10,7 @@ export const cx = (...args: (Arg | Arg[])[]) => {
     if ((arg = args[i])) {
       if (typeof arg === 'string') {
         className && (className += ' ')
-        className += arg.trim()
+        className += arg
       } else if (typeof arg === 'number') {
         className && (className += ' ')
         className += arg

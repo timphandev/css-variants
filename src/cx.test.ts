@@ -3,7 +3,7 @@ import { cx } from '.'
 
 describe('cx', async () => {
   it('string', () => {
-    expect(cx('c1', '  c2  ')).toEqual('c1 c2')
+    expect(cx('c1', ' ', '  c2  ')).toEqual('c1     c2  ')
   })
 
   it('number', () => {
@@ -20,6 +20,6 @@ describe('cx', async () => {
 
   it('array', () => {
     expect(cx('class', [1, 2, 3])).toEqual('class 1 2 3')
-    expect(cx([1, 'c1', ' c2  ', { c3: true, c4: false }])).toEqual('1 c1 c2 c3')
+    expect(cx([1, 'c1', 'c2', { c3: true, c4: false }])).toEqual('1 c1 c2 c3')
   })
 })
