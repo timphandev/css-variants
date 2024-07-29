@@ -1,6 +1,6 @@
 {
   "name": "css-variants",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Variant API for plain class names",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
