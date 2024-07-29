@@ -1,14 +1,15 @@
 import { compact, entries, match } from './utils'
 import { VariantCreatorFn, VariantStyle } from './types'
 
-const push = (data: VariantStyle, value?: string | Partial<VariantStyle>) => {
+const push = (data: VariantStyle, value: string | Partial<VariantStyle>) => {
   if (typeof value === 'string') {
-    data.className += (data.className ? ' ' : '') + value.trim()
+    data.className && (data.className += ' ')
+    data.className += value.trim()
   } else {
     if (value?.className) {
-      data.className += (data.className ? ' ' : '') + value.className.trim()
+      data.className && (data.className += ' ')
+      data.className += value.className.trim()
     }
-
     if (value?.style) {
       data.style = { ...data.style, ...value.style }
     }
@@ -44,7 +45,8 @@ export const cv: VariantCreatorFn = (config) => {
     }
 
     if (propClassName) {
-      css.className += (css.className ? ' ' : '') + propClassName
+      css.className && (css.className += ' ')
+      css.className += propClassName
     }
 
     if (propStyle) {
