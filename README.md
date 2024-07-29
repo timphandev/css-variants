@@ -13,7 +13,13 @@ A lightweight, flexible API for managing CSS class variants in JavaScript and Ty
 
 `css-variants` provides a simple yet powerful way to handle dynamic class names and inline styles based on component props or state. It's designed to work seamlessly with modern JavaScript frameworks and CSS methodologies, offering a type-safe approach to styling your UI components.
 
-`css-variants` is heavily inspired by [CVA](https://github.com/joe-bell/cva), [Tailwind Variants](https://github.com/nextui-org/tailwind-variants) and [Panda CSS](https://github.com/chakra-ui/panda).
+`css-variants` is heavily inspired by the following excellent packages:
+
+- [CVA (Class Variance Authority)](https://github.com/joe-bell/cva): A powerful utility for creating dynamic class names with variants.
+- [Tailwind Variants](https://github.com/nextui-org/tailwind-variants): A flexible and reusable variant system for Tailwind CSS.
+- [Panda CSS](https://github.com/chakra-ui/panda): A CSS-in-JS solution with a focus on developer experience and performance.
+
+Thank you to the authors and contributors of these projects for their innovative work.
 
 ## Features
 
@@ -35,6 +41,9 @@ A lightweight, flexible API for managing CSS class variants in JavaScript and Ty
 * [Slots](#events)
   * [Basic Usage](#basic-usage)
   * [Slots with variants](#slots-with-variants)
+* [Overriding styles](#overriding-styles)
+  * [Overriding styles on a single component](#overriding-styles-on-a-single-component)
+  * [Overriding styles on a component with slots](#overriding-styles-on-a-component-with-slots)
 * [Handling Style Conflicts](#handling-style-conflicts)
 * [TypeScript](#typeScript)
 * [Contribute](#contribute)
@@ -257,7 +266,7 @@ const notification = cv({
       style: { fontSize: 16 },
     },
   },
-});
+})
 
 notification()
 /**
@@ -306,7 +315,7 @@ const notification = cv({
       },
     }
   },
-});
+})
 
 notification({ color: 'primary' })
 /**
@@ -347,13 +356,95 @@ notification({ color: 'secondary' })
  */
 ```
 
+## Overriding styles
+
+`css-variants` allows you to override or extend the styles of your components. This feature is useful when you need to add custom styles or modify existing ones without changing the original component definition.
+
+### Overriding styles on a single component
+
+You can override or extend styles for a single component by passing additional `className` and `style` properties when calling the component function. These will be merged with the existing styles.
+
+```ts
+import { cv } from 'css-variants'
+ 
+const button = cv({
+  base: 'font-semibold',
+  variants: {
+    color: {
+      primary: 'bg-blue-500 hover:bg-blue-700',
+      secondary: 'bg-purple-500 hover:bg-purple-700',
+    }
+  }
+})
+ 
+button({
+  color: 'secondary',
+  className: 'border-purple-600',
+  style: {
+    color: 'purple',
+  },
+})
+ 
+/**
+ * Result:
+ * {
+ *    className: 'bg-purple-500 hover:bg-purple-700 border-purple-600',
+ *    style: { color: 'purple' },
+ * }
+ */
+```
+
+### Overriding styles on a component with slots
+
+For components with slots, you can override styles using the `classNames` and `styles` properties. These allow you to target specific slots and apply custom classes or inline styles.
+
+```ts
+import { csv } from 'css-variants'
+
+const notification = cv({
+  slots: ['root', 'title'],
+  base: {
+    root: 'root',
+    title: {
+      className: 'title',
+      style: { fontSize: 16 },
+    },
+  },
+})
+
+notification({
+  classNames: {
+    root: 'root-custom-class',
+  },
+  styles: {
+    title: {
+      fontSize: 20,
+    }
+  },
+})
+/**
+ * Result:
+ * {
+ *    root: {
+ *      className: 'root-custom-class',
+ *      style: {},
+ *    },
+ *    title: {
+ *      className: 'title',
+ *      style: { fontSize: 20 },
+ *    },
+ * }
+ */
+
+```
+
 ## Handling Style Conflicts
 
-Although `css-variants` is designed to help you avoid styling conflicts, there's still a small margin of error.
+Although `css-variants` is designed to help you avoid styling conflicts, there's still a small margin of error when combining multiple classes or variants. To further minimize these conflicts and ensure consistent styling, you can integrate `tailwind-merge` into your project.
 
-If you're keen to lift that burden altogether, check out the wonderful `tailwind-merge` package.
+`tailwind-merge` is a utility that intelligently combines Tailwind CSS classes, resolving conflicts by giving precedence to the latter class when two classes target the same style property. By incorporating `tailwind-merge` with `css-variants`, you can create more robust components that automatically handle class conflicts.
 
-For bulletproof components, wrap your `cx`, `cv`, `csv` component with `twMerge`.
+The following example demonstrates how to extend functions from `css-variants` to use `tailwind-merge`. This integration ensures that your components will have consistent styling, even when multiple classes or variants are applied.
 
 ```ts
 import { twMerge } from 'tailwind-merge'
