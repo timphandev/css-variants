@@ -6,7 +6,7 @@ export const entries = <
 >(
   obj: T
 ): TEntry[] => {
-  return Object.entries(obj) as TEntry[]
+  return Object.keys(obj).map((key) => [key, obj[key as TK]]) as TEntry[]
 }
 
 export function fromEntries<A extends symbol | string | number, B>(entries: [A, B][]): { [key in A]: B } {
