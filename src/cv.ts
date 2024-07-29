@@ -1,5 +1,5 @@
 import { compact, entries, match } from './utils'
-import { VariantCreatorFn, VariantStyle } from './types'
+import { RequireAtLeastOne, VariantCreatorFn, VariantStyle } from './types'
 
 const push = (data: VariantStyle, value: string | Partial<VariantStyle>) => {
   if (typeof value === 'string') {
@@ -21,22 +21,24 @@ export const cv: VariantCreatorFn = (config) => {
   return (props) => {
     const { className: propClassName, style: propStyle, ...rest } = props ?? {}
 
+    const variantProps = { ...defaultVariants, ...compact(rest) }
     const css: VariantStyle = { className: '', style: {} }
 
-    const variantProps = { ...defaultVariants, ...compact(rest) }
+    let tmp: string | RequireAtLeastOne<VariantStyle>
 
     if (base) {
       push(css, base)
     }
 
-    for (const [propKey, propValue] of entries(variantProps)) {
-      const value = variants?.[propKey]?.[propValue as string]
-      if (value) {
-        push(css, value)
+    if (variants) {
+      for (const [key, variant] of entries(variants)) {
+        if ((tmp = variant[variantProps[key] as string])) {
+          push(css, tmp)
+        }
       }
     }
 
-    if (compoundVariants?.length) {
+    if (compoundVariants) {
       for (const { className: cvClassName, style: cvStyle, ...compoundVariant } of compoundVariants) {
         if (match(compoundVariant, variantProps)) {
           push(css, { className: cvClassName, style: cvStyle })
