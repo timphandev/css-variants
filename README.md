@@ -5,22 +5,24 @@
 [![npm](https://img.shields.io/npm/dm/css-variants)](https://npmjs.com/package/css-variants)
 ![npm](https://img.shields.io/npm/v/css-variants)
 
-# A powerful and flexible package for managing style-based variants
+# css-variants
 
-Creating variants with the "traditional" CSS approach can become an arduous task; manually matching classes to props and manually adding types.
+A lightweight, flexible API for managing CSS class variants in JavaScript and TypeScript projects.
 
-`css-variants` aims to take those pain points away, allowing you to focus on the more fun aspects of UI development.
+## Overview
+
+`css-variants` provides a simple yet powerful way to handle dynamic class names and inline styles based on component props or state. It's designed to work seamlessly with modern JavaScript frameworks and CSS methodologies, offering a type-safe approach to styling your UI components.
 
 `css-variants` is heavily inspired by [CVA](https://github.com/joe-bell/cva), [Tailwind Variants](https://github.com/nextui-org/tailwind-variants) and [Panda CSS](https://github.com/chakra-ui/panda).
 
 ## Features
-- First-class variant API
-- Inline-style support
-- Slots support
-- Fully type-safe
-- Framework agnostic
-- Supports custom strategies like `tailwind-merge`
-- Light-weight without any dependencies
+
+- 🎨 Dynamic class name generation based on variants
+- 🔧 Support for inline styles alongside class names
+- 🧩 Slot-based variant system for complex components
+- 📦 Zero dependencies
+- 🔒 Fully type-safe with TypeScript
+- 🚀 Framework-agnostic
 
 ## Table of Contents
 * [Installation](#installation)
