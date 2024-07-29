@@ -4,23 +4,21 @@ import { PartialRecord, SlotVariantCreatorFn, VariantStyle } from './types'
 const push = <K extends string>(
   data: PartialRecord<K, VariantStyle>,
   key: K,
-  value?: string | Partial<VariantStyle>
+  value: string | Partial<VariantStyle>
 ) => {
-  if (value) {
-    if (data[key] === undefined) {
-      data[key] = { className: '', style: {} }
+  if (data[key] === undefined) data[key] = { className: '', style: {} }
+
+  if (typeof value === 'string') {
+    data[key].className && (data[key].className += ' ')
+    data[key].className += value
+  } else {
+    if (value.className) {
+      data[key].className && (data[key].className += ' ')
+      data[key].className += value.className
     }
 
-    if (typeof value === 'string') {
-      data[key].className += (data[key].className ? ' ' : '') + value.trim()
-    } else {
-      if (value.className) {
-        data[key].className += (data[key].className ? ' ' : '') + value.className.trim()
-      }
-
-      if (value.style) {
-        data[key].style = { ...data[key].style, ...value.style }
-      }
+    if (value.style) {
+      data[key].style = { ...data[key].style, ...value.style }
     }
   }
 }
@@ -34,25 +32,45 @@ export const csv: SlotVariantCreatorFn = (config) => {
 
     const variantProps = { ...defaultVariants, ...compact(rest) }
 
-    for (const [key, value] of entries(base)) {
-      push(data, key, value)
+    if (base) {
+      for (const [key, value] of entries(base)) {
+        if (value) {
+          push(data, key, value)
+        }
+      }
     }
 
     for (const [propKey, propValue] of entries(variantProps)) {
-      for (const [key, value] of entries(variants?.[propKey]?.[propValue as string])) {
-        push(data, key, value)
+      const variant = variants?.[propKey]?.[propValue as string]
+      if (variant) {
+        for (const [key, value] of entries(variant)) {
+          if (value) {
+            push(data, key, value)
+          }
+        }
       }
     }
 
-    for (const { classNames: cvClassNames, styles: cvStyles, ...compoundVariant } of compoundVariants ?? []) {
-      if (match(compoundVariant, variantProps)) {
-        for (const [key, value] of entries(cvClassNames)) push(data, key, { className: value })
-        for (const [key, value] of entries(cvStyles)) push(data, key, { style: value })
+    if (compoundVariants) {
+      for (const { classNames: cvClassNames, styles: cvStyles, ...compoundVariant } of compoundVariants) {
+        if (match(compoundVariant, variantProps)) {
+          if (cvClassNames) {
+            for (const [key, value] of entries(cvClassNames)) push(data, key, { className: value })
+          }
+          if (cvStyles) {
+            for (const [key, value] of entries(cvStyles)) push(data, key, { style: value })
+          }
+        }
       }
     }
 
-    for (const [key, value] of entries(propClassNames)) push(data, key, { className: value })
-    for (const [key, value] of entries(propStyles)) push(data, key, { style: value })
+    if (propClassNames) {
+      for (const [key, value] of entries(propClassNames)) push(data, key, { className: value })
+    }
+
+    if (propStyles) {
+      for (const [key, value] of entries(propStyles)) push(data, key, { style: value })
+    }
 
     const css = fromEntries(
       slots.map((slot) => [
