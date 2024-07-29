@@ -1,5 +1,5 @@
 import { compact, entries, fromEntries, match } from './utils'
-import { PartialRecord, SlotVariantCreatorFn, VariantStyle } from './types'
+import { PartialRecord, RequireAtLeastOne, SlotVariantCreatorFn, VariantStyle } from './types'
 
 const push = <K extends string>(
   data: PartialRecord<K, VariantStyle>,
@@ -28,9 +28,9 @@ export const csv: SlotVariantCreatorFn = (config) => {
   return (props) => {
     const { classNames: propClassNames, styles: propStyles, ...rest } = props ?? {}
 
-    const data: PartialRecord<(typeof slots)[number], VariantStyle> = {}
-
     const variantProps = { ...defaultVariants, ...compact(rest) }
+    const data: PartialRecord<(typeof slots)[number], VariantStyle> = {}
+    let tmp: Partial<Record<(typeof slots)[number], string | RequireAtLeastOne<VariantStyle>>>
 
     if (base) {
       for (const [key, value] of entries(base)) {
@@ -40,12 +40,13 @@ export const csv: SlotVariantCreatorFn = (config) => {
       }
     }
 
-    for (const [propKey, propValue] of entries(variantProps)) {
-      const variant = variants?.[propKey]?.[propValue as string]
-      if (variant) {
-        for (const [key, value] of entries(variant)) {
-          if (value) {
-            push(data, key, value)
+    if (variants) {
+      for (const [key, variant] of entries(variants)) {
+        if ((tmp = variant[variantProps[key] as string])) {
+          for (const [key, value] of entries(tmp)) {
+            if (value) {
+              push(data, key, value)
+            }
           }
         }
       }

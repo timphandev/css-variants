@@ -4,9 +4,8 @@ export const entries = <
   TV extends T[TK],
   TEntry extends [TK, TV],
 >(
-  obj?: T
+  obj: T
 ): TEntry[] => {
-  if (!obj) return []
   return Object.entries(obj) as TEntry[]
 }
 
