@@ -1,63 +1,96 @@
-import { compact, entries, match } from './utils'
-import { RequireAtLeastOne, VariantCreatorFn, VariantStyle } from './types'
+import { ObjectKeyPicker, ObjectKeyArrayPicker } from './utils/types'
+import { compact } from './utils/compact'
+import { entries } from './utils/entries'
+import { cx, ClassValue } from './cx'
 
-const push = (data: VariantStyle, value: string | Partial<VariantStyle>) => {
-  if (typeof value === 'string') {
-    data.className && (data.className += ' ')
-    data.className += value.trim()
-  } else {
-    if (value?.className) {
-      data.className && (data.className += ' ')
-      data.className += value.className.trim()
-    }
-    if (value?.style) {
-      data.style = { ...data.style, ...value.style }
-    }
-  }
+export type ClassVariantRecord = Record<string, Record<string, ClassValue>>
+
+export interface ClassVariantDefinition<T extends ClassVariantRecord | undefined> {
+  base?: ClassValue
+  variants?: T
+  compoundVariants?: (ObjectKeyArrayPicker<T> & { className: ClassValue })[]
+  defaultVariants?: ObjectKeyPicker<T>
+  classNameResolver?: typeof cx
 }
 
-export const cv: VariantCreatorFn = (config) => {
-  const { base, variants, compoundVariants, defaultVariants, onDone } = config
+export type ClassVariantFn<T extends ClassVariantRecord | undefined> = (
+  props?: ObjectKeyPicker<T> & { className?: ClassValue }
+) => string
+
+export type ClassVariantCreatorFn = <T extends ClassVariantRecord | undefined>(
+  config: ClassVariantDefinition<T>
+) => ClassVariantFn<T>
+
+/**
+ * Creates a class variant function that combines base classes, variants, compound variants, and default variants.
+ *
+ * @template T - Type of the variant record
+ * @param config - Configuration object for creating class variants
+ * @returns A function that accepts variant props and returns a combined class string
+ *
+ * @example
+ * ```typescript
+ * const button = cv({
+ *   base: 'px-4 py-2 rounded',
+ *   variants: {
+ *     color: {
+ *       primary: 'bg-blue-500 text-white',
+ *       secondary: 'bg-gray-500 text-white'
+ *     },
+ *     size: {
+ *       sm: 'text-sm',
+ *       lg: 'text-lg'
+ *     }
+ *   },
+ *   defaultVariants: {
+ *     color: 'primary',
+ *     size: 'sm'
+ *   }
+ * });
+ *
+ * button(); // => 'px-4 py-2 rounded bg-blue-500 text-white text-sm'
+ * button({ color: 'secondary' }); // => 'px-4 py-2 rounded bg-gray-500 text-white text-sm'
+ * ```
+ */
+export const cv: ClassVariantCreatorFn = (config) => {
+  const { base, variants, compoundVariants, defaultVariants, classNameResolver = cx } = config
   return (props) => {
-    const { className: propClassName, style: propStyle, ...rest } = props ?? {}
+    const { className, ...rest } = props ?? {}
 
-    const variantProps = { ...defaultVariants, ...compact(rest) }
-    const css: VariantStyle = { className: '', style: {} }
+    const mergedProps = { ...defaultVariants, ...compact(rest) }
 
-    let tmp: string | RequireAtLeastOne<VariantStyle>
+    const classValues: ClassValue[] = []
 
     if (base) {
-      push(css, base)
+      classValues.push(base)
     }
 
     if (variants) {
-      for (const [key, variant] of entries(variants)) {
-        if ((tmp = variant[variantProps[key] as string])) {
-          push(css, tmp)
+      for (const [key, value] of entries(mergedProps)) {
+        const classValue = variants[key][value as string]
+        if (classValue) {
+          classValues.push(classValue)
         }
       }
     }
 
     if (compoundVariants) {
-      for (const { className: cvClassName, style: cvStyle, ...compoundVariant } of compoundVariants) {
-        if (match(compoundVariant, variantProps)) {
-          push(css, { className: cvClassName, style: cvStyle })
+      for (const { className: classValue, ...compoundVariant } of compoundVariants) {
+        if (
+          entries(compoundVariant).every(([key, value]) =>
+            Array.isArray(value) ? value.includes(mergedProps[key]) : value === mergedProps[key]
+          )
+        ) {
+          classValues.push(classValue)
         }
       }
     }
 
-    if (propClassName) {
-      css.className && (css.className += ' ')
-      css.className += propClassName
+    if (className) {
+      classValues.push(className)
     }
 
-    if (propStyle) {
-      css.style = { ...css.style, ...propStyle }
-    }
-
-    if (onDone) return onDone(css)
-
-    return css
+    return classNameResolver(...classValues)
   }
 }
 

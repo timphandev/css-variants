@@ -5,10 +5,11 @@ export default defineConfig({
     testTimeout: 10000,
     coverage: {
       reporter: ['json', 'text'],
-      exclude: ['vite.config.ts', '**/*.bench.ts'],
+      include: ['src/**/*.ts'],
+      exclude: ['**/*.bench.ts', '**/*.test.ts'],
     },
     benchmark: {
-      include: ['src/**.bench.ts'],
+      include: ['src/*.bench.ts'],
     },
   },
 })

@@ -1,25 +1,42 @@
 import { describe, it, expect } from 'vitest'
 import { cx } from '.'
 
-describe('cx', async () => {
-  it('string', () => {
-    expect(cx('c1', ' ', '  c2  ')).toEqual('c1     c2  ')
+describe('cx', () => {
+  it('returns empty string for no args', () => {
+    expect(cx()).toBe('')
   })
 
-  it('number', () => {
-    expect(cx(1, 2, 3)).toEqual('1 2 3')
+  it('returns empty string for falsy values', () => {
+    expect(cx(null, undefined, false, true, '')).toBe('')
   })
 
-  it('null / undefined', () => {
-    expect(cx('c1', null, undefined, 0, 1)).toEqual('c1 1')
+  it('handles strings', () => {
+    expect(cx('foo')).toBe('foo')
+    expect(cx('foo', 'bar')).toBe('foo bar')
   })
 
-  it('object', () => {
-    expect(cx({ c1: true, c2: false, 3: true })).toEqual('3 c1')
+  it('handles numbers', () => {
+    expect(cx(1, 2)).toBe('1 2')
   })
 
-  it('array', () => {
-    expect(cx('class', [1, 2, 3])).toEqual('class 1 2 3')
-    expect(cx([1, 'c1', 'c2', { c3: true, c4: false }])).toEqual('1 c1 c2 c3')
+  it('handles bigints', () => {
+    expect(cx(BigInt(1), BigInt(2))).toBe('1 2')
+  })
+
+  it('handles arrays', () => {
+    expect(cx(['foo', 'bar'])).toBe('foo bar')
+    expect(cx(['foo'], ['bar'])).toBe('foo bar')
+    expect(cx(['foo', ['bar']])).toBe('foo bar')
+  })
+
+  it('handles objects', () => {
+    expect(cx({ foo: true, bar: false })).toBe('foo')
+    expect(cx({ foo: true, bar: true })).toBe('foo bar')
+    expect(cx({ 'foo-bar': true })).toBe('foo-bar')
+  })
+
+  it('handles mixed inputs', () => {
+    expect(cx('foo', { bar: true }, ['baz'])).toBe('foo bar baz')
+    expect(cx('foo', { bar: false }, ['baz', null])).toBe('foo baz')
   })
 })

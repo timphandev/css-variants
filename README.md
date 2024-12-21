@@ -44,7 +44,7 @@ Thank you to the authors and contributors of these projects for their innovative
 * [Overriding styles](#overriding-styles)
   * [Overriding styles on a single component](#overriding-styles-on-a-single-component)
   * [Overriding styles on a component with slots](#overriding-styles-on-a-component-with-slots)
-* [Handling Style Conflicts](#handling-style-conflicts)
+* [Custom function to resolve class names](#custom-function-to-resolve-class-names)
 * [TypeScript](#typeScript)
 * [Contribute](#contribute)
 * [License](#license)
@@ -75,31 +75,39 @@ const button = cv({
     color: {
       primary: 'bg-blue-500 hover:bg-blue-700',
       secondary: 'bg-purple-500 hover:bg-purple-700',
+      success: 'hover:bg-green-700',
+    },
+  },
+})
+
+button({ color: 'secondary' })
+// => 'font-bold rounded-sm bg-purple-500 hover:bg-purple-700'
+```
+
+```ts
+import { sv } from 'css-variants'
+ 
+const button = sv({
+  base: {
+    fontWeight: 700,
+  },
+  variants: {
+    color: {
+      primary: {
+        color: 'blue',
+      },
+      secondary: {
+        color: 'red',
+      },
       success: {
-        className: 'hover:bg-green-700',
-        style: { color: 'green' }, // You can also use inline style
+        color: 'green',
       },
     },
   },
 })
 
 button({ color: 'secondary' })
-/**
- * Result:
- * {
- *    className: 'font-bold rounded-sm bg-purple-500 hover:bg-purple-700',
- *    style: {},
- * }
- */
-
-button({ color: 'success' })
-/**
- * Result:
- * {
- *    className: 'font-bold rounded-sm hover:bg-green-700',
- *    style: { color: 'green' },
- * }
- */
+// => { fontWeight: 700, color: 'red' }
 ```
 
 ### Multiple variants
@@ -110,10 +118,7 @@ You can add multiple variants to a single component.
 import { cv } from 'css-variants'
  
 const button = cv({
-  base: {
-    className: 'font-bold',
-    style: { borderRadius: 16 },
-  },
+  base: 'font-bold',
   variants: {
     color: {
       primary: 'bg-blue-500 hover:bg-blue-700',
@@ -129,13 +134,7 @@ const button = cv({
 })
 
 button({ color: 'success', size: 'lg' })
-/**
- * Result:
- * {
- *    className: 'font-bold bg-green-500 hover:bg-green-700 text-lg p-6',
- *    style: { borderRadius: 16 },
- * }
- */
+// => 'font-bold bg-green-500 hover:bg-green-700 text-lg p-6'
 ```
 
 ### Boolean variants
@@ -146,9 +145,6 @@ You can also add boolean variants to a component. This is useful when you want t
 import { cv } from 'css-variants'
  
 const button = cv({
-  base: {
-    style: { fontWeight: 'bold' },
-  },
   variants: {
     color: {
       primary: 'bg-blue-500 hover:bg-blue-700',
@@ -162,13 +158,7 @@ const button = cv({
 })
 
 button({ disabled: true })
-/**
- * Result:
- * {
- *    className: 'opacity-50 pointer-events-none',
- *    style: { fontWeight: 'bold' },
- * }
- */
+// => 'opacity-50 pointer-events-none'
 ```
 
 ### Compound variants
@@ -179,17 +169,11 @@ Sometimes you might want to add a variant that depends on another variant. This 
 import { cv } from 'css-variants'
  
 const button = cv({
-  base: {
-    style: { fontWeight: 'bold' },
-  },
   variants: {
     size: {
       sm: 'text-sm p-2',
       md: 'text-md p-4',
-      lg: {
-        className: 'text-lg',
-        style: { padding: 6 },
-      },
+      lg: 'text-lg',
     },
     disabled: {
       true: 'opacity-50 pointer-events-none',
@@ -200,19 +184,12 @@ const button = cv({
       size: 'lg', // You can also use the values as an array
       disabled: true,
       className: 'uppercase',
-      style: { padding: 5 },
     }
   ],
 })
 
 button({ size: 'lg', disabled: true })
-/**
- * Result:
- * {
- *    className: 'text-lg p-6 opacity-50 pointer-events-none uppercase',
- *    style: { fontWeight: 'bold', padding: 5 },
- * }
- */
+// => 'text-lg p-6 opacity-50 pointer-events-none uppercase'
 ```
 
 ### Default variants
@@ -237,13 +214,7 @@ const button = cv({
 })
 
 button()
-/**
- * Result:
- * {
- *    className: 'font-bold rounded-sm bg-blue-500 hover:bg-blue-700',
- *    style: {},
- * }
- */
+// => 'font-bold rounded-sm bg-blue-500 hover:bg-blue-700'
 ```
 
 ## Slots
@@ -255,16 +226,13 @@ Slots allows you to separate a component into multiple parts.
 You can add `slots` by using the slots key. There's no limit to how many slots you can add.
 
 ```ts
-import { csv } from 'css-variants'
+import { scv } from 'css-variants'
 
-const notification = cv({
+const notification = scv({
   slots: ['root', 'title'],
   base: {
     root: 'root',
-    title: {
-      className: 'title',
-      style: { fontSize: 16 },
-    },
+    title: 'title',
   },
 })
 
@@ -272,17 +240,35 @@ notification()
 /**
  * Result:
  * {
- *    root: {
- *      className: 'root',
- *      style: {},
- *    },
- *    title: {
- *      className: 'title',
- *      style: { fontSize: 16 },
- *    },
+ *    root: 'root',
+ *    title: 'title',
  * }
  */
+```
 
+```ts
+import { ssv } from 'css-variants'
+
+const notification = ssv({
+  slots: ['root', 'title'],
+  base: {
+    root: {
+      fontWeight: 'bold',
+    },
+    title: {
+      fontSize: '20px',
+    }
+  },
+})
+
+notification()
+/**
+ * Result:
+ * {
+ *    root: { fontWeight: 'bold' },
+ *    title: { fontSize: '20px' },
+ * }
+ */
 ```
 
 ### Slots with variants
@@ -297,10 +283,7 @@ const notification = cv({
   base: {
     root: 'root',
     title: 'title',
-    content: {
-      className: 'content',
-      style: { fontSize: 16 },
-    },
+    content: 'content',
   },
   variants: {
     color: {
@@ -321,18 +304,9 @@ notification({ color: 'primary' })
 /**
  * Result:
  * {
- *    root: {
- *      className: 'root root-primary',
- *      style: {},
- *    },
- *    title: {
- *      className: 'title title-primary',
- *      style: {},
- *    },
- *    content: {
- *      className: 'content content-primary',
- *      style: { fontSize: 16 },
- *    },
+ *    root: 'root root-primary',
+ *    title: 'title title-primary',
+ *    content: 'content content-primary',
  * }
  */
 
@@ -340,18 +314,9 @@ notification({ color: 'secondary' })
 /**
  * Result:
  * {
- *    root: {
- *      className: 'root',
- *      style: {},
- *    },
- *    title: {
- *      className: 'title title-secondary',
- *      style: {},
- *    },
- *    content: {
- *      className: 'content content-secondary',
- *      style: { fontSize: 16 },
- *    },
+ *    root: 'root',
+ *    title: 'title title-secondary',
+ *    content: 'content content-secondary',
  * }
  */
 ```
@@ -380,18 +345,34 @@ const button = cv({
 button({
   color: 'secondary',
   className: 'border-purple-600',
-  style: {
-    color: 'purple',
+})
+// => 'bg-purple-500 hover:bg-purple-700 border-purple-600'
+```
+
+```ts
+import { sv } from 'css-variants'
+ 
+const button = cv({
+  base: {
+    fontWeight: 700,
   },
+  variants: {
+    color: {
+      primary: {
+        color: 'blue',
+      },
+      secondary: {
+        color: 'purple',
+      },
+    }
+  }
 })
  
-/**
- * Result:
- * {
- *    className: 'bg-purple-500 hover:bg-purple-700 border-purple-600',
- *    style: { color: 'purple' },
- * }
- */
+button({
+  color: 'secondary',
+  style: { color: 'red' },
+})
+// => { fontWeight: 700, color: 'red' }
 ```
 
 ### Overriding styles on a component with slots
@@ -405,10 +386,7 @@ const notification = cv({
   slots: ['root', 'title'],
   base: {
     root: 'root',
-    title: {
-      className: 'title',
-      style: { fontSize: 16 },
-    },
+    title: 'title',
   },
 })
 
@@ -416,53 +394,38 @@ notification({
   classNames: {
     root: 'root-custom-class',
   },
-  styles: {
-    title: {
-      fontSize: 20,
-    }
-  },
 })
 /**
  * Result:
  * {
- *    root: {
- *      className: 'root-custom-class',
- *      style: {},
- *    },
- *    title: {
- *      className: 'title',
- *      style: { fontSize: 20 },
- *    },
+ *    root: 'root root-custom-class',
+ *    title: 'title',
  * }
  */
 
 ```
 
-## Handling Style Conflicts
+## Custom function to resolve class names
 
-Although `css-variants` is designed to help you avoid styling conflicts, there's still a small margin of error when combining multiple classes or variants. To further minimize these conflicts and ensure consistent styling, you can integrate `tailwind-merge` into your project.
+Default is the internal 'cx' function. The resolver function should accept multiple class name arguments and return a single concatenated string.
 
-`tailwind-merge` is a utility that intelligently combines Tailwind CSS classes, resolving conflicts by giving precedence to the latter class when two classes target the same style property. By incorporating `tailwind-merge` with `css-variants`, you can create more robust components that automatically handle class conflicts.
-
-The following example demonstrates how to extend functions from `css-variants` to use `tailwind-merge`. This integration ensures that your components will have consistent styling, even when multiple classes or variants are applied.
+You can use this to integrate with class name utilities like clsx, classnames, or your own custom class name resolution logic.
 
 ```ts
-import { twMerge } from 'tailwind-merge'
-import { cx as baseCx, cv as baseCv } from 'css-variants'
+import { clsx } from 'clsx'
+import { cv as _cv, scv as _scv } from 'css-variants'
 
-export const cx: typeof baseCx = (...args) => twMerge(baseCx(...args))
-
-export const cv: typeof baseCv = (config) => {
-  return baseCv({
+export const cv: typeof _cv = (config) => {
+  return _cv({
     ...config,
-    onDone: ({ className, style }) => {
-      const css = {
-        style,
-        className: twMerge(className),
-      }
+    classNameResolver: clsx,
+  })
+}
 
-      return config.onDone ? config.onDone(css) : css
-    },
+export const scv: typeof _scv = (config) => {
+  return _scv({
+    ...config,
+    classNameResolver: clsx,
   })
 }
 ```
@@ -471,11 +434,8 @@ export const cv: typeof baseCv = (config) => {
 
 ### Extracting Variant Types
 
-You can use the `VariantProps` utility to extract variants from a component.
-
 ```tsx
-import { VariantProps } from 'css-variants'
-import { cv } from 'class-variance-authority'
+import { cv } from 'css-variants'
  
 export const button = cv({
   variants: {
@@ -486,7 +446,7 @@ export const button = cv({
   },
 })
 
-export type ButtonProps = VariantProps<typeof button>
+export type ButtonProps = Parameters<typeof button>[0]
 ```
 
 ## Contribute

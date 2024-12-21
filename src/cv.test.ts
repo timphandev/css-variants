@@ -1,118 +1,95 @@
 import { describe, it, expect, vi } from 'vitest'
-import { cv } from '.'
+import { cv, cx } from '.'
 
-describe('cv', async () => {
-  it('no variants', () => {
-    const component = cv({})
-    expect(component()).toEqual({ className: '', style: {} })
-    expect(
-      component({
-        className: 'class',
-        style: {
-          fontSize: 20,
-        },
-      })
-    ).toEqual({
-      className: 'class',
-      style: { fontSize: 20 },
-    })
-
-    expect(cv({ base: 'base' })({ className: 'class' })).toEqual({ className: 'base class', style: {} })
+describe('cv', () => {
+  it('should return base class when no props are provided', () => {
+    const variantFn = cv({ base: 'base-class' })
+    expect(variantFn()).toBe('base-class')
   })
 
-  it('variants', () => {
-    const component = cv({
+  it('should return base class and variant class when variant prop is provided', () => {
+    const variantFn = cv({
+      base: 'base-class',
       variants: {
-        color: {
-          red: 'red',
-          blue: {
-            className: 'blue',
-          },
-          green: {
-            style: { color: 'green' },
-          },
-          yellow: {
-            className: 'yellow',
-            style: { color: 'yellow' },
-          },
+        size: {
+          small: 'small-class',
+          large: 'large-class',
         },
       },
     })
-
-    expect(component({ color: 'red' })).toEqual({ className: 'red', style: {} })
-    expect(component({ color: 'blue' })).toEqual({ className: 'blue', style: {} })
-    expect(component({ color: 'green' })).toEqual({ className: '', style: { color: 'green' } })
-    expect(component({ color: 'green', className: 'class' })).toEqual({ className: 'class', style: { color: 'green' } })
-    expect(component({ color: 'yellow' })).toEqual({ className: 'yellow', style: { color: 'yellow' } })
+    expect(variantFn({ size: 'small' })).toBe('base-class small-class')
   })
 
-  it('variants with default', () => {
-    const component = cv({
+  it('should return base class and default variant class when no variant prop is provided', () => {
+    const variantFn = cv({
+      base: 'base-class',
       variants: {
-        color: {
-          red: 'red',
-          blue: 'blue',
+        size: {
+          small: 'small-class',
+          large: 'large-class',
         },
       },
       defaultVariants: {
-        color: 'red',
+        size: 'large',
       },
     })
-
-    expect(component()).toEqual({ className: 'red', style: {} })
-    expect(component({ color: undefined })).toEqual({ className: 'red', style: {} })
+    expect(variantFn()).toBe('base-class large-class')
   })
 
-  it('compound variants', () => {
-    const component = cv({
+  it('should return base class, variant class, and compound variant class when all props match', () => {
+    const variantFn = cv({
+      base: 'base-class',
       variants: {
-        color: {
-          red: 'red',
-          blue: 'blue',
-          green: 'green',
-        },
         size: {
-          sm: 'sm',
-          lg: {
-            className: 'lg',
-            style: {
-              fontSize: 20,
-            },
-          },
+          small: 'small-class',
+          large: 'large-class',
+        },
+        color: {
+          red: 'red-class',
+          blue: 'blue-class',
         },
       },
-      compoundVariants: [
-        {
-          color: 'red',
-          size: 'sm',
-          className: 'red-sm',
-        },
-        {
-          color: ['blue', 'green'],
-          size: 'lg',
-          className: 'blue-lg',
-          style: {
-            padding: 20,
-          },
-        },
-      ],
+      compoundVariants: [{ size: 'small', color: 'red', className: 'small-red-class' }],
     })
-
-    expect(component({ color: 'red', size: 'sm' })).toEqual({ className: 'red sm red-sm', style: {} })
-    expect(component({ color: 'blue', size: 'lg' })).toEqual({
-      className: 'blue lg blue-lg',
-      style: {
-        fontSize: 20,
-        padding: 20,
-      },
-    })
+    expect(variantFn({ size: 'small', color: 'red' })).toBe('base-class small-class red-class small-red-class')
   })
 
-  it('onDone', () => {
-    const onDone = vi.fn((css) => css)
+  it('should return base class, variant class, and compound variant class when variant values are arrays', () => {
+    const variantFn = cv({
+      base: 'base-class',
+      variants: {
+        size: {
+          small: 'small-class',
+          large: 'large-class',
+        },
+        color: {
+          red: 'red-class',
+          blue: 'blue-class',
+        },
+      },
+      compoundVariants: [{ size: ['small', 'large'], color: 'red', className: 'with-red-class' }],
+    })
+    expect(variantFn({ size: 'small', color: 'red' })).toBe('base-class small-class red-class with-red-class')
+    expect(variantFn({ size: 'large', color: 'red' })).toBe('base-class large-class red-class with-red-class')
+  })
 
-    const component = cv({ base: 'base', onDone })
-    expect(component()).toEqual({ className: 'base', style: {} })
-    expect(onDone).toBeCalledTimes(1)
+  it('should return base class and className prop when provided', () => {
+    const variantFn = cv({ base: 'base-class' })
+    expect(variantFn({ className: 'custom-class' })).toBe('base-class custom-class')
+  })
+
+  it('should return only className prop when no base or variants are provided', () => {
+    const variantFn = cv({})
+    expect(variantFn({ className: 'custom-class' })).toBe('custom-class')
+  })
+
+  it('should allow custom class name resolver', () => {
+    const classNameResolver = vi.fn(cx)
+    const variantFn = cv({
+      base: 'base-class',
+      classNameResolver,
+    })
+    expect(variantFn()).toBe('base-class')
+    expect(classNameResolver).toHaveBeenCalled()
   })
 })
