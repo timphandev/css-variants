@@ -1,7 +1,6 @@
 import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord } from './utils/types'
 import { cx, ClassValue } from './cx'
 import { compact } from './utils/compact'
-import { entries } from './utils/entries'
 
 export type SlotClassRecord<S extends string> = PartialRecord<S, ClassValue>
 
@@ -79,12 +78,12 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
     }
 
     if (variants) {
-      for (const [key, value] of entries(mergedProps)) {
-        const slotClassValue = variants[key]?.[value as string]
+      for (const key in mergedProps) {
+        const slotClassValue = variants[key]?.[mergedProps[key] as string]
 
         if (slotClassValue) {
-          for (const [slot, slotValue] of entries(slotClassValue)) {
-            slotClassValues[slot].push(slotValue)
+          for (const slot in slotClassValue) {
+            slotClassValues[slot].push(slotClassValue[slot])
           }
         }
       }
@@ -92,28 +91,33 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
 
     if (compoundVariants) {
       for (const { classNames: slotClassValue, ...compoundVariant } of compoundVariants) {
-        if (
-          entries(compoundVariant).every(([key, value]) =>
-            Array.isArray(value) ? value.includes(mergedProps[key]) : value === mergedProps[key]
-          )
-        ) {
-          for (const [slot, slotValue] of entries(slotClassValue)) {
-            slotClassValues[slot].push(slotValue)
+        let matches = true
+        for (const key in compoundVariant) {
+          const value = compoundVariant[key]
+          const propValue = mergedProps[key]
+          if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
+            matches = false
+            break
+          }
+        }
+        if (matches) {
+          for (const slot in slotClassValue) {
+            slotClassValues[slot].push(slotClassValue[slot])
           }
         }
       }
     }
 
     if (classNames) {
-      for (const [slot, slotValue] of entries(classNames)) {
-        slotClassValues[slot].push(slotValue)
+      for (const slot in classNames) {
+        slotClassValues[slot].push(classNames[slot])
       }
     }
 
     const result = {} as Record<(typeof slots)[number], string>
 
-    for (const [slot, classValues] of entries(slotClassValues)) {
-      result[slot] = classNameResolver(...classValues)
+    for (const slot in slotClassValues) {
+      result[slot] = classNameResolver(slotClassValues[slot])
     }
 
     return result

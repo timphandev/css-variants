@@ -104,6 +104,7 @@ describe('ssv', () => {
       variants: {
         size: {
           small: { root: { padding: '4px' } },
+          medium: { root: { padding: '6px' } },
           large: { root: { padding: '8px' } },
         },
         color: {
@@ -122,6 +123,12 @@ describe('ssv', () => {
       ],
     })
 
+    expect(styleVariant({ size: 'medium', color: 'red' })).toEqual({
+      root: {
+        padding: '6px',
+        color: 'red',
+      },
+    })
     expect(styleVariant({ size: 'small', color: 'red' })).toEqual({
       root: {
         padding: '4px',

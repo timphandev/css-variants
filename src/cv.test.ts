@@ -48,6 +48,9 @@ describe('cv', () => {
           red: 'red-class',
           blue: 'blue-class',
         },
+        isLoading: {
+          true: 'loading',
+        },
       },
       compoundVariants: [{ size: 'small', color: 'red', className: 'small-red-class' }],
     })
@@ -60,15 +63,20 @@ describe('cv', () => {
       variants: {
         size: {
           small: 'small-class',
+          medium: 'medium-class',
           large: 'large-class',
         },
         color: {
           red: 'red-class',
           blue: 'blue-class',
         },
+        isLoading: {
+          true: 'loading',
+        },
       },
       compoundVariants: [{ size: ['small', 'large'], color: 'red', className: 'with-red-class' }],
     })
+    expect(variantFn({ size: 'medium' })).toBe('base-class medium-class')
     expect(variantFn({ size: 'small', color: 'red' })).toBe('base-class small-class red-class with-red-class')
     expect(variantFn({ size: 'large', color: 'red' })).toBe('base-class large-class red-class with-red-class')
   })

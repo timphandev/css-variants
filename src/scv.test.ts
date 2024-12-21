@@ -72,6 +72,7 @@ describe('scv', () => {
       variants: {
         size: {
           sm: { root: 'size-sm' },
+          md: { root: 'size-md' },
           lg: { root: 'size-lg' },
         },
         color: {
@@ -86,6 +87,9 @@ describe('scv', () => {
           classNames: { root: 'special-blue' },
         },
       ],
+    })
+    expect(variantFn({ size: 'md' })).toEqual({
+      root: 'size-md',
     })
     expect(variantFn({ size: 'lg', color: 'blue' })).toEqual({
       root: 'size-lg color-blue special-blue',

@@ -1,6 +1,5 @@
 import { ObjectKeyPicker, ObjectKeyArrayPicker } from './utils/types'
 import { compact } from './utils/compact'
-import { entries } from './utils/entries'
 import { cx, ClassValue } from './cx'
 
 export type ClassVariantRecord = Record<string, Record<string, ClassValue>>
@@ -57,40 +56,37 @@ export const cv: ClassVariantCreatorFn = (config) => {
   return (props) => {
     const { className, ...rest } = props ?? {}
 
+    if (!variants) return classNameResolver(base, className)
+
     const mergedProps = { ...defaultVariants, ...compact(rest) }
 
     const classValues: ClassValue[] = []
 
-    if (base) {
-      classValues.push(base)
-    }
-
-    if (variants) {
-      for (const [key, value] of entries(mergedProps)) {
-        const classValue = variants[key][value as string]
-        if (classValue) {
-          classValues.push(classValue)
-        }
+    for (const key in mergedProps) {
+      const classValue = variants[key][mergedProps[key] as string]
+      if (classValue) {
+        classValues.push(classValue)
       }
     }
 
     if (compoundVariants) {
       for (const { className: classValue, ...compoundVariant } of compoundVariants) {
-        if (
-          entries(compoundVariant).every(([key, value]) =>
-            Array.isArray(value) ? value.includes(mergedProps[key]) : value === mergedProps[key]
-          )
-        ) {
+        let matches = true
+        for (const key in compoundVariant) {
+          const value = compoundVariant[key]
+          const propValue = mergedProps[key]
+          if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
+            matches = false
+            break
+          }
+        }
+        if (matches) {
           classValues.push(classValue)
         }
       }
     }
 
-    if (className) {
-      classValues.push(className)
-    }
-
-    return classNameResolver(...classValues)
+    return classNameResolver(base, classValues, className)
   }
 }
 

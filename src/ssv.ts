@@ -1,6 +1,5 @@
 import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord, CssProperties } from './utils/types'
 import { compact } from './utils/compact'
-import { entries } from './utils/entries'
 
 export type SlotStyleRecord<S extends string> = PartialRecord<S, CssProperties>
 
@@ -66,16 +65,16 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
     const result = {} as Record<(typeof slots)[number], CssProperties>
 
     for (const slot of slots) {
-      result[slot] = base?.[slot] ?? ({} as CssProperties)
+      result[slot] = base?.[slot] ?? {}
     }
 
     if (variants) {
-      for (const [key, value] of entries(mergedProps)) {
-        const slotStyle = variants[key]?.[value as string]
+      for (const key in mergedProps) {
+        const slotStyle = variants[key]?.[mergedProps[key] as string]
 
         if (slotStyle) {
-          for (const [slot, slotValue] of entries(slotStyle)) {
-            result[slot] = { ...result[slot], ...slotValue }
+          for (const slot in slotStyle) {
+            result[slot] = { ...result[slot], ...slotStyle[slot] }
           }
         }
       }
@@ -83,21 +82,29 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
 
     if (compoundVariants) {
       for (const { styles: slotStyle, ...compoundVariant } of compoundVariants) {
-        if (
-          entries(compoundVariant).every(([key, value]) =>
-            Array.isArray(value) ? value.includes(mergedProps[key]) : value === mergedProps[key]
-          )
-        ) {
-          for (const [slot, slotValue] of entries(slotStyle)) {
-            result[slot] = { ...result[slot], ...slotValue }
+        let matches = true
+
+        for (const key in compoundVariant) {
+          const value = compoundVariant[key]
+          const propValue = mergedProps[key]
+
+          if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
+            matches = false
+            break
+          }
+        }
+
+        if (matches) {
+          for (const slot in slotStyle) {
+            result[slot] = { ...result[slot], ...slotStyle[slot] }
           }
         }
       }
     }
 
     if (styles) {
-      for (const [slot, slotValue] of entries(styles)) {
-        result[slot] = { ...result[slot], ...slotValue }
+      for (const slot in styles) {
+        result[slot] = { ...result[slot], ...styles[slot] }
       }
     }
 

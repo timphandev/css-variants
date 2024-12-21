@@ -1,6 +1,5 @@
 import { CssProperties, ObjectKeyArrayPicker, ObjectKeyPicker } from './utils/types'
 import { compact } from './utils/compact'
-import { entries } from './utils/entries'
 
 export type StyleVariantRecord = Record<string, Record<string, CssProperties>>
 
@@ -52,13 +51,15 @@ export const sv: StyleVariantCreatorFn = (config) => {
   return (props) => {
     const { style, ...rest } = props ?? {}
 
+    if (!variants) return { ...base, ...style }
+
     let result: CssProperties = { ...base }
 
     const mergedProps = { ...defaultVariants, ...compact(rest) }
 
     if (variants) {
-      for (const [key, variant] of entries(variants)) {
-        const s = variant[mergedProps[key] as string]
+      for (const key in mergedProps) {
+        const s = variants[key][mergedProps[key] as string]
         if (s) {
           result = { ...result, ...s }
         }
@@ -67,11 +68,16 @@ export const sv: StyleVariantCreatorFn = (config) => {
 
     if (compoundVariants) {
       for (const { style: s, ...compoundVariant } of compoundVariants) {
-        if (
-          entries(compoundVariant).every(([key, value]) =>
-            Array.isArray(value) ? value.includes(mergedProps[key]) : value === mergedProps[key]
-          )
-        ) {
+        let matches = true
+        for (const key in compoundVariant) {
+          const value = compoundVariant[key]
+          const propValue = mergedProps[key]
+          if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
+            matches = false
+            break
+          }
+        }
+        if (matches) {
           result = { ...result, ...s }
         }
       }
