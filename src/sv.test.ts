@@ -6,6 +6,7 @@ describe('sv function', () => {
     const baseStyle = { color: 'red' }
     const styleVariant = sv({ base: baseStyle })
     expect(styleVariant()).toEqual(baseStyle)
+    expect(styleVariant({ style: { fontSize: '20px' } })).toEqual({ ...baseStyle, fontSize: '20px' })
   })
 
   it('should apply variant styles based on props', () => {
@@ -78,6 +79,8 @@ describe('sv function', () => {
       defaultVariants: { size: 'small' },
     })
     expect(styleVariant()).toEqual({ fontSize: '12px' })
+    expect(styleVariant({ size: undefined })).toEqual({ fontSize: '12px' })
+    expect(styleVariant({ size: 'large' })).toEqual({ fontSize: '24px' })
   })
 
   it('should merge style prop with other styles', () => {

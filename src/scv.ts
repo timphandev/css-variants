@@ -62,10 +62,22 @@ export type SlotClassVariantCreatorFn = <S extends string, T extends SlotClassVa
 export const scv: SlotClassVariantCreatorFn = (config) => {
   const { slots, base, variants, compoundVariants, defaultVariants, classNameResolver = cx } = config
 
+  if (!variants) {
+    return (props) => {
+      const result = {} as Record<(typeof slots)[number], string>
+
+      for (const slot of slots) {
+        result[slot] = classNameResolver(base?.[slot], props?.classNames?.[slot])
+      }
+
+      return result
+    }
+  }
+
   return (props) => {
     const { classNames, ...rest } = props ?? {}
 
-    const mergedProps = { ...defaultVariants, ...compact(rest) }
+    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
 
     const slotClassValues = {} as Record<(typeof slots)[number], ClassValue[]>
 
@@ -77,14 +89,12 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
       }
     }
 
-    if (variants) {
-      for (const key in mergedProps) {
-        const slotClassValue = variants[key]?.[mergedProps[key] as string]
+    for (const key in mergedProps) {
+      const slotClassValue = variants[key]?.[mergedProps[key] as string]
 
-        if (slotClassValue) {
-          for (const slot in slotClassValue) {
-            slotClassValues[slot].push(slotClassValue[slot])
-          }
+      if (slotClassValue) {
+        for (const slot in slotClassValue) {
+          slotClassValues[slot].push(slotClassValue[slot])
         }
       }
     }

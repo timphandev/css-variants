@@ -23,10 +23,11 @@ describe('scv', () => {
 
   it('should apply variants', () => {
     const variantFn = scv({
-      slots: ['root'],
+      slots: ['root', 'icon'],
+      base: { root: 'base', icon: [] },
       variants: {
         size: {
-          sm: { root: 'size-sm' },
+          sm: { root: 'size-sm', icon: 'icon-sm' },
           lg: { root: 'size-lg' },
         },
         color: {
@@ -36,7 +37,8 @@ describe('scv', () => {
       },
     })
     expect(variantFn({ size: 'sm', color: 'red' })).toEqual({
-      root: 'size-sm color-red',
+      root: 'base size-sm color-red',
+      icon: 'icon-sm',
     })
   })
 
@@ -108,19 +110,33 @@ describe('scv', () => {
       defaultVariants: {
         size: 'sm',
       },
-    })({})
-    expect(variantFn).toEqual({
+    })
+    expect(variantFn()).toEqual({
       root: 'size-sm',
+    })
+    expect(variantFn({ size: undefined })).toEqual({
+      root: 'size-sm',
+    })
+    expect(variantFn({ size: 'lg' })).toEqual({
+      root: 'size-lg',
     })
   })
 
   it('should merge provided classNames with generated ones', () => {
-    const variantFn = scv({
+    const config = {
       slots: ['root'],
       base: { root: 'base' },
-    })
+    }
     expect(
-      variantFn({
+      scv(config)({
+        classNames: { root: 'custom' },
+      })
+    ).toEqual({
+      root: 'base custom',
+    })
+
+    expect(
+      scv({ ...config, variants: {} })({
         classNames: { root: 'custom' },
       })
     ).toEqual({

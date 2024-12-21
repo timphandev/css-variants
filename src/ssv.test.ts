@@ -144,6 +144,7 @@ describe('ssv', () => {
       variants: {
         size: {
           small: { root: { padding: '4px' } },
+          large: { root: { padding: '8px' } },
         },
       },
       defaultVariants: {
@@ -153,6 +154,12 @@ describe('ssv', () => {
 
     expect(styleVariant()).toEqual({
       root: { padding: '4px' },
+    })
+    expect(styleVariant({ size: undefined })).toEqual({
+      root: { padding: '4px' },
+    })
+    expect(styleVariant({ size: 'large' })).toEqual({
+      root: { padding: '8px' },
     })
   })
 
@@ -166,6 +173,29 @@ describe('ssv', () => {
 
     expect(
       styleVariant({
+        styles: {
+          root: { padding: '12px' },
+        },
+      })
+    ).toEqual({
+      root: { padding: '12px' },
+    })
+  })
+
+  it('should allow overriding styles via props with variants', () => {
+    const styleVariant = ssv({
+      slots: ['root'],
+      variants: {
+        size: {
+          small: { root: { padding: '4px' } },
+          large: { root: { padding: '8px' } },
+        },
+      },
+    })
+
+    expect(
+      styleVariant({
+        size: 'small',
         styles: {
           root: { padding: '12px' },
         },

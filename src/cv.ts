@@ -53,12 +53,15 @@ export type ClassVariantCreatorFn = <T extends ClassVariantRecord | undefined>(
  */
 export const cv: ClassVariantCreatorFn = (config) => {
   const { base, variants, compoundVariants, defaultVariants, classNameResolver = cx } = config
+
+  if (!variants) {
+    return (props) => classNameResolver(base, props?.className)
+  }
+
   return (props) => {
     const { className, ...rest } = props ?? {}
 
-    if (!variants) return classNameResolver(base, className)
-
-    const mergedProps = { ...defaultVariants, ...compact(rest) }
+    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
 
     const classValues: ClassValue[] = []
 

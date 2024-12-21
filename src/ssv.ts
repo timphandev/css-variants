@@ -57,10 +57,22 @@ export type SlotStyleVariantCreatorFn = <S extends string, T extends SlotStyleVa
 export const ssv: SlotStyleVariantCreatorFn = (config) => {
   const { slots, base, variants, compoundVariants, defaultVariants } = config
 
+  if (!variants) {
+    return (props) => {
+      const result = {} as Record<(typeof slots)[number], CssProperties>
+
+      for (const slot of slots) {
+        result[slot] = { ...base?.[slot], ...props?.styles?.[slot] }
+      }
+
+      return result
+    }
+  }
+
   return (props) => {
     const { styles, ...rest } = props ?? {}
 
-    const mergedProps = { ...defaultVariants, ...compact(rest) }
+    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
 
     const result = {} as Record<(typeof slots)[number], CssProperties>
 
@@ -68,14 +80,12 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
       result[slot] = base?.[slot] ?? {}
     }
 
-    if (variants) {
-      for (const key in mergedProps) {
-        const slotStyle = variants[key]?.[mergedProps[key] as string]
+    for (const key in mergedProps) {
+      const slotStyle = variants[key]?.[mergedProps[key] as string]
 
-        if (slotStyle) {
-          for (const slot in slotStyle) {
-            result[slot] = { ...result[slot], ...slotStyle[slot] }
-          }
+      if (slotStyle) {
+        for (const slot in slotStyle) {
+          result[slot] = { ...result[slot], ...slotStyle[slot] }
         }
       }
     }

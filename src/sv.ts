@@ -48,26 +48,27 @@ export type StyleVariantCreatorFn = <T extends StyleVariantRecord | undefined>(
  */
 export const sv: StyleVariantCreatorFn = (config) => {
   const { base, variants, compoundVariants, defaultVariants } = config
+
+  if (!variants) {
+    return (props) => ({ ...base, ...props?.style })
+  }
+
   return (props) => {
     const { style, ...rest } = props ?? {}
 
-    if (!variants) return { ...base, ...style }
-
     let result: CssProperties = { ...base }
 
-    const mergedProps = { ...defaultVariants, ...compact(rest) }
+    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
 
-    if (variants) {
-      for (const key in mergedProps) {
-        const s = variants[key][mergedProps[key] as string]
-        if (s) {
-          result = { ...result, ...s }
-        }
+    for (const key in mergedProps) {
+      const styleValue = variants[key][mergedProps[key] as string]
+      if (styleValue) {
+        result = { ...result, ...styleValue }
       }
     }
 
     if (compoundVariants) {
-      for (const { style: s, ...compoundVariant } of compoundVariants) {
+      for (const { style: styleValue, ...compoundVariant } of compoundVariants) {
         let matches = true
         for (const key in compoundVariant) {
           const value = compoundVariant[key]
@@ -78,16 +79,12 @@ export const sv: StyleVariantCreatorFn = (config) => {
           }
         }
         if (matches) {
-          result = { ...result, ...s }
+          result = { ...result, ...styleValue }
         }
       }
     }
 
-    if (style) {
-      result = { ...result, ...style }
-    }
-
-    return result
+    return { ...result, ...style }
   }
 }
 

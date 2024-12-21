@@ -34,6 +34,8 @@ describe('cv', () => {
       },
     })
     expect(variantFn()).toBe('base-class large-class')
+    expect(variantFn({ size: 'small' })).toBe('base-class small-class')
+    expect(variantFn({ size: undefined })).toBe('base-class large-class')
   })
 
   it('should return base class, variant class, and compound variant class when all props match', () => {
