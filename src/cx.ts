@@ -1,6 +1,6 @@
 // credit: https://github.com/lukeed/clsx
 
-export type ClassDictionary = Record<string, boolean | string | number>
+export type ClassDictionary = Record<string, unknown>
 export type ClassValue = ClassValue[] | string | number | bigint | ClassDictionary | null | boolean | undefined
 export type ClassArray = ClassValue[]
 
