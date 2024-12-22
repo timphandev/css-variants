@@ -1,5 +1,5 @@
 import { CssProperties, ObjectKeyArrayPicker, ObjectKeyPicker } from './utils/types'
-import { compact } from './utils/compact'
+import { mergeProps } from './utils/merge-props'
 
 export type StyleVariantRecord = Record<string, Record<string, CssProperties>>
 
@@ -58,7 +58,7 @@ export const sv: StyleVariantCreatorFn = (config) => {
 
     let result: CssProperties = { ...base }
 
-    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
+    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
 
     for (const key in mergedProps) {
       const styleValue = variants[key][mergedProps[key] as string]

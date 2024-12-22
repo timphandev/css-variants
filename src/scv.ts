@@ -1,6 +1,6 @@
 import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord } from './utils/types'
 import { cx, ClassValue } from './cx'
-import { compact } from './utils/compact'
+import { mergeProps } from './utils/merge-props'
 
 export type SlotClassRecord<S extends string> = PartialRecord<S, ClassValue>
 
@@ -77,7 +77,7 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
   return (props) => {
     const { classNames, ...rest } = props ?? {}
 
-    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
+    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
 
     const slotClassValues = {} as Record<(typeof slots)[number], ClassValue[]>
 

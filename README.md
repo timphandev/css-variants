@@ -9,6 +9,15 @@
 
 A lightweight, flexible API for managing CSS class variants in JavaScript and TypeScript projects.
 
+## Features
+
+- 🎨 Dynamic class name generation based on variants
+- 🔧 Support for inline styles alongside class names
+- 🧩 Slot-based variant system for complex components
+- 📦 Zero dependencies
+- 🔒 Fully type-safe with TypeScript
+- 🚀 Framework-agnostic
+
 ## Overview
 
 `css-variants` provides a simple yet powerful way to handle dynamic class names and inline styles based on component props or state. It's designed to work seamlessly with modern JavaScript frameworks and CSS methodologies, offering a type-safe approach to styling your UI components.
@@ -20,15 +29,6 @@ A lightweight, flexible API for managing CSS class variants in JavaScript and Ty
 - [Panda CSS](https://github.com/chakra-ui/panda): A CSS-in-JS solution with a focus on developer experience and performance.
 
 Thank you to the authors and contributors of these projects for their innovative work.
-
-## Features
-
-- 🎨 Dynamic class name generation based on variants
-- 🔧 Support for inline styles alongside class names
-- 🧩 Slot-based variant system for complex components
-- 📦 Zero dependencies
-- 🔒 Fully type-safe with TypeScript
-- 🚀 Framework-agnostic
 
 ## Table of Contents
 * [Installation](#installation)
@@ -116,7 +116,7 @@ You can add multiple variants to a single component.
 
 ```ts
 import { cv } from 'css-variants'
- 
+
 const button = cv({
   base: 'font-bold',
   variants: {
@@ -135,6 +135,29 @@ const button = cv({
 
 button({ color: 'success', size: 'lg' })
 // => 'font-bold bg-green-500 hover:bg-green-700 text-lg p-6'
+```
+
+```ts
+import { sv } from 'css-variants'
+
+const button = sv({
+  base: {
+    fontWeight: 700,
+  },
+  variants: {
+    size: {
+      small: { fontSize: '12px' },
+      large: { fontSize: '24px' },
+    },
+    color: {
+      red: { color: 'red' },
+      blue: { color: 'blue' },
+    },
+  },
+})
+
+button({ size: 'small', color: 'blue' })
+// => { fontWeight: 700, fontSize: '12px', color: 'blue' }
 ```
 
 ### Boolean variants

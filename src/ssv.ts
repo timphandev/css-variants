@@ -1,5 +1,5 @@
 import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord, CssProperties } from './utils/types'
-import { compact } from './utils/compact'
+import { mergeProps } from './utils/merge-props'
 
 export type SlotStyleRecord<S extends string> = PartialRecord<S, CssProperties>
 
@@ -72,7 +72,7 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
   return (props) => {
     const { styles, ...rest } = props ?? {}
 
-    const mergedProps: Record<string, unknown> = defaultVariants ? { ...defaultVariants, ...compact(rest) } : rest
+    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
 
     const result = {} as Record<(typeof slots)[number], CssProperties>
 
