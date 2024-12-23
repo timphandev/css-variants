@@ -38,12 +38,12 @@ pnpm add css-variants
 
 css-variants provides four main utilities:
 
-- [cv](./src/cv.ts) - Class Variants for managing single component class names
-- [sv](./src/sv.ts) - Style Variants for managing single component inline styles
-- [scv](./src/scv.ts) - Slot Class Variants for managing multiple slot class names
-- [ssv](./src/ssv.ts) - Slot Style Variants for managing multiple slot inline styles
+- [cv](#class-variants-cv) - Class Variants for managing single component class names
+- [sv](#style-variants-sv) - Style Variants for managing single component inline styles
+- [scv](#slot-class-variants-scv) - Slot Class Variants for managing multiple slot class names
+- [ssv](#slot-style-variants-ssv) - Slot Style Variants for managing multiple slot inline styles
 
-### Class Variants (cv)
+### Class Variants ([cv](./src/cv.ts))
 For managing class names for a single component:
 
 ```ts
@@ -79,7 +79,7 @@ button() // => 'font-bold rounded-lg bg-blue-500 text-white text-sm px-2 py-1'
 button({ size: 'lg' }) // => 'font-bold rounded-lg bg-blue-500 text-white text-lg px-4 py-2 uppercase'
 ```
 
-### Style Variants (sv)
+### Style Variants ([sv](./src/sv.ts))
 
 For managing inline styles:
 
@@ -109,7 +109,7 @@ button({ color: 'primary' })
 // => { fontWeight: 'bold', borderRadius: '8px', backgroundColor: 'blue', color: 'white' }
 ```
 
-### Slot Class Variants (scv)
+### Slot Class Variants ([scv](./src/scv.ts))
 
 For managing class names across multiple slots/elements:
 
@@ -146,7 +146,7 @@ card({ size: 'sm' })
 // }
 ```
 
-### Slot Style Variants (ssv)
+### Slot Style Variants ([ssv](./src/ssv.ts))
 
 For managing inline styles across multiple slots:
 
@@ -226,6 +226,8 @@ const button = cv({
     }
   ]
 })
+
+button({ color: 'danger', size: 'lg' }) // => 'bg-red-500 text-lg animate-pulse'
 ```
 
 ### Default Variants
