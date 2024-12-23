@@ -1,5 +1,3 @@
-![Logo](.github/assets/logo.png)
-
 [![test](https://github.com/timphandev/css-variants/actions/workflows/ci.yml/badge.svg)](https://github.com/timphandev/css-variants/actions/workflows/ci.yml)
 [![license](https://img.shields.io/github/license/timphandev/css-variants)](https://github.com/timphandev/css-variants/blob/main/LICENSE)
 [![npm](https://img.shields.io/npm/dm/css-variants)](https://npmjs.com/package/css-variants)
