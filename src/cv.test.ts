@@ -57,6 +57,7 @@ describe('cv', () => {
       compoundVariants: [{ size: 'small', color: 'red', className: 'small-red-class' }],
     })
     expect(variantFn({ size: 'small', color: 'red' })).toBe('base-class small-class red-class small-red-class')
+    expect(variantFn({ size: 'small', isLoading: true })).toBe('base-class small-class loading')
   })
 
   it('should return base class, variant class, and compound variant class when variant values are arrays', () => {

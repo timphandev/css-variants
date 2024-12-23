@@ -83,7 +83,7 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
 
     for (const slot of slots) {
       if (base?.[slot]) {
-        slotClassValues[slot] = Array.isArray(base[slot]) ? base[slot] : [base[slot]]
+        slotClassValues[slot] = Array.isArray(base[slot]) ? [...base[slot]] : [base[slot]]
       } else {
         slotClassValues[slot] = []
       }

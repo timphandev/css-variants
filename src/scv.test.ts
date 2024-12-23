@@ -34,10 +34,27 @@ describe('scv', () => {
           red: { root: 'color-red' },
           blue: { root: 'color-blue' },
         },
+        isLoading: {
+          true: {
+            root: 'loading',
+          },
+        },
       },
     })
     expect(variantFn({ size: 'sm', color: 'red' })).toEqual({
       root: 'base size-sm color-red',
+      icon: 'icon-sm',
+    })
+    expect(variantFn({ size: 'sm', isLoading: true })).toEqual({
+      root: 'base size-sm loading',
+      icon: 'icon-sm',
+    })
+    expect(variantFn({ size: 'sm', isLoading: undefined })).toEqual({
+      root: 'base size-sm',
+      icon: 'icon-sm',
+    })
+    expect(variantFn({ size: 'sm', isLoading: false })).toEqual({
+      root: 'base size-sm',
       icon: 'icon-sm',
     })
   })

@@ -77,7 +77,7 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
     const result = {} as Record<(typeof slots)[number], CssProperties>
 
     for (const slot of slots) {
-      result[slot] = base?.[slot] ?? {}
+      result[slot] = { ...base?.[slot] }
     }
 
     for (const key in mergedProps) {
