@@ -42,6 +42,7 @@ css-variants provides four main utilities:
 - [sv](#style-variants-sv) - Style Variants for managing single component inline styles
 - [scv](#slot-class-variants-scv) - Slot Class Variants for managing multiple slot class names
 - [ssv](#slot-style-variants-ssv) - Slot Style Variants for managing multiple slot inline styles
+- [cx](#class-merger-cx) - Utility for composing class names conditionally.
 
 ### Class Variants ([cv](./src/cv.ts))
 For managing class names for a single component:
@@ -76,7 +77,10 @@ const button = cv({
 
 // Usage
 button() // => 'font-bold rounded-lg bg-blue-500 text-white text-sm px-2 py-1'
+
 button({ size: 'lg' }) // => 'font-bold rounded-lg bg-blue-500 text-white text-lg px-4 py-2 uppercase'
+
+button({ size: 'lg', className: 'custom' }) // => 'font-bold rounded-lg bg-blue-500 text-white text-lg px-4 py-2 uppercase custom'
 ```
 
 ### Style Variants ([sv](./src/sv.ts))
@@ -105,8 +109,15 @@ const button = sv({
   }
 })
 
+// Usage
 button({ color: 'primary' })
 // => { fontWeight: 'bold', borderRadius: '8px', backgroundColor: 'blue', color: 'white' }
+
+button({
+  color: 'secondary',
+  style: { padding: '4px' },
+})
+// => { fontWeight: 'bold', borderRadius: '8px', backgroundColor: 'gray', color: 'white', padding: '4px' }
 ```
 
 ### Slot Class Variants ([scv](./src/scv.ts))
@@ -144,6 +155,18 @@ card({ size: 'sm' })
 //   title: 'text-xl font-bold text-base',
 //   content: 'mt-2'
 // }
+
+card({
+  size: 'lg',
+  classNames: {
+    content: 'custom',
+  },
+})
+// => {
+//   root: 'rounded-lg shadow p-6',
+//   title: 'text-xl font-bold text-2xl',
+//   content: 'mt-2 custom'
+// }
 ```
 
 ### Slot Style Variants ([ssv](./src/ssv.ts))
@@ -173,11 +196,57 @@ const card = ssv({
   }
 })
 
+// Usage
 card({ size: 'sm' })
 // => {
 //   root: { padding: '1rem', maxWidth: '300px' },
 //   title: { fontWeight: 'bold', fontSize: '14px' }
 // }
+
+card({
+  size: 'lg',
+  styles: {
+    title: {
+      color: 'red',
+    },
+  },
+})
+// => {
+//   root: { padding: '1rem', maxWidth: '600px' },
+//   title: { fontWeight: 'bold', fontSize: '18px', color: 'red' }
+// }
+```
+
+### Class Merger ([cx](./src/cx.ts))
+
+Similar to `clsx/classnames` but with better TypeScript support.
+
+```tsx
+import { cx } from 'css-variants'
+
+// Basic usage
+cx('foo', 'bar') // => 'foo bar'
+
+// With conditions
+cx('foo', { 
+  'bar': true,
+  'baz': false 
+}) // => 'foo bar'
+
+// With arrays
+cx('foo', ['bar', 'baz']) // => 'foo bar baz'
+
+// With nested structures
+cx('foo', {
+  bar: true,
+  baz: [
+    'qux',
+    { quux: true }
+  ]
+}) // => 'foo bar qux quux'
+
+// With falsy values (they're ignored)
+cx('foo', null, undefined, false, 0, '') // => 'foo'
 ```
 
 ## Advanced Features
