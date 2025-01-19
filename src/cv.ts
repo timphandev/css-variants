@@ -76,7 +76,7 @@ export const cv: ClassVariantCreatorFn = (config) => {
       for (const { className: classValue, ...compoundVariant } of compoundVariants) {
         let matches = true
         for (const key in compoundVariant) {
-          const value = compoundVariant[key]
+          const value = compoundVariant[key as keyof typeof compoundVariant]
           const propValue = mergedProps[key]
           if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
             matches = false

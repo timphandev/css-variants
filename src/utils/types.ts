@@ -1,5 +1,7 @@
 import { Properties } from 'csstype'
 
+export type RecordKey = string | number | symbol
+
 export type OneOrMore<T> = T | T[]
 
 export type PartialRecord<S extends string, T> = Partial<Record<S, T>>
@@ -10,14 +12,14 @@ export type RequireAtLeastOne<T> = {
 
 export type StringToBoolean<T> = T extends 'true' | 'false' ? boolean : T
 
-export type ObjectKeyPicker<T> = T extends undefined
-  ? Record<string, unknown>
+export type ObjectKeyPicker<T> = keyof unknown extends keyof T
+  ? Record<RecordKey, unknown>
   : {
       [K in keyof T]?: StringToBoolean<keyof T[K]> | undefined
     }
 
-export type ObjectKeyArrayPicker<T> = T extends undefined
-  ? Record<string, unknown>
+export type ObjectKeyArrayPicker<T> = keyof unknown extends keyof T
+  ? Record<RecordKey, unknown>
   : {
       [K in keyof T]?: OneOrMore<StringToBoolean<keyof T[K]>> | undefined
     }
