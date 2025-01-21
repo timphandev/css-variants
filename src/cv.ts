@@ -4,17 +4,21 @@ import { cx, ClassValue } from './cx'
 
 export type ClassVariantRecord = Record<string, Record<string, ClassValue>>
 
+export type ClassVariantExtendProps = { className: ClassValue }
+
 export interface ClassVariantDefinition<T extends ClassVariantRecord | undefined> {
   base?: ClassValue
   variants?: T
-  compoundVariants?: (ObjectKeyArrayPicker<T> & { className: ClassValue })[]
+  compoundVariants?: (ObjectKeyArrayPicker<T> & ClassVariantExtendProps)[]
   defaultVariants?: ObjectKeyPicker<T>
   classNameResolver?: typeof cx
 }
 
-export type ClassVariantFn<T extends ClassVariantRecord | undefined> = (
-  props?: ObjectKeyPicker<T> & { className?: ClassValue }
-) => string
+export type ClassVariantFnProps<T extends ClassVariantRecord | undefined> = T extends undefined
+  ? Partial<ClassVariantExtendProps>
+  : ObjectKeyPicker<T> & Partial<ClassVariantExtendProps>
+
+export type ClassVariantFn<T extends ClassVariantRecord | undefined> = (props?: ClassVariantFnProps<T>) => string
 
 export type ClassVariantCreatorFn = <T extends ClassVariantRecord | undefined>(
   config: ClassVariantDefinition<T>

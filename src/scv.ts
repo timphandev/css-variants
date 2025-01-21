@@ -6,17 +6,26 @@ export type SlotClassRecord<S extends string> = PartialRecord<S, ClassValue>
 
 export type SlotClassVariantRecord<S extends string> = Record<string, Record<string, SlotClassRecord<S>>>
 
+export type SlotClassVariantExtendProps<S extends string> = { classNames: SlotClassRecord<S> }
+
 export interface SlotClassVariantDefinition<S extends string, T extends SlotClassVariantRecord<S> | undefined> {
   slots: S[]
   base?: SlotClassRecord<S>
   variants?: T
-  compoundVariants?: (ObjectKeyArrayPicker<T> & { classNames: SlotClassRecord<S> })[]
+  compoundVariants?: (ObjectKeyArrayPicker<T> & SlotClassVariantExtendProps<S>)[]
   defaultVariants?: ObjectKeyPicker<T>
   classNameResolver?: typeof cx
 }
 
+export type SlotClassVariantFnProps<
+  S extends string,
+  T extends SlotClassVariantRecord<S> | undefined,
+> = T extends undefined
+  ? Partial<SlotClassVariantExtendProps<S>>
+  : ObjectKeyPicker<T> & Partial<SlotClassVariantExtendProps<S>>
+
 export type SlotClassVariantFn<S extends string, T extends SlotClassVariantRecord<S> | undefined> = (
-  props?: ObjectKeyPicker<T> & { classNames?: SlotClassRecord<S> }
+  props?: SlotClassVariantFnProps<S, T>
 ) => Record<S, string>
 
 export type SlotClassVariantCreatorFn = <S extends string, T extends SlotClassVariantRecord<S> | undefined>(

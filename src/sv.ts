@@ -3,16 +3,20 @@ import { mergeProps } from './utils/merge-props'
 
 export type StyleVariantRecord = Record<string, Record<string, CssProperties>>
 
+export type StyleVariantExtendProps = { style: CssProperties }
+
 export interface StyleVariantDefinition<T extends StyleVariantRecord | undefined> {
   base?: CssProperties
   variants?: T
-  compoundVariants?: (ObjectKeyArrayPicker<T> & { style: CssProperties })[]
+  compoundVariants?: (ObjectKeyArrayPicker<T> & StyleVariantExtendProps)[]
   defaultVariants?: ObjectKeyPicker<T>
 }
 
-export type StyleVariantFn<T extends StyleVariantRecord | undefined> = (
-  props?: ObjectKeyPicker<T> & { style?: CssProperties }
-) => CssProperties
+export type StyleVariantFnProps<T extends StyleVariantRecord | undefined> = T extends undefined
+  ? Partial<StyleVariantExtendProps>
+  : ObjectKeyPicker<T> & Partial<StyleVariantExtendProps>
+
+export type StyleVariantFn<T extends StyleVariantRecord | undefined> = (props?: StyleVariantFnProps<T>) => CssProperties
 
 export type StyleVariantCreatorFn = <T extends StyleVariantRecord | undefined>(
   config: StyleVariantDefinition<T>
