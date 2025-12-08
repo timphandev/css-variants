@@ -24,6 +24,16 @@ This repo implements a tiny, zero-dependency library for composing CSS class nam
 - Slot APIs: `scv`/`ssv` accept a `slots` array and `base`/`variants` as maps of slot -> value. Consumers can pass `classNames`/`styles` per-slot to merge on top.
 - `classNameResolver`: callers can pass a custom resolver (defaults to `cx`). The resolver accepts mixed nested inputs and returns a single space-delimited string (`src/cx.ts`).
 
+**CompoundVariants Walkthrough**
+
+- Purpose: `compoundVariants` allow adding classes/styles when multiple variant selectors match simultaneously (e.g., `size: 'sm'` + `color: 'red'`).
+- Matching algorithm (see `src/cv.ts`, `src/scv.ts`, `src/sv.ts`, `src/ssv.ts`):
+	- `mergedProps` is computed by merging `defaultVariants` and incoming props using `mergeProps`.
+	- For each `compoundVariant` entry, the code iterates its selector keys (all keys except the final `className`/`style`/`classNames`/`styles`) and checks whether the prop value matches the selector. If a selector value is an array it checks membership.
+	- If all selectors match, the provided classes/styles are merged into the result.
+- Type-safety pitfalls: older TypeScript versions could widen mapped types to `Record<string, unknown>` causing excess property checks to be skipped (so `classNames: { container: 'x' }` might not error even when `container` isn't a valid slot). This repo uses a `[keyof T] extends [never]` pattern in `src/utils/types.ts` to avoid that widening and restore excess property checks across TS versions.
+- Runtime safety: in addition to the types fix, code defensively guards against unexpected slot keys in runtime values (see `src/scv.ts` where pushes into per-slot arrays are guarded). This prevents runtime exceptions even if a bad object slips through.
+
 # Typical code changes and where to implement them
 
 - Adding a new feature for variants: update the relevant `src/*v.ts` file and its `.test.ts` file under `src/`.

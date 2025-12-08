@@ -99,17 +99,17 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
     }
 
     for (const key in mergedProps) {
-      const slotClassValue = variants[key]?.[mergedProps[key] as string]
+      const cls = variants[key]?.[mergedProps[key] as string]
 
-      if (slotClassValue) {
-        for (const slot in slotClassValue) {
-          slotClassValues[slot].push(slotClassValue[slot])
+      if (cls) {
+        for (const slot in cls) {
+          slotClassValues[slot]?.push(cls[slot])
         }
       }
     }
 
     if (compoundVariants) {
-      for (const { classNames: slotClassValue, ...compoundVariant } of compoundVariants) {
+      for (const { classNames: cls, ...compoundVariant } of compoundVariants) {
         let matches = true
         for (const key in compoundVariant) {
           const value = compoundVariant[key as keyof typeof compoundVariant]
@@ -120,8 +120,8 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
           }
         }
         if (matches) {
-          for (const slot in slotClassValue) {
-            slotClassValues[slot].push(slotClassValue[slot])
+          for (const slot in cls) {
+            slotClassValues[slot]?.push(cls[slot])
           }
         }
       }
@@ -129,7 +129,7 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
 
     if (classNames) {
       for (const slot in classNames) {
-        slotClassValues[slot].push(classNames[slot])
+        slotClassValues[slot]?.push(classNames[slot])
       }
     }
 

@@ -10,13 +10,13 @@ export type RequireAtLeastOne<T> = {
 
 export type StringToBoolean<T> = T extends 'true' | 'false' ? boolean : T
 
-export type ObjectKeyPicker<T> = keyof never extends keyof T
+export type ObjectKeyPicker<T> = [keyof T] extends [never]
   ? Record<string, unknown>
   : {
       [K in keyof T]?: StringToBoolean<keyof T[K]> | undefined
     }
 
-export type ObjectKeyArrayPicker<T> = keyof never extends keyof T
+export type ObjectKeyArrayPicker<T> = [keyof T] extends [never]
   ? Record<string, unknown>
   : {
       [K in keyof T]?: OneOrMore<StringToBoolean<keyof T[K]>> | undefined
