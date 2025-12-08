@@ -3,23 +3,37 @@
 [![npm](https://img.shields.io/npm/dm/css-variants)](https://npmjs.com/package/css-variants)
 ![npm](https://img.shields.io/npm/v/css-variants)
 
-# css-variants
+# css-variants — Compose class names & styles with variants
 
-A lightweight, flexible API for managing CSS class variants and inline styles in JavaScript and TypeScript projects.
+Lightweight helpers to compose class names and inline styles using "variants". Zero runtime deps, small bundle, and first-class TypeScript support.
+
+<p align="center">
+  <img src="/.github/assets/logo.png" alt="css-variants" />
+</p>
 
 ## Features
 
-- 🎨 Dynamic class name generation with variant support
-- 💅 First-class inline styles support alongside class names  
-- 🧩 Powerful slot-based variant system for complex components
-- 📦 Zero dependencies
-- 🔒 Fully type-safe with TypeScript
-- 🚀 Framework-agnostic
-- 🪶 Lightweight (~2KB gzipped)
-- 🔥 Strong tree-shaking support
-- ⚡️ Optimal runtime performance
+🌱 **Zero deps** — No runtime dependencies; tiny bundle and minimal maintenance.
+
+🐪 **Tailwind-friendly** — First-class compatibility with Tailwind via `tw-merge` (see "Tailwind Integration (tw-merge)"), so conflicting utilities are resolved predictably.
+
+🔒 **TypeScript-safe** — Strong inference and mapped-type helpers keep variant props typed correctly.
+
+🧩 **Variants & compound rules** — Simple `variants` maps plus `compoundVariants` for combination rules (e.g., size + color).
+
+🧭 **Slot support** — `scv` / `ssv` manage multiple named slots with per-slot `base`, `variants`, and overrides.
+
+⚙️ **Flexible resolver** — Default `cx`, with an option to pass a custom `classNameResolver` (recommended: `twMerge(cx(...))`).
+
+⚡ **Performance & tree-shaking** — Minimal runtime and tree-shakeable code paths for small bundles.
+
+🧪 **Developer ergonomics** — Colocated `*.test.ts` (Vitest), clear build scripts (`yarn build`) and linting (`yarn lint`).
+
+Use cases: design-system components, Tailwind + component libraries, SSR-friendly UI primitives.
 
 ## Installation
+
+Install with your preferred package manager:
 
 ```bash
 # npm
@@ -28,22 +42,46 @@ npm install css-variants
 # yarn
 yarn add css-variants
 
-# pnpm 
+# pnpm
 pnpm add css-variants
+```
+
+TypeScript types are included. Import the package in ESM or CJS projects:
+
+```ts
+// ESM
+import { cv, scv, cx } from 'css-variants'
+
+// CJS
+const { cv, scv, cx } = require('css-variants')
 ```
 
 ## Core Utilities
 
-css-variants provides four main utilities:
+Quick reference for the main exports. Each utility has full examples below.
 
-- [cv](#class-variants-cv) - Class Variants for managing single component class names
-- [sv](#style-variants-sv) - Style Variants for managing single component inline styles
-- [scv](#slot-class-variants-scv) - Slot Class Variants for managing multiple slot class names
-- [ssv](#slot-style-variants-ssv) - Slot Style Variants for managing multiple slot inline styles
-- [cx](#class-merger-cx) - Utility for composing class names conditionally.
+- 🧩 [`cv`](#cv---class-variants) — Class Variants (single element)
+  - Use to compose class names for one element. Supports `base`, `variants`, `compoundVariants`, and `defaultVariants`.
+  - Quick: `const btn = cv({ base: 'btn', variants: { size: { sm: 'p-2', lg: 'p-4' } } })`
 
-### Class Variants ([cv](./src/cv.ts))
-For managing class names for a single component:
+- 🎨 [`sv`](#sv---style-variants) — Style Variants (single element)
+  - Compose inline style objects similarly to `cv` but returning CSS props.
+  - Quick: `const s = sv({ base: { display: 'flex' }, variants: { size: { sm: { gap: '4px' } } } })`
+
+- 🧰 [`scv`](#scv-slot-class-variants) — Slot Class Variants (multi-slot)
+  - Manage class names across named slots (`slots: ['root','title']`) with per-slot `base`, `variants`, and `classNames` overrides.
+  - Quick: `const card = scv({ slots: ['root','title'], base: { root: 'card' } })`
+
+- 🧾 [`ssv`](#ssv---slot-style-variants) — Slot Style Variants (multi-slot styles)
+  - Same as `scv` but composes inline style objects per slot.
+
+- ⚙️ [`cx`](#cx---class-merger) — Class merger
+  - Small, typed `clsx`-like utility used as the default `classNameResolver`.
+  - Quick: `cx('a', { b: true }, ['c']) // => 'a b c'`
+
+### [cv](./src/cv.ts) - Class Variants
+Compose class names for a single element. Config keys: `base`, `variants`, `defaultVariants`, `compoundVariants`, and optional `classNameResolver` (defaults to `cx`).
+`cv` returns a typed function you call with variant props (and optional `className`) to get the final class string.
 
 ```ts
 import { cv } from 'css-variants'
@@ -81,9 +119,10 @@ button({ size: 'lg' }) // => 'font-bold rounded-lg bg-blue-500 text-white text-l
 button({ size: 'lg', className: 'custom' }) // => 'font-bold rounded-lg bg-blue-500 text-white text-lg px-4 py-2 uppercase custom'
 ```
 
-### Style Variants ([sv](./src/sv.ts))
+### [sv](./src/sv.ts) - Style Variants
 
-For managing inline styles:
+Compose inline style objects for a single element. Config keys: `base`, `variants`, `defaultVariants`, and `compoundVariants`.
+`sv` returns a typed function that accepts variant props and an optional `style` object which is shallow-merged into the result.
 
 ```ts
 import { sv } from 'css-variants'
@@ -118,9 +157,13 @@ button({
 // => { fontWeight: 'bold', borderRadius: '8px', backgroundColor: 'gray', color: 'white', padding: '4px' }
 ```
 
-### Slot Class Variants ([scv](./src/scv.ts))
+### [scv](./src/scv.ts) - Slot Class Variants
 
-For managing class names across multiple slots/elements:
+Compose and merge class names across named slots.
+`scv` accepts `slots` plus per-slot `base`, `variants`, `compoundVariants`,
+and runtime `classNames` overrides, and returns an object mapping each slot to
+its final merged class string. Ideal for components with multiple sub-elements
+(for example: `root`, `title`, `content`).
 
 ```ts
 import { scv } from 'css-variants'
@@ -167,9 +210,13 @@ card({
 // }
 ```
 
-### Slot Style Variants ([ssv](./src/ssv.ts))
+### [ssv](./src/ssv.ts) - Slot Style Variants
 
-For managing inline styles across multiple slots:
+Compose and merge inline style objects across named slots.
+`ssv` accepts `slots` plus per-slot `base`, `variants`, `compoundVariants`,
+and runtime `styles` overrides, and returns an object mapping each slot to
+its final merged style. Useful for components with multiple styled
+sub-elements (for example: `root`, `title`, `content`).
 
 ```ts
 import { ssv } from 'css-variants'
@@ -215,7 +262,7 @@ card({
 // }
 ```
 
-### Class Merger ([cx](./src/cx.ts))
+### [cx](./src/cx.ts) - Class Merger
 
 Similar to `clsx/classnames` but with better TypeScript support.
 
@@ -247,95 +294,30 @@ cx('foo', {
 cx('foo', null, undefined, false, 0, '') // => 'foo'
 ```
 
-## Advanced Features
+## Tailwind Integration (tw-merge)
 
-### Boolean Variants
-
-Support for boolean variants to toggle styles conditionally:
-
-```ts
-import { cv } from 'css-variants'
-
-const button = cv({
-  variants: {
-    disabled: {
-      true: 'opacity-50 cursor-not-allowed'
-    }
-  }
-})
-
-button({ disabled: true }) // => 'opacity-50 cursor-not-allowed'
-```
-
-### Compound Variants
-
-Apply styles based on combinations of variants:
+Use a resolver that combines `cx` with `tw-merge` to properly merge Tailwind classes
+and let `tw-merge` remove conflicting utility classes (recommended for Tailwind users).
 
 ```ts
-import { cv } from 'css-variants'
-
-const button = cv({
-  variants: {
-    color: {
-      primary: 'bg-blue-500',
-      danger: 'bg-red-500'  
-    },
-    size: {
-      sm: 'text-sm',
-      lg: 'text-lg'
-    }
-  },
-  compoundVariants: [
-    {
-      color: 'danger',
-      size: 'lg',
-      className: 'animate-pulse'
-    }
-  ]
-})
-
-button({ color: 'danger', size: 'lg' }) // => 'bg-red-500 text-lg animate-pulse'
-```
-
-### Default Variants
-
-Specify default variant values:
-
-```ts
-import { cv } from 'css-variants'
-
-const button = cv({
-  variants: {
-    size: {
-      sm: 'text-sm',
-      lg: 'text-lg'  
-    }
-  },
-  defaultVariants: {
-    size: 'sm'
-  }
-})
-
-button() // => 'text-sm'
-```
-
-### Custom Class Name Resolver
-
-Use your preferred class name utility:
-
-```ts
-import { cv } from 'css-variants'
-import { clsx } from 'clsx'
+import { cv, cx } from 'css-variants'
+import { twMerge } from 'tailwind-merge'
 
 const button = cv({
   base: 'btn',
   variants: {
     color: {
-      primary: 'btn-primary'
+      primary: 'bg-blue-500',
+      danger: 'bg-red-500'
     }
   },
-  classNameResolver: clsx
+  // recommended resolver: compose `cx` then `twMerge`
+  classNameResolver: (...args) => twMerge(cx(...args))
 })
+
+// Later classes and conflicting utilities are resolved by `tw-merge`:
+button({ color: 'primary', className: 'bg-red-600' })
+// => 'btn bg-red-600'  (tw-merge will prefer the later `bg-red-600` value)
 ```
 
 ## TypeScript Support
@@ -365,9 +347,17 @@ This library is inspired by several excellent projects:
 - [CVA (Class Variance Authority)](https://github.com/joe-bell/cva)
 - [Panda CSS](https://github.com/chakra-ui/panda)
 
+## Developer commands
+
+```bash
+yarn test   # run vitest tests
+yarn build  # build CJS + ESM artifacts into dist/
+yarn lint   # eslint + prettier
+```
+
 ## Contribute
 
-If you would like to contribute to the project, please read how to contribute here [CONTRIBUTING.md](./CONTRIBUTING.md).
+Please open PRs with focused changes and unit tests under `src/*.test.ts`. Keep runtime footprint minimal and preserve the exported API (`cv`, `sv`, `scv`, `ssv`, `cx`). See [CONTRIBUTING.md](./CONTRIBUTING.md) for process details.
 
 ## License
 
