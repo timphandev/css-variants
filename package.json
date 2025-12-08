@@ -1,6 +1,6 @@
 {
   "name": "css-variants",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Lightweight helpers to compose class names and inline styles using variants. Zero runtime deps, small bundle, and first-class TypeScript support.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
