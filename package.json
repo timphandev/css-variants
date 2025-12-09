@@ -30,6 +30,10 @@
     "type": "git",
     "url": "git+https://github.com/timphandev/css-variants.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "keywords": [
     "javascript",
     "typescript",

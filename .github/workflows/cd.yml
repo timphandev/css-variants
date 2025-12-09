@@ -1,9 +1,13 @@
-name: release
+name: publish
 
 on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   publish:
@@ -11,22 +15,24 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup node for npmjs.org as registry
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
-          check-latest: true
           registry-url: 'https://registry.npmjs.org'
+          node-version: 24.x
+          check-latest: true
+
+      - run: npm -v
 
       - name: Install 🔧
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Build 🏗️
         run: yarn build
 
       - name: NPM PKG Publish 🎉
-        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: npm publish --access public
