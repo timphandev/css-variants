@@ -1,0 +1,186 @@
+/* Enhanced styles for Jekyll Cayman theme */
+
+/* Improve code blocks */
+.main-content .highlight pre,
+.main-content pre {
+    padding: 1rem;
+    overflow: auto;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    border-radius: 0.3rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Inline code */
+.main-content code {
+    padding: 2px 6px;
+    font-size: 0.9rem;
+    color: #567482;
+    background-color: #f3f6fa;
+    border-radius: 0.3rem;
+}
+
+.main-content pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+/* Improve headings */
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #159957;
+}
+
+.main-content h1 {
+    font-size: 2.5rem;
+    border-bottom: 3px solid #159957;
+    padding-bottom: 0.5rem;
+}
+
+.main-content h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+.main-content h3 {
+    font-size: 1.5rem;
+}
+
+.main-content h4 {
+    font-size: 1.25rem;
+}
+
+/* Improve links */
+.main-content a {
+    color: #1e6bb8;
+    text-decoration: none;
+}
+
+.main-content a:hover {
+    text-decoration: underline;
+}
+
+/* Table styling */
+.main-content table {
+    display: block;
+    width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 1.5rem;
+}
+
+.main-content table th {
+    font-weight: 700;
+    background-color: #159957;
+    color: white;
+}
+
+.main-content table th,
+.main-content table td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+}
+
+.main-content table tr:nth-child(2n) {
+    background-color: #f6f8fa;
+}
+
+/* Blockquote styling */
+.main-content blockquote {
+    padding: 0 1rem;
+    margin-left: 0;
+    color: #6b7280;
+    border-left: 0.3rem solid #159957;
+    background-color: #f9fafb;
+    margin-bottom: 1.5rem;
+}
+
+.main-content blockquote > :first-child {
+    margin-top: 0.5rem;
+}
+
+.main-content blockquote > :last-child {
+    margin-bottom: 0.5rem;
+}
+
+/* Badge images */
+.main-content img[src*="shields.io"],
+.main-content img[src*="badge"] {
+    display: inline;
+    margin: 0 0.25rem;
+}
+
+/* Horizontal rule */
+.main-content hr {
+    height: 2px;
+    padding: 0;
+    margin: 2rem 0;
+    background-color: #e5e7eb;
+    border: 0;
+}
+
+/* Lists */
+.main-content ul,
+.main-content ol {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+.main-content li {
+    margin-bottom: 0.5rem;
+}
+
+.main-content li > p {
+    margin-bottom: 0.5rem;
+}
+
+/* Paragraph spacing */
+.main-content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Strong emphasis */
+.main-content strong {
+    font-weight: 700;
+    color: #159957;
+}
+
+/* Responsive design improvements */
+@media screen and (max-width: 64em) {
+    .main-content h1 {
+        font-size: 2rem;
+    }
+
+    .main-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .main-content pre {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 42em) {
+    .main-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .main-content h2 {
+        font-size: 1.25rem;
+    }
+}

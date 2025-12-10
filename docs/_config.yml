@@ -1,0 +1,17 @@
+title: css-variants
+description: Zero-dependency, type-safe CSS variant composition for modern JavaScript
+theme: jekyll-theme-cayman
+show_downloads: true
+repository: timphandev/css-variants
+url: https://timphandev.github.io
+baseurl: /css-variants
+
+# Syntax highlighting
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'

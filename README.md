@@ -9,6 +9,7 @@ Build powerful, flexible component style systems with variants. Perfect for Tail
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/css-variants)](https://bundlephobia.com/package/css-variants)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Give a Star](https://img.shields.io/badge/⭐️%20Give%20a%20Star-support%20the%20project-ffcc00)](https://github.com/timphandev/css-variants)
 
 ---
 
@@ -1439,6 +1440,10 @@ MIT © [Tim Phan](https://github.com/timphandev)
 
 - Class merging inspired by [clsx](https://github.com/lukeed/clsx) by Luke Edwards
 - API design inspired by [CVA](https://github.com/joe-bell/cva) and [Panda CSS](https://panda-css.com)
+
+## ⭐ Like it? Star it!
+
+If this library saves you time, a **⭐ on GitHub** means a lot. Thank you! 🚀
 
 ---
 
