@@ -109,19 +109,21 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
     }
 
     if (compoundVariants) {
-      for (const { classNames: cls, ...compoundVariant } of compoundVariants) {
+      for (let i = 0; i < compoundVariants.length; i++) {
+        const compound = compoundVariants[i]
         let matches = true
-        for (const key in compoundVariant) {
-          const value = compoundVariant[key as keyof typeof compoundVariant]
+        for (const key in compound) {
+          if (key === 'classNames') continue
+          const value = compound[key as keyof typeof compound]
           const propValue = mergedProps[key]
           if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
             matches = false
             break
           }
         }
-        if (matches) {
-          for (const slot in cls) {
-            slotClassValues[slot]?.push(cls[slot])
+        if (matches && compound.classNames) {
+          for (const slot in compound.classNames) {
+            slotClassValues[slot]?.push(compound.classNames[slot])
           }
         }
       }

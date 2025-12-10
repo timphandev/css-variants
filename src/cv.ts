@@ -77,18 +77,20 @@ export const cv: ClassVariantCreatorFn = (config) => {
     }
 
     if (compoundVariants) {
-      for (const { className: classValue, ...compoundVariant } of compoundVariants) {
+      for (let i = 0; i < compoundVariants.length; i++) {
+        const compound = compoundVariants[i]
         let matches = true
-        for (const key in compoundVariant) {
-          const value = compoundVariant[key as keyof typeof compoundVariant]
+        for (const key in compound) {
+          if (key === 'className') continue
+          const value = compound[key as keyof typeof compound]
           const propValue = mergedProps[key]
           if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
             matches = false
             break
           }
         }
-        if (matches) {
-          classValues.push(classValue)
+        if (matches && compound.className) {
+          classValues.push(compound.className)
         }
       }
     }

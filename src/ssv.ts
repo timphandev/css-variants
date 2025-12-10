@@ -94,17 +94,19 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
 
       if (slotStyle) {
         for (const slot in slotStyle) {
-          result[slot] = { ...result[slot], ...slotStyle[slot] }
+          Object.assign(result[slot], slotStyle[slot])
         }
       }
     }
 
     if (compoundVariants) {
-      for (const { styles: slotStyle, ...compoundVariant } of compoundVariants) {
+      for (let i = 0; i < compoundVariants.length; i++) {
+        const compound = compoundVariants[i]
         let matches = true
 
-        for (const key in compoundVariant) {
-          const value = compoundVariant[key as keyof typeof compoundVariant]
+        for (const key in compound) {
+          if (key === 'styles') continue
+          const value = compound[key as keyof typeof compound]
           const propValue = mergedProps[key]
 
           if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
@@ -113,9 +115,9 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
           }
         }
 
-        if (matches) {
-          for (const slot in slotStyle) {
-            result[slot] = { ...result[slot], ...slotStyle[slot] }
+        if (matches && compound.styles) {
+          for (const slot in compound.styles) {
+            Object.assign(result[slot], compound.styles[slot])
           }
         }
       }
@@ -123,7 +125,7 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
 
     if (styles) {
       for (const slot in styles) {
-        result[slot] = { ...result[slot], ...styles[slot] }
+        Object.assign(result[slot], styles[slot])
       }
     }
 

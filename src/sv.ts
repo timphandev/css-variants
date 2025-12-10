@@ -60,35 +60,41 @@ export const sv: StyleVariantCreatorFn = (config) => {
   return (props) => {
     const { style, ...rest } = props ?? {}
 
-    let result: CssProperties = { ...base }
+    const result: CssProperties = { ...base }
 
     const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
 
     for (const key in mergedProps) {
       const styleValue = variants[key]?.[mergedProps[key] as string]
       if (styleValue) {
-        result = { ...result, ...styleValue }
+        Object.assign(result, styleValue)
       }
     }
 
     if (compoundVariants) {
-      for (const { style: styleValue, ...compoundVariant } of compoundVariants) {
+      for (let i = 0; i < compoundVariants.length; i++) {
+        const compound = compoundVariants[i]
         let matches = true
-        for (const key in compoundVariant) {
-          const value = compoundVariant[key as keyof typeof compoundVariant]
+        for (const key in compound) {
+          if (key === 'style') continue
+          const value = compound[key as keyof typeof compound]
           const propValue = mergedProps[key]
           if (Array.isArray(value) ? !value.includes(propValue) : value !== propValue) {
             matches = false
             break
           }
         }
-        if (matches) {
-          result = { ...result, ...styleValue }
+        if (matches && compound.style) {
+          Object.assign(result, compound.style)
         }
       }
     }
 
-    return { ...result, ...style }
+    if (style) {
+      Object.assign(result, style)
+    }
+
+    return result
   }
 }
 
