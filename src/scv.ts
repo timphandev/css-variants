@@ -84,9 +84,7 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
   }
 
   return (props) => {
-    const { classNames, ...rest } = props ?? {}
-
-    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
+    const mergedProps = mergeProps(defaultVariants, props, ['classNames'])
 
     const slotClassValues = {} as Record<(typeof slots)[number], ClassValue[]>
 
@@ -129,9 +127,9 @@ export const scv: SlotClassVariantCreatorFn = (config) => {
       }
     }
 
-    if (classNames) {
-      for (const slot in classNames) {
-        slotClassValues[slot]?.push(classNames[slot])
+    if (props?.classNames) {
+      for (const slot in props.classNames) {
+        slotClassValues[slot]?.push(props.classNames[slot])
       }
     }
 

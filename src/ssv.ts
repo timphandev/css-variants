@@ -79,9 +79,7 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
   }
 
   return (props) => {
-    const { styles, ...rest } = props ?? {}
-
-    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
+    const mergedProps = mergeProps(defaultVariants, props, ['styles'])
 
     const result = {} as Record<(typeof slots)[number], CssProperties>
 
@@ -123,9 +121,9 @@ export const ssv: SlotStyleVariantCreatorFn = (config) => {
       }
     }
 
-    if (styles) {
-      for (const slot in styles) {
-        Object.assign(result[slot], styles[slot])
+    if (props?.styles) {
+      for (const slot in props.styles) {
+        Object.assign(result[slot], props.styles[slot])
       }
     }
 

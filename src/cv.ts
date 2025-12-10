@@ -1,6 +1,6 @@
 import { ObjectKeyPicker, ObjectKeyArrayPicker } from './utils/types'
-import { mergeProps } from './utils/merge-props'
 import { cx, ClassValue } from './cx'
+import { mergeProps } from './utils/merge-props'
 
 export type ClassVariantRecord = Record<string, Record<string, ClassValue>>
 
@@ -63,9 +63,7 @@ export const cv: ClassVariantCreatorFn = (config) => {
   }
 
   return (props) => {
-    const { className, ...rest } = props ?? {}
-
-    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
+    const mergedProps = mergeProps(defaultVariants, props, ['className'])
 
     const classValues: ClassValue[] = []
 
@@ -95,7 +93,7 @@ export const cv: ClassVariantCreatorFn = (config) => {
       }
     }
 
-    return classNameResolver(base, classValues, className)
+    return classNameResolver(base, classValues, props?.className)
   }
 }
 

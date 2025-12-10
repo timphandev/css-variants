@@ -58,11 +58,9 @@ export const sv: StyleVariantCreatorFn = (config) => {
   }
 
   return (props) => {
-    const { style, ...rest } = props ?? {}
-
     const result: CssProperties = { ...base }
 
-    const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
+    const mergedProps = mergeProps(defaultVariants, props, ['style'])
 
     for (const key in mergedProps) {
       const styleValue = variants[key]?.[mergedProps[key] as string]
@@ -90,8 +88,8 @@ export const sv: StyleVariantCreatorFn = (config) => {
       }
     }
 
-    if (style) {
-      Object.assign(result, style)
+    if (props?.style) {
+      Object.assign(result, props.style)
     }
 
     return result

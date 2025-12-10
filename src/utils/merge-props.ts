@@ -1,11 +1,17 @@
-export function mergeProps<T extends Record<string, unknown>>(defaultProps: T, props: T) {
-  const newObj = { ...defaultProps }
+export function mergeProps<T extends Record<string, unknown>, P extends Record<string, unknown>>(
+  defaultProps: T | undefined,
+  props: P | undefined,
+  omitKeys?: (keyof P)[]
+): Record<string, unknown> {
+  const merged: Record<string, unknown> = { ...defaultProps }
 
-  for (const k in props) {
-    if (props[k] !== undefined) {
-      newObj[k] = props[k]
+  if (props) {
+    for (const k in props) {
+      if (props[k] !== undefined && (!omitKeys || !omitKeys.includes(k))) {
+        merged[k] = props[k]
+      }
     }
   }
 
-  return newObj
+  return merged
 }
