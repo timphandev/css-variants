@@ -65,7 +65,7 @@ export const sv: StyleVariantCreatorFn = (config) => {
     const mergedProps: Record<string, unknown> = defaultVariants ? mergeProps(defaultVariants, rest) : rest
 
     for (const key in mergedProps) {
-      const styleValue = variants[key][mergedProps[key] as string]
+      const styleValue = variants[key]?.[mergedProps[key] as string]
       if (styleValue) {
         result = { ...result, ...styleValue }
       }

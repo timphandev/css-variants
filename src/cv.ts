@@ -70,7 +70,7 @@ export const cv: ClassVariantCreatorFn = (config) => {
     const classValues: ClassValue[] = []
 
     for (const key in mergedProps) {
-      const classValue = variants[key][mergedProps[key] as string]
+      const classValue = variants[key]?.[mergedProps[key] as string]
       if (classValue) {
         classValues.push(classValue)
       }
