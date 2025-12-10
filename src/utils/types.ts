@@ -22,4 +22,6 @@ export type ObjectKeyArrayPicker<T> = [keyof T] extends [never]
       [K in keyof T]?: OneOrMore<StringToBoolean<keyof T[K]>> | undefined
     }
 
-export type CssProperties = Properties<string | number>
+export type CssProperties = Properties<string | number> & {
+  [key: `--${string}`]: string | number
+}
