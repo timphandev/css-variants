@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/benchmark/*.json
 
 # production
 /build
