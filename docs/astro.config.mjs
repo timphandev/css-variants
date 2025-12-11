@@ -1,6 +1,19 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
+/** @type {import('@astrojs/starlight/types').StarlightConfig['head']} */
+const head = []
+
+if (process.env.GOOGLE_SITE_VERIFICATION) {
+  head.push({
+    tag: 'meta',
+    attrs: {
+      name: 'google-site-verification',
+      content: process.env.GOOGLE_SITE_VERIFICATION,
+    },
+  })
+}
+
 export default defineConfig({
   site: 'https://css-variants.vercel.app',
   integrations: [
@@ -23,7 +36,7 @@ export default defineConfig({
         baseUrl: 'https://github.com/timphandev/css-variants/edit/main/docs/',
       },
       customCss: ['./src/styles/custom.css'],
-      head: [],
+      head,
       sidebar: [
         {
           label: 'Getting Started',
