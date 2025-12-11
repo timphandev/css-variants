@@ -8,6 +8,11 @@ export default defineConfig({
     starlight({
       title: 'css-variants',
       description: 'Zero-dependency, type-safe CSS variant composition for modern JavaScript',
+      favicon: '/favicon.svg',
+      logo: {
+        light: './src/assets/logo-light.svg',
+        dark: './src/assets/logo-dark.svg',
+      },
       social: [
         {
           icon: 'github',
