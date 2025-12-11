@@ -1,0 +1,492 @@
+# css-variants
+
+> Zero-dependency, type-safe CSS variant composition for modern JavaScript
+
+css-variants is a lightweight (~1KB) library for building powerful, flexible component style systems with variants. Perfect for Tailwind CSS, vanilla CSS, or any CSS-in-JS solution.
+
+## Features
+
+- **Tiny & Fast** - Zero dependencies, ~1KB minified+gzipped
+- **Type-Safe** - First-class TypeScript support with complete type inference
+- **Flexible** - Works with Tailwind, CSS modules, vanilla CSS, or inline styles
+- **Developer-Friendly** - Intuitive API inspired by CVA and Panda CSS
+- **Production-Ready** - Battle-tested, fully tested, dual CJS/ESM builds
+
+## Installation
+
+```bash
+npm install css-variants
+# or
+pnpm add css-variants
+# or
+yarn add css-variants
+```
+
+Requirements:
+- Node.js 16 or later
+- TypeScript 4.7+ (optional, but recommended)
+
+## Quick Example
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({
+  base: 'font-semibold rounded-lg transition-colors',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white hover:bg-blue-700',
+      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+      danger: 'bg-red-600 text-white hover:bg-red-700',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-4 py-2 text-base',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'md',
+  },
+})
+
+// Usage
+button() // => 'font-semibold rounded-lg ... bg-blue-600 text-white ... px-4 py-2 text-base'
+button({ color: 'danger', size: 'lg' }) // => '... bg-red-600 ... px-6 py-3 text-lg'
+```
+
+## API Reference
+
+### cv - Class Variants
+
+Create variants for single-element components using CSS class names.
+
+```typescript
+import { cv } from 'css-variants'
+
+function cv<T extends ClassVariantRecord | undefined>(
+  config: ClassVariantDefinition<T>
+): ClassVariantFn<T>
+
+interface ClassVariantDefinition<T> {
+  base?: ClassValue
+  variants?: T
+  compoundVariants?: (ObjectKeyArrayPicker<T> & { className: ClassValue })[]
+  defaultVariants?: ObjectKeyPicker<T>
+  classNameResolver?: typeof cx
+}
+```
+
+Parameters:
+- `base` - Base classes applied to all instances
+- `variants` - Variant definitions as Record<string, Record<string, ClassValue>>
+- `compoundVariants` - Conditional styles when multiple variants match
+- `defaultVariants` - Default variant selections
+- `classNameResolver` - Custom class merger (default: cx)
+
+Example:
+
+```typescript
+const badge = cv({
+  base: 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+  variants: {
+    variant: {
+      default: 'bg-gray-100 text-gray-800',
+      success: 'bg-green-100 text-green-800',
+      warning: 'bg-yellow-100 text-yellow-800',
+      error: 'bg-red-100 text-red-800',
+    },
+  },
+})
+
+badge({ variant: 'success' })
+// => 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800'
+```
+
+### scv - Slot Class Variants
+
+Create variants for multi-element components using CSS class names.
+
+```typescript
+import { scv } from 'css-variants'
+
+function scv<S extends string, T extends SlotClassVariantRecord<S> | undefined>(
+  config: SlotClassVariantDefinition<S, T>
+): SlotClassVariantFn<S, T>
+
+interface SlotClassVariantDefinition<S, T> {
+  slots: S[]
+  base?: PartialRecord<S, ClassValue>
+  variants?: T
+  compoundVariants?: (ObjectKeyArrayPicker<T> & { classNames: PartialRecord<S, ClassValue> })[]
+  defaultVariants?: ObjectKeyPicker<T>
+  classNameResolver?: typeof cx
+}
+```
+
+Example:
+
+```typescript
+const card = scv({
+  slots: ['root', 'header', 'title', 'content', 'footer'],
+  base: {
+    root: 'rounded-lg border bg-white shadow-sm',
+    header: 'border-b p-6',
+    title: 'text-2xl font-semibold',
+    content: 'p-6',
+    footer: 'border-t bg-gray-50 px-6 py-3',
+  },
+  variants: {
+    variant: {
+      default: { root: 'border-gray-200' },
+      primary: { root: 'border-blue-200', title: 'text-blue-900' },
+    },
+  },
+})
+
+const classes = card({ variant: 'primary' })
+// => {
+//   root: 'rounded-lg border bg-white shadow-sm border-blue-200',
+//   header: 'border-b p-6',
+//   title: 'text-2xl font-semibold text-blue-900',
+//   content: 'p-6',
+//   footer: 'border-t bg-gray-50 px-6 py-3'
+// }
+```
+
+### sv - Style Variants
+
+Create variants for inline CSS styles (React's `style` prop, Vue's `:style`, etc.).
+
+```typescript
+import { sv } from 'css-variants'
+
+function sv<T extends StyleVariantRecord | undefined>(
+  config: StyleVariantDefinition<T>
+): StyleVariantFn<T>
+
+interface StyleVariantDefinition<T> {
+  base?: CssProperties
+  variants?: T
+  compoundVariants?: (ObjectKeyArrayPicker<T> & { style: CssProperties })[]
+  defaultVariants?: ObjectKeyPicker<T>
+}
+```
+
+Example:
+
+```typescript
+const box = sv({
+  base: {
+    display: 'flex',
+    borderRadius: '8px',
+  },
+  variants: {
+    size: {
+      sm: { padding: '8px', fontSize: '14px' },
+      md: { padding: '16px', fontSize: '16px' },
+      lg: { padding: '24px', fontSize: '18px' },
+    },
+  },
+})
+
+box({ size: 'lg' })
+// => { display: 'flex', borderRadius: '8px', padding: '24px', fontSize: '18px' }
+```
+
+### ssv - Slot Style Variants
+
+Create variants for multi-element components using inline CSS styles.
+
+```typescript
+import { ssv } from 'css-variants'
+
+const tooltip = ssv({
+  slots: ['container', 'arrow', 'content'],
+  base: {
+    container: { position: 'relative', display: 'inline-block' },
+    content: { position: 'absolute', padding: '8px 12px', borderRadius: '6px' },
+  },
+  variants: {
+    placement: {
+      top: { content: { bottom: '100%', left: '50%', transform: 'translateX(-50%)' } },
+      bottom: { content: { top: '100%', left: '50%', transform: 'translateX(-50%)' } },
+    },
+  },
+})
+```
+
+### cx - Class Name Merger
+
+A lightweight utility for merging class names. Supports strings, arrays, objects, and nested combinations.
+
+```typescript
+import { cx } from 'css-variants'
+
+cx('foo', 'bar') // => 'foo bar'
+cx('foo', null, 'bar', undefined) // => 'foo bar'
+cx({ active: true, disabled: false }) // => 'active'
+cx(['foo', 'bar'], 'baz') // => 'foo bar baz'
+```
+
+## Core Concepts
+
+### Variants
+
+Variants are named groups of style options:
+
+```typescript
+const button = cv({
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white',
+      secondary: 'bg-gray-200 text-gray-900',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-4 py-2 text-base',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+})
+
+button({ color: 'primary', size: 'lg' })
+```
+
+### Base Styles
+
+Base styles are applied to all instances:
+
+```typescript
+const card = cv({
+  base: 'rounded-lg shadow-md overflow-hidden',
+  variants: {
+    padding: {
+      sm: 'p-4',
+      md: 'p-6',
+      lg: 'p-8',
+    },
+  },
+})
+```
+
+### Default Variants
+
+Set fallback values when props aren't provided:
+
+```typescript
+const input = cv({
+  variants: {
+    size: {
+      sm: 'text-sm px-2 py-1',
+      md: 'text-base px-3 py-2',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+})
+
+input() // Uses size: 'md'
+```
+
+### Compound Variants
+
+Apply additional styles when multiple variants match:
+
+```typescript
+const button = cv({
+  variants: {
+    color: { primary: '...', secondary: '...' },
+    size: { sm: '...', lg: '...' },
+  },
+  compoundVariants: [
+    {
+      color: 'primary',
+      size: 'lg',
+      className: 'font-bold shadow-lg',
+    },
+  ],
+})
+```
+
+### Boolean Variants
+
+Use `'true'` and `'false'` as string keys, but pass actual booleans when calling:
+
+```typescript
+const checkbox = cv({
+  variants: {
+    checked: {
+      true: 'bg-blue-600',
+      false: 'bg-white',
+    },
+    disabled: {
+      true: 'opacity-50 cursor-not-allowed',
+      false: 'cursor-pointer',
+    },
+  },
+})
+
+checkbox({ checked: true, disabled: false })
+```
+
+## Tailwind CSS Integration
+
+### Handling Class Conflicts with tailwind-merge
+
+```typescript
+import { cv, cx } from 'css-variants'
+import { twMerge } from 'tailwind-merge'
+
+const classNameResolver: typeof cx = (...args) => twMerge(cx(...args))
+
+const button = cv({
+  base: 'px-4 py-2 text-sm',
+  variants: {
+    size: {
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  classNameResolver,
+})
+```
+
+### Recommended Setup
+
+```typescript
+// lib/variants.ts
+import css from 'css-variants'
+import { twMerge } from 'tailwind-merge'
+
+export const cx: typeof css.cx = (...args) => twMerge(css.cx(...args))
+
+export const cv: typeof css.cv = (config) => css.cv({
+  ...config,
+  classNameResolver: cx,
+})
+
+export const scv: typeof css.scv = (config) => css.scv({
+  ...config,
+  classNameResolver: cx,
+})
+```
+
+### VS Code IntelliSense
+
+Add to `.vscode/settings.json`:
+
+```json
+{
+  "tailwindCSS.classFunctions": ["cv", "scv", "cx"]
+}
+```
+
+## TypeScript
+
+### Extracting Variant Types
+
+```typescript
+const button = cv({
+  variants: {
+    color: { primary: '...', secondary: '...' },
+    size: { sm: '...', md: '...', lg: '...' },
+  },
+})
+
+type ButtonVariants = Parameters<typeof button>[0]
+// => { color?: 'primary' | 'secondary', size?: 'sm' | 'md' | 'lg', className?: ClassValue }
+```
+
+### React Component Example
+
+```tsx
+const buttonVariants = cv({
+  base: 'font-medium rounded transition-colors',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white hover:bg-blue-700',
+      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-4 py-2 text-base',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'md',
+  },
+})
+
+type ButtonVariants = Parameters<typeof buttonVariants>[0]
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonVariants
+
+export function Button({ color, size, className, children, ...props }: ButtonProps) {
+  return (
+    <button className={buttonVariants({ color, size, className })} {...props}>
+      {children}
+    </button>
+  )
+}
+```
+
+## Migration from CVA
+
+Key differences from Class Variance Authority (CVA):
+
+| Feature | CVA | css-variants |
+|---------|-----|--------------|
+| Base styles | First argument | `base` property |
+| Compound class key | `class` | `className` |
+| Custom merger | `class` in call | `classNameResolver` in config |
+| Slot variants | Not built-in | `scv` function |
+| Style variants | Not built-in | `sv` and `ssv` functions |
+
+### Before (CVA)
+
+```typescript
+import { cva } from 'class-variance-authority'
+
+const button = cva('btn base-styles', {
+  variants: { /* ... */ },
+  compoundVariants: [
+    { color: 'primary', size: 'lg', class: 'shadow-lg' },
+  ],
+})
+```
+
+### After (css-variants)
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({
+  base: 'btn base-styles',
+  variants: { /* ... */ },
+  compoundVariants: [
+    { color: 'primary', size: 'lg', className: 'shadow-lg' },
+  ],
+})
+```
+
+## Performance
+
+- **Bundle Size**: ~1KB minified + gzipped
+- **Zero Dependencies**: No additional packages bundled
+- **Tree-shakeable**: Import only what you need
+- **SSR Compatible**: Works identically on server and client
+
+Best practices:
+1. Create variants at module level, not inside components
+2. Keep compound variants minimal
+3. Use `cv` for single elements, `scv` for multi-element components
+4. Import only what you need for optimal tree-shaking
+
+## Links
+
+- [Documentation](https://css-variants.vercel.app/)
+- [GitHub Repository](https://github.com/timphandev/css-variants)
+- [npm Package](https://www.npmjs.com/package/css-variants)

@@ -1,0 +1,44 @@
+# css-variants
+
+> Zero-dependency, type-safe CSS variant composition for modern JavaScript
+
+css-variants is a lightweight (~1KB) library for building powerful, flexible component style systems with variants. Perfect for Tailwind CSS, vanilla CSS, or any CSS-in-JS solution.
+
+## Documentation
+
+- [Introduction](https://css-variants.vercel.app/getting-started/introduction/): Learn about css-variants and why you should use it
+- [Installation](https://css-variants.vercel.app/getting-started/installation/): How to install css-variants in your project
+- [Quick Start](https://css-variants.vercel.app/getting-started/quick-start/): Create your first variant
+
+### Core Concepts
+
+- [Variants](https://css-variants.vercel.app/core-concepts/variants/): Understanding variants in css-variants
+- [Base Styles](https://css-variants.vercel.app/core-concepts/base-styles/): Apply styles to all component instances
+- [Default Variants](https://css-variants.vercel.app/core-concepts/default-variants/): Set default values for variants
+- [Compound Variants](https://css-variants.vercel.app/core-concepts/compound-variants/): Apply styles when multiple variants match
+- [Boolean Variants](https://css-variants.vercel.app/core-concepts/boolean-variants/): Using boolean variants for toggles
+
+### API Reference
+
+- [cv](https://css-variants.vercel.app/api/cv/): Class variants for single-element components
+- [scv](https://css-variants.vercel.app/api/scv/): Slot class variants for multi-element components
+- [sv](https://css-variants.vercel.app/api/sv/): Style variants for inline CSS styles
+- [ssv](https://css-variants.vercel.app/api/ssv/): Slot style variants for multi-element inline styles
+- [cx](https://css-variants.vercel.app/api/cx/): Class name merger utility
+
+### Guides
+
+- [Tailwind CSS](https://css-variants.vercel.app/guides/tailwind/): How to use css-variants with Tailwind CSS
+- [CSS Modules](https://css-variants.vercel.app/guides/css-modules/): How to use css-variants with CSS Modules
+- [TypeScript](https://css-variants.vercel.app/guides/typescript/): Getting the most out of TypeScript
+- [Framework Integration](https://css-variants.vercel.app/guides/frameworks/): Using with React, Vue, Solid.js, and more
+
+### Resources
+
+- [FAQ](https://css-variants.vercel.app/resources/faq/): Frequently asked questions
+- [Migration from CVA](https://css-variants.vercel.app/resources/migration/): How to migrate from Class Variance Authority
+- [Performance](https://css-variants.vercel.app/resources/performance/): Performance characteristics and optimization tips
+
+## Optional
+
+- [GitHub Repository](https://github.com/timphandev/css-variants)

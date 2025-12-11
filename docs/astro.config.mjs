@@ -68,6 +68,7 @@ export default defineConfig({
             { label: 'Migration from CVA', slug: 'resources/migration' },
             { label: 'Performance', slug: 'resources/performance' },
             { label: 'FAQ', slug: 'resources/faq' },
+            { label: 'LLMs', slug: 'resources/llms' },
           ],
         },
       ],
