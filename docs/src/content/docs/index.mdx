@@ -1,0 +1,64 @@
+---
+title: CSS variant composition for modern JavaScript
+description: Zero-dependency, type-safe CSS variant composition for modern JavaScript
+template: splash
+hero:
+  tagline: Build powerful, flexible component style systems with variants. Perfect for Tailwind CSS, vanilla CSS, or any CSS-in-JS solution.
+  actions:
+    - text: Get Started
+      link: /css-variants/getting-started/introduction/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/timphandev/css-variants
+      icon: external
+      variant: secondary
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why css-variants?
+
+<CardGrid stagger>
+  <Card title="Tiny & Fast" icon="rocket">
+    Zero dependencies, ~1KB minified+gzipped. Optimized for performance.
+  </Card>
+  <Card title="Type-Safe" icon="approve-check">
+    First-class TypeScript support with complete type inference for variants and props.
+  </Card>
+  <Card title="Flexible" icon="puzzle">
+    Works with Tailwind, CSS modules, vanilla CSS, or inline styles.
+  </Card>
+  <Card title="Developer-Friendly" icon="heart">
+    Intuitive API inspired by CVA and Panda CSS. Easy to learn and use.
+  </Card>
+</CardGrid>
+
+## Quick Example
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({
+  base: 'font-semibold rounded-lg transition-colors',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white hover:bg-blue-700',
+      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+      danger: 'bg-red-600 text-white hover:bg-red-700',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-4 py-2 text-base',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'md',
+  },
+})
+
+// Usage
+button() // => 'font-semibold rounded-lg ... bg-blue-600 text-white ... px-4 py-2 text-base'
+button({ color: 'danger', size: 'lg' }) // => '... bg-red-600 ... px-6 py-3 text-lg'
+```

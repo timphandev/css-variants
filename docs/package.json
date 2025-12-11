@@ -1,0 +1,17 @@
+{
+  "name": "@css-variants/docs",
+  "type": "module",
+  "version": "2.2.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.37.1",
+    "astro": "^5.16.5",
+    "sharp": "^0.33.5"
+  }
+}

@@ -1,0 +1,190 @@
+---
+title: Performance
+description: Performance characteristics and optimization tips for css-variants
+---
+
+css-variants is designed to be fast and lightweight. Here's what you need to know about performance.
+
+## Bundle Size
+
+css-variants is extremely lightweight:
+
+- **Core library**: ~1KB minified + gzipped
+- **Zero dependencies**: No additional packages bundled
+- **Tree-shakeable**: Import only what you need
+
+### Selective Imports
+
+Each function can be imported independently:
+
+```typescript
+// Only imports cv (~400 bytes)
+import { cv } from 'css-variants/cv'
+
+// Only imports scv (~600 bytes)
+import { scv } from 'css-variants/scv'
+
+// Only imports cx (~200 bytes)
+import { cx } from 'css-variants/scv'
+
+// Import multiple
+import { cv, cx } from 'css-variants'
+```
+
+## Runtime Performance
+
+### Variant Creation
+
+Variant functions are created once and reused:
+
+```typescript
+// ✅ Good: Created once at module level
+const button = cv({
+  base: 'rounded font-medium',
+  variants: { /* ... */ },
+})
+
+function Button(props) {
+  return <button className={button(props)} />
+}
+```
+
+```typescript
+// ❌ Bad: Recreated on every render
+function Button(props) {
+  const button = cv({
+    base: 'rounded font-medium',
+    variants: { /* ... */ },
+  })
+  return <button className={button(props)} />
+}
+```
+
+### Variant Resolution
+
+When you call a variant function:
+
+1. **Base classes** are concatenated (O(1))
+2. **Selected variants** are looked up by key (O(1) per variant)
+3. **Compound variants** are checked (O(n) where n = number of compound rules)
+4. **Classes are merged** using cx (O(m) where m = total classes)
+
+For typical usage with 3-5 variants and 2-3 compound rules, this is extremely fast.
+
+## Optimization Tips
+
+### 1. Minimize Compound Variants
+
+Each compound variant is checked at runtime:
+
+```typescript
+// More compound variants = more checks
+compoundVariants: [
+  { size: 'lg', color: 'primary', className: '...' },
+  { size: 'lg', color: 'secondary', className: '...' },
+  { size: 'md', color: 'primary', className: '...' },
+  // ... many more
+]
+```
+
+Consider restructuring if you have many compound variants:
+
+```typescript
+// Better: Use a dedicated variant instead
+variants: {
+  featured: {
+    true: 'shadow-lg font-bold',
+    false: '',
+  },
+}
+```
+
+### 2. Avoid Dynamic Variant Creation
+
+```typescript
+// ❌ Bad: Creates new variant on each call
+function getButtonVariant(theme: 'light' | 'dark') {
+  return cv({
+    base: theme === 'dark' ? 'bg-gray-800' : 'bg-white',
+    variants: { /* ... */ },
+  })
+}
+```
+
+```typescript
+// ✅ Good: Handle themes within variants
+const button = cv({
+  variants: {
+    theme: {
+      light: 'bg-white text-gray-900',
+      dark: 'bg-gray-800 text-white',
+    },
+    // ... other variants
+  },
+})
+```
+
+### 3. Use Slot Variants Appropriately
+
+`scv` creates an object of class strings for each slot. Only use it when you have multiple related elements:
+
+```typescript
+// ✅ Good: Multiple related elements
+const card = scv({
+  slots: ['root', 'header', 'content', 'footer'],
+  // ...
+})
+
+// ❌ Overkill: Single element
+const button = scv({
+  slots: ['root'], // Just use cv() instead
+  // ...
+})
+```
+
+### 4. Memoization (React)
+
+For components that render frequently with the same props, consider memoization:
+
+```tsx
+import { useMemo } from 'react'
+
+function ExpensiveComponent({ color, size, ...props }) {
+  const className = useMemo(
+    () => button({ color, size }),
+    [color, size]
+  )
+
+  return <button className={className} {...props} />
+}
+```
+
+However, for most cases this is unnecessary - variant resolution is fast enough.
+
+## Memory Usage
+
+Variant definitions are plain JavaScript objects and have minimal memory overhead. The main memory considerations:
+
+1. **Variant configuration**: Stored once per variant definition
+2. **Generated classes**: New strings created per call (garbage collected normally)
+3. **Compound variant arrays**: One array per variant definition
+
+For typical applications with dozens of component variants, memory usage is negligible.
+
+## Server-Side Rendering
+
+css-variants works identically on server and client:
+
+- No DOM dependencies
+- No browser-specific APIs
+- Same output in Node.js and browser
+
+This makes it ideal for SSR frameworks like Next.js, Nuxt, and Remix.
+
+## Production Tips Summary
+
+1. **Create variants at module level**, not inside components
+2. **Keep compound variants minimal**
+3. **Use `cv` for single elements, `scv` for multi-element components**
+4. **Import only what you need** for optimal tree-shaking
+5. **Memoize only when profiling shows it's needed**
