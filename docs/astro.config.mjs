@@ -44,6 +44,7 @@ export default defineConfig({
             { label: 'Introduction', link: 'getting-started/introduction', slug: 'getting-started/introduction' },
             { label: 'Installation', slug: 'getting-started/installation' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
+            { label: 'llms.txt', slug: 'resources/llms' },
           ],
         },
         {
@@ -81,7 +82,6 @@ export default defineConfig({
             { label: 'Migration from CVA', slug: 'resources/migration' },
             { label: 'Performance', slug: 'resources/performance' },
             { label: 'FAQ', slug: 'resources/faq' },
-            { label: 'LLMs', slug: 'resources/llms' },
           ],
         },
       ],
