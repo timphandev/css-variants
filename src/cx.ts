@@ -37,7 +37,7 @@ function toVal(input: ClassValue): string {
 
   for (const key in input) {
     if (input[key]) {
-      result && (result += ' ')
+      if (result) result += ' '
       result += key
     }
   }
