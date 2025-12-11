@@ -6,16 +6,6 @@ on:
       - main
     paths:
       - 'docs/**'
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -31,9 +21,6 @@ jobs:
           node-version: 24.x
           check-latest: true
 
-      - name: Configure GitHub Pages 📄
-        uses: actions/configure-pages@v5
-
       - name: Install 🔧
         working-directory: docs
         run: yarn install --frozen-lockfile
@@ -41,24 +28,3 @@ jobs:
       - name: Build 🏗️
         working-directory: docs
         run: yarn build
-
-      - name: Upload artifact 📦
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: docs/dist
-
-  deploy:
-    needs: build
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages 🚀
-        id: deployment
-        uses: actions/deploy-pages@v4

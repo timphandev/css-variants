@@ -2,8 +2,7 @@ import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
 export default defineConfig({
-  site: 'https://timphandev.github.io',
-  base: '/css-variants',
+  site: 'https://css-variants.vercel.app',
   integrations: [
     starlight({
       title: 'css-variants',

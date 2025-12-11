@@ -2,6 +2,7 @@
   "name": "@css-variants/docs",
   "type": "module",
   "version": "2.2.0",
+  "license": "MIT",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

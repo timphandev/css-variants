@@ -59,12 +59,12 @@ button({ color: 'secondary', size: 'lg' }) // => '... bg-gray-200 text-gray-900 
 
 ## Documentation
 
-**[View full documentation →](https://timphandev.github.io/css-variants/getting-started/introduction/)**
+**[View full documentation →](https://css-variants.vercel.app/)**
 
-- [Getting Started](https://timphandev.github.io/css-variants/getting-started/introduction/)
-- [Core Concepts](https://timphandev.github.io/css-variants/core-concepts/variants/)
-- [API Reference](https://timphandev.github.io/css-variants/api/cv/)
-- [Tailwind CSS Integration](https://timphandev.github.io/css-variants/guides/tailwind/)
+- [Getting Started](https://css-variants.vercel.app/getting-started/introduction/)
+- [Core Concepts](https://css-variants.vercel.app/core-concepts/variants/)
+- [API Reference](https://css-variants.vercel.app/api/cv/)
+- [Tailwind CSS Integration](https://css-variants.vercel.app/guides/tailwind/)
 
 ## Contributing
 
