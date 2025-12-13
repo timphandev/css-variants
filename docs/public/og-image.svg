@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="white"/>
+
+  <polygon points="0,0 1200,0 1200,200 0,350"
+    fill="hsla(225,80%,70%,0.2)" />
+
+  <g transform="translate(120,160) rotate(-6 256 256)">
+    <rect x="0" y="200" width="320" height="260" rx="60" fill="hsl(225,65%,92%)" opacity="0.95"/>
+    <rect x="40" y="150" width="320" height="260" rx="60" fill="hsl(225,75%,85%)" opacity="0.98"/>
+    <rect x="80" y="100" width="320" height="260" rx="60" fill="hsl(225,80%,70%)"/>
+  </g>
+
+  <text x="600" y="450" font-size="96" font-family="Inter, sans-serif" fill="hsl(225,40%,25%)">
+    css-variants
+  </text>
+</svg>

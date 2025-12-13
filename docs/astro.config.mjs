@@ -1,8 +1,19 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
+const SITE = 'https://css-variants.vercel.app'
+
 /** @type {import('@astrojs/starlight/types').StarlightConfig['head']} */
-const head = []
+const head = [
+  {
+    tag: 'meta',
+    attrs: { property: 'og:image', content: SITE + '/og-image.svg' },
+  },
+  {
+    tag: 'meta',
+    attrs: { name: 'twitter:image', content: SITE + '/og-image.svg' },
+  },
+]
 
 if (process.env.GOOGLE_SITE_VERIFICATION) {
   head.push({
@@ -15,13 +26,14 @@ if (process.env.GOOGLE_SITE_VERIFICATION) {
 }
 
 export default defineConfig({
-  site: 'https://css-variants.vercel.app',
+  site: SITE,
   integrations: [
     starlight({
       title: 'css-variants',
       description: 'Zero-dependency, type-safe CSS variant composition for modern JavaScript',
       favicon: '/favicon.svg',
       logo: {
+        alt: 'css-variants logo',
         light: './src/assets/logo-light.svg',
         dark: './src/assets/logo-dark.svg',
       },

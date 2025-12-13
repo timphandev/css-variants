@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <g transform="rotate(-6 256 256)">
+    <rect x="80" y="200" width="320" height="260" rx="60"
+      fill="hsl(225, 45%, 88%)" opacity="0.9" />
+
+    <rect x="120" y="150" width="320" height="260" rx="60"
+      fill="hsl(225, 70%, 82%)" opacity="0.95" />
+
+    <rect x="160" y="100" width="320" height="260" rx="60"
+      fill="hsl(225, 80%, 70%)" />
+  </g>
+</svg>

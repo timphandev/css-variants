@@ -4,6 +4,10 @@ description: Zero-dependency, type-safe CSS variant composition for modern JavaS
 template: splash
 hero:
   tagline: Build powerful, flexible component style systems with variants. Perfect for Tailwind CSS, vanilla CSS, or any CSS-in-JS solution.
+  image:
+    alt: css-variants
+    dark: ../../assets/banner-dark.svg
+    light: ../../assets/banner-light.svg
   actions:
     - text: Get Started
       link: /getting-started/introduction/
@@ -14,51 +18,136 @@ hero:
       variant: secondary
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Why css-variants?
+## Complete Toolkit
 
-<CardGrid stagger>
-  <Card title="Tiny & Fast" icon="rocket">
-    Zero dependencies, ~1KB minified+gzipped. Optimized for performance.
+<CardGrid>
+  <LinkCard
+    title="cv - Class Variants"
+    description="Single-element component styling with class names"
+    href="/api/cv/"
+  />
+  <LinkCard
+    title="scv - Slot Class Variants"
+    description="Multi-element components with named slots"
+    href="/api/scv/"
+  />
+  <LinkCard
+    title="sv - Style Variants"
+    description="Inline CSS style objects with variants"
+    href="/api/sv/"
+  />
+  <LinkCard
+    title="ssv - Slot Style Variants"
+    description="Multi-slot inline style management"
+    href="/api/ssv/"
+  />
+</CardGrid>
+
+## Powerful Features
+
+<CardGrid>
+  <Card title="Compound Variants" icon="setting">
+    Apply styles when multiple variant conditions are met simultaneously.
+
+    ```typescript
+    compoundVariants: [
+      {
+        color: 'primary',
+        size: 'lg',
+        class: 'uppercase tracking-wide'
+      }
+    ]
+    ```
   </Card>
-  <Card title="Type-Safe" icon="approve-check">
-    First-class TypeScript support with complete type inference for variants and props.
+  <Card title="Boolean Variants" icon="approve-check-circle">
+    Simple on/off toggles for common states like disabled, loading, or active.
+
+    ```typescript
+    variants: {
+      disabled: {
+        true: 'opacity-50 cursor-not-allowed'
+      }
+    }
+    ```
   </Card>
-  <Card title="Flexible" icon="puzzle">
-    Works with Tailwind, CSS modules, vanilla CSS, or inline styles.
+  <Card title="Slot System" icon="list-format">
+    Style multi-element components with named slots for complex UI patterns.
+
+    ```typescript
+    slots: ['root', 'header'],
+    base: {
+      root: 'card-root',
+      header: 'card-header'
+    }
+    ```
   </Card>
-  <Card title="Developer-Friendly" icon="heart">
-    Intuitive API inspired by CVA and Panda CSS. Easy to learn and use.
+  <Card title="Class Merging" icon="random">
+    Smart class name merging with the `cx` utility. Handle conditional classes with ease.
+
+    ```typescript
+    cx('base', condition && 'active', {
+      'enabled': isEnabled
+    })
+    ```
   </Card>
 </CardGrid>
 
-## Quick Example
+## Works Everywhere
 
-```typescript
-import { cv } from 'css-variants'
+<CardGrid stagger>
+  <Card title="React" icon="seti:react">
+    ```tsx
+    <button className={button({ color: 'primary' })}>
+      Click me
+    </button>
+    ```
+  </Card>
+  <Card title="Vue" icon="seti:vue">
+    ```vue
+    <button :class="button({ color: 'primary' })">
+      Click me
+    </button>
+    ```
+  </Card>
+  <Card title="Svelte" icon="seti:svelte">
+    ```svelte
+    <button class={button({ color: 'primary' })}>
+      Click me
+    </button>
+    ```
+  </Card>
+  <Card title="Solid" icon="seti:json">
+    ```tsx
+    <button class={button({ color: 'primary' })}>
+      Click me
+    </button>
+    ```
+  </Card>
+</CardGrid>
 
-const button = cv({
-  base: 'font-semibold rounded-lg transition-colors',
-  variants: {
-    color: {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
-      danger: 'bg-red-600 text-white hover:bg-red-700',
-    },
-    size: {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-4 py-2 text-base',
-      lg: 'px-6 py-3 text-lg',
-    },
-  },
-  defaultVariants: {
-    color: 'primary',
-    size: 'md',
-  },
-})
+## Ready to Get Started?
 
-// Usage
-button() // => 'font-semibold rounded-lg ... bg-blue-600 text-white ... px-4 py-2 text-base'
-button({ color: 'danger', size: 'lg' }) // => '... bg-red-600 ... px-6 py-3 text-lg'
-```
+<CardGrid>
+  <LinkCard
+    title="Introduction"
+    description="Learn the core concepts and philosophy behind css-variants"
+    href="/getting-started/introduction/"
+  />
+  <LinkCard
+    title="Quick Start"
+    description="Build your first variant in under 5 minutes"
+    href="/getting-started/quick-start/"
+  />
+  <LinkCard
+    title="Tailwind Integration"
+    description="Best practices for using css-variants with Tailwind CSS"
+    href="/guides/tailwind/"
+  />
+  <LinkCard
+    title="Migration from CVA"
+    description="Coming from cva? See what's different and how to migrate"
+    href="/resources/migration/"
+  />
+</CardGrid>
