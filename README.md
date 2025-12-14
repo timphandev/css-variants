@@ -7,7 +7,7 @@
 Build powerful, flexible component style systems with variants.<br/>
 Perfect for Tailwind CSS, vanilla CSS, or any CSS-in-JS solution.
 
-[![test](https://github.com/timphandev/css-variants/actions/workflows/ci.yml/badge.svg)](https://github.com/timphandev/css-variants/actions/workflows/ci.yml)
+[![test](https://github.com/timphandev/css-variants/actions/workflows/packages.css-variants.test.yml/badge.svg)](https://github.com/timphandev/css-variants/actions/workflows/packages.css-variants.test.yml)
 [![npm version](https://img.shields.io/npm/v/css-variants.svg)](https://www.npmjs.com/package/css-variants)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/css-variants)](https://bundlephobia.com/package/css-variants)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](https://www.typescriptlang.org/)
