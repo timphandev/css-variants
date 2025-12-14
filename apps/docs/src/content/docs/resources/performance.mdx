@@ -193,25 +193,7 @@ This makes it ideal for SSR frameworks like Next.js, Nuxt, and Remix.
 4. **Import only what you need** for optimal tree-shaking
 5. **Memoize only when profiling shows it's needed**
 
-## Benchmark Comparison
-
-css-variants delivers exceptional performance compared to popular alternatives:
-
-| Benchmark | vs cva | vs tailwind-variants |
-|-----------|:------:|:--------------------:|
-| **Overall** | ⚡ Faster in 11/13 scenarios | ⚡ Faster in all scenarios |
-| **Compound Variants** | 🚀 **3-4x faster** | 🚀 **5-6x faster** |
-| **Complex Components** | 🚀 **4-9x faster** | 🚀 **10-11x faster** |
-| **Simple Operations** | ✓ Competitive | 🚀 **3-7x faster** |
-
-:::tip[Performance Scales with Complexity]
-The more complex your components, the bigger the performance advantage. Real-world production components with multiple variants and compound rules see the most dramatic improvements.
+:::tip[Want to see the numbers?]
+Check out our [detailed benchmark comparison](/resources/benchmarks) to see how css-variants performs against popular alternatives like class-variance-authority and tailwind-variants.
 :::
 
-*Benchmarks last updated: 2025-12-11*
-
-Run `yarn benchmark bench` to regenerate these benchmarks on your machine.
-
-**Benchmark source code:**
-- [vs class-variance-authority](https://github.com/timphandev/css-variants/blob/main/internal/benchmark/src/cva/)
-- [vs tailwind-variants](https://github.com/timphandev/css-variants/blob/main/internal/benchmark/src/tailwind-variants/)

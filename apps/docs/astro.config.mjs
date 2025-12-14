@@ -94,6 +94,7 @@ export default defineConfig({
             { label: 'Migration from CVA', slug: 'resources/migration-cva' },
             { label: 'Migration from Tailwind Variants', slug: 'resources/migration-tailwind-variants' },
             { label: 'Performance', slug: 'resources/performance' },
+            { label: 'Benchmarks', slug: 'resources/benchmarks' },
             { label: 'FAQ', slug: 'resources/faq' },
           ],
         },

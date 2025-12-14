@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "prebench": "yarn workspace css-variants build",
-    "bench": "vitest bench --outputJson ./dist/benchmark.json --run"
+    "prestart": "yarn workspace css-variants build",
+    "start": "vitest bench --outputJson ./dist/benchmark.json --run"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

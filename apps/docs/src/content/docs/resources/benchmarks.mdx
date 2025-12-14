@@ -1,0 +1,215 @@
+---
+title: Benchmarks
+description: Detailed performance comparison of css-variants against class-variance-authority and tailwind-variants
+---
+
+import { Card, CardGrid, Aside, Badge, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Performance matters. css-variants is engineered for speed, delivering exceptional runtime performance without sacrificing features.
+
+## Quick Summary
+
+| Comparison | Simple Ops | Compound Variants | Complex Components | Slots |
+|:-----------|:----------:|:-----------------:|:------------------:|:-----:|
+| **vs cva** | ~1.1-1.3x | **3-4x faster** | **2-7x faster** | — |
+| **vs tailwind-variants** | **3-5x faster** | **5-7x faster** | **10-11x faster** | **3-7x faster** |
+
+<Aside type="tip" title="Performance scales with complexity">
+The more complex your components, the bigger the performance advantage. Real-world production components with multiple variants and compound rules see the most dramatic improvements.
+</Aside>
+
+---
+
+## css-variants vs class-variance-authority
+
+Direct comparison against the popular [class-variance-authority](https://cva.style) (cva) library.
+
+### Basic Operations
+
+| Test Case | css-variants | cva | Difference |
+|-----------|-------------:|----:|:-----------|
+| Base class only | 23.2M ops/s | 21.2M ops/s | **1.09x faster** |
+| Single variant | 9.4M ops/s | 9.4M ops/s | Equal |
+| Multiple variants | 5.1M ops/s | 4.7M ops/s | **1.07x faster** |
+| Boolean variants | 5.9M ops/s | 5.0M ops/s | **1.18x faster** |
+| className override | 20.7M ops/s | 15.7M ops/s | **1.31x faster** |
+
+### Default Variants
+
+| Test Case | css-variants | cva | Difference |
+|-----------|-------------:|----:|:-----------|
+| Defaults (no props) | 9.3M ops/s | 8.0M ops/s | **1.16x faster** |
+| Override one default | 8.2M ops/s | 6.3M ops/s | **1.31x faster** |
+| With className | 8.4M ops/s | 6.6M ops/s | **1.27x faster** |
+
+### Compound Variants
+
+This is where css-variants really shines:
+
+| Test Case | css-variants | cva | Difference |
+|-----------|-------------:|----:|:-----------|
+| No match | 4.2M ops/s | 1.1M ops/s | **3.70x faster** |
+| Single match | 4.1M ops/s | 1.0M ops/s | **3.92x faster** |
+| Multiple matches | 3.8M ops/s | 0.9M ops/s | **4.24x faster** |
+
+<Aside type="tip" title="Why compound variants are faster">
+css-variants uses optimized iteration and early-exit strategies when checking compound variant conditions, resulting in significantly better performance as complexity increases.
+</Aside>
+
+### Complex Real-World Components
+
+Testing a production-ready button component with 6 variant options and compound rules:
+
+| Test Case | css-variants | cva | Difference |
+|-----------|-------------:|----:|:-----------|
+| With defaults | 8.1M ops/s | 3.4M ops/s | **2.40x faster** |
+| With overrides | 5.1M ops/s | 0.7M ops/s | **6.93x faster** |
+
+---
+
+## css-variants vs tailwind-variants
+
+Comparison against [tailwind-variants](https://www.tailwind-variants.org/), using its lightweight `/lite` build.
+
+### Basic Operations
+
+| Test Case | css-variants | tailwind-variants | Difference |
+|-----------|-------------:|------------------:|:-----------|
+| Base class only | 23.1M ops/s | 6.4M ops/s | **3.59x faster** |
+| Single variant | 9.9M ops/s | 2.2M ops/s | **4.52x faster** |
+| Multiple variants | 4.8M ops/s | 1.1M ops/s | **4.58x faster** |
+| Boolean variants | 5.8M ops/s | 1.6M ops/s | **3.57x faster** |
+| className override | 21.4M ops/s | 3.9M ops/s | **5.47x faster** |
+
+### Default Variants
+
+| Test Case | css-variants | tailwind-variants | Difference |
+|-----------|-------------:|------------------:|:-----------|
+| Defaults (no props) | 8.6M ops/s | 1.4M ops/s | **6.04x faster** |
+| Override one default | 8.6M ops/s | 1.4M ops/s | **6.35x faster** |
+| With className | 8.4M ops/s | 2.1M ops/s | **4.07x faster** |
+
+### Compound Variants
+
+| Test Case | css-variants | tailwind-variants | Difference |
+|-----------|-------------:|------------------:|:-----------|
+| No match | 4.2M ops/s | 0.6M ops/s | **6.60x faster** |
+| Single match | 4.0M ops/s | 0.7M ops/s | **5.43x faster** |
+| Multiple matches | 3.8M ops/s | 0.7M ops/s | **5.57x faster** |
+
+### Complex Real-World Components
+
+| Test Case | css-variants | tailwind-variants | Difference |
+|-----------|-------------:|------------------:|:-----------|
+| With defaults | 8.1M ops/s | 0.8M ops/s | **10.39x faster** |
+| With overrides | 5.2M ops/s | 0.5M ops/s | **11.05x faster** |
+
+---
+
+## Slot-Based Components: scv vs tailwind-variants
+
+Comparing css-variants' `scv` (slot class variants) against tailwind-variants' slots feature.
+
+### Basic Slots
+
+| Test Case | css-variants (scv) | tailwind-variants | Difference |
+|-----------|-------------------:|------------------:|:-----------|
+| Base slots (2 slots) | 11.4M ops/s | 2.1M ops/s | **5.33x faster** |
+| Single variant (2 slots) | 3.9M ops/s | 1.2M ops/s | **3.25x faster** |
+| Multiple slots (4 slots) | 2.2M ops/s | 0.6M ops/s | **3.79x faster** |
+| Multiple variants (4 slots) | 1.8M ops/s | 0.4M ops/s | **4.67x faster** |
+| No variants (optimized) | 9.3M ops/s | 2.0M ops/s | **4.59x faster** |
+
+### Default Variants with Slots
+
+| Test Case | css-variants (scv) | tailwind-variants | Difference |
+|-----------|-------------------:|------------------:|:-----------|
+| Defaults (no props) | 2.8M ops/s | 0.7M ops/s | **3.95x faster** |
+| Override one default | 2.7M ops/s | 0.8M ops/s | **3.52x faster** |
+| With classNames | 2.8M ops/s | 1.0M ops/s | **2.75x faster** |
+
+### Compound Variants with Slots
+
+| Test Case | css-variants (scv) | tailwind-variants | Difference |
+|-----------|-------------------:|------------------:|:-----------|
+| No match | 1.8M ops/s | 0.3M ops/s | **6.04x faster** |
+| Single match | 1.7M ops/s | 0.2M ops/s | **7.45x faster** |
+| Multiple matches | 1.6M ops/s | 0.2M ops/s | **7.47x faster** |
+
+### Complex Slot Components
+
+| Test Case | css-variants (scv) | tailwind-variants | Difference |
+|-----------|-------------------:|------------------:|:-----------|
+| Card (7 slots, defaults) | 1.6M ops/s | 0.3M ops/s | **6.26x faster** |
+| Card (7 slots, overrides) | 0.8M ops/s | 0.1M ops/s | **7.32x faster** |
+| Stress test (8 slots) | 1.2M ops/s | 0.3M ops/s | **3.44x faster** |
+
+<Aside type="note" title="API Design Impact">
+tailwind-variants returns slot functions that must be called individually, adding overhead per slot. css-variants returns pre-computed strings for all slots in a single call, making it fundamentally more efficient.
+</Aside>
+
+---
+
+## Why css-variants is Faster
+
+### 1. Optimized Data Structures
+
+css-variants uses simple JavaScript objects and arrays with minimal indirection. No complex class instances or prototype chains.
+
+### 2. Early Exit Strategies
+
+When checking compound variants, css-variants exits as soon as a mismatch is found, avoiding unnecessary comparisons.
+
+### 3. Pre-computation
+
+Variant configurations are analyzed at creation time, not at runtime. The returned function is optimized for the specific configuration.
+
+### 4. Minimal String Operations
+
+Class strings are concatenated efficiently using a lightweight `cx` utility, avoiding expensive regex operations or repeated string allocations.
+
+### 5. No Runtime Dependencies
+
+Zero external dependencies means no additional function call overhead or module resolution costs.
+
+---
+
+## Running Benchmarks Yourself
+
+Clone the repository and run the benchmarks on your machine:
+
+```bash
+git clone https://github.com/timphandev/css-variants.git
+cd css-variants
+yarn install
+cd internal/benchmark
+yarn start
+```
+
+Results are saved to `internal/benchmark/dist/benchmark.json`.
+
+### Benchmark Configuration
+
+- **Framework**: Vitest Bench (using tinybench)
+- **Duration**: 500ms minimum per test
+- **Warmup**: Automatic by tinybench
+- **Environment**: Node.js
+
+---
+
+## Methodology
+
+All benchmarks follow these principles:
+
+1. **Fair comparison**: Identical configurations for both libraries
+2. **Isolated setup**: Variant configs created outside bench blocks (not measured)
+3. **Real-world scenarios**: Test cases mirror actual production usage patterns
+4. **Statistical rigor**: Multiple iterations with standard deviation and percentile metrics
+
+<Aside type="tip" title="Benchmark Source Code">
+View the complete benchmark suite on [GitHub](https://github.com/timphandev/css-variants/tree/main/internal/benchmark).
+</Aside>
+
+---
+
+*Last updated: December 2025*
