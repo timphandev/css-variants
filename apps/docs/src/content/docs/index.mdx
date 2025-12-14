@@ -1,9 +1,9 @@
 ---
-title: CSS variant composition for modern JavaScript
-description: Zero-dependency, type-safe CSS variant composition for modern JavaScript
+title: css-variants — The Fastest CSS Variant Library
+description: Zero-dependency, type-safe CSS variant composition for JavaScript. A faster, smaller alternative to CVA and tailwind-variants.
 template: splash
 hero:
-  tagline: Build powerful, flexible component style systems with variants. Perfect for Tailwind CSS, vanilla CSS, or any CSS-in-JS solution.
+  tagline: The fastest, smallest CSS variant library for JavaScript. Zero dependencies, full TypeScript support, 3-11x faster than CVA and tailwind-variants.
   image:
     alt: css-variants
     dark: ../../assets/banner-dark.svg
@@ -18,83 +18,144 @@ hero:
       variant: secondary
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Aside, Badge } from '@astrojs/starlight/components';
+
+## What is css-variants?
+
+**css-variants** is a zero-dependency, type-safe library for managing CSS class variants in JavaScript and TypeScript. Define style variations (color, size, state) declaratively, and let the library generate the correct CSS classes at runtime.
+
+**Key facts:**
+- **~1KB gzipped** — smallest variant library available
+- **3-11x faster** — outperforms CVA and tailwind-variants
+- **Zero dependencies** — no clsx, no tailwind-merge bundled
+- **Framework-agnostic** — works with React, Vue, Svelte, Solid, vanilla JS
+- **CSS-agnostic** — works with Tailwind, CSS Modules, vanilla CSS, CSS-in-JS
+
+<Aside type="tip" title="Alternative to CVA and tailwind-variants">
+If you're using CVA (Class Variance Authority) or tailwind-variants, css-variants is a drop-in replacement with better performance and additional features like slot variants and style variants.
+</Aside>
+
+---
+
+## Quick Example
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({
+  base: 'px-4 py-2 rounded font-medium transition-colors',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white hover:bg-blue-700',
+      secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+    },
+    size: {
+      sm: 'text-sm px-3 py-1.5',
+      lg: 'text-lg px-6 py-3',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'sm',
+  },
+})
+
+button()                     // Primary + Small (defaults)
+button({ color: 'secondary', size: 'lg' }) // Secondary + Large
+```
+
+---
+
+## Why css-variants?
+
+<CardGrid>
+  <Card title="~1KB Bundle" icon="rocket">
+    Smallest variant library available. Zero dependencies means nothing else to download.
+  </Card>
+  <Card title="3-11x Faster" icon="star">
+    Optimized algorithms outperform CVA and tailwind-variants in all benchmarks.
+  </Card>
+  <Card title="Type-Safe" icon="approve-check-circle">
+    Full TypeScript inference. Get autocomplete for variant props without extra type definitions.
+  </Card>
+  <Card title="Works Everywhere" icon="puzzle">
+    Framework-agnostic (React, Vue, Svelte) and CSS-agnostic (Tailwind, CSS Modules, vanilla).
+  </Card>
+</CardGrid>
+
+---
 
 ## Complete Toolkit
 
 <CardGrid>
   <LinkCard
-    title="cv - Class Variants"
+    title="cv — Class Variants"
     description="Single-element component styling with class names"
     href="/api/cv/"
   />
   <LinkCard
-    title="scv - Slot Class Variants"
-    description="Multi-element components with named slots"
+    title="scv — Slot Class Variants"
+    description="Multi-element components with named slots (cards, modals)"
     href="/api/scv/"
   />
   <LinkCard
-    title="sv - Style Variants"
+    title="sv — Style Variants"
     description="Inline CSS style objects with variants"
     href="/api/sv/"
   />
   <LinkCard
-    title="ssv - Slot Style Variants"
-    description="Multi-slot inline style management"
-    href="/api/ssv/"
+    title="cx — Class Merger"
+    description="Lightweight conditional class name merging"
+    href="/api/cx/"
   />
 </CardGrid>
 
-## Powerful Features
+---
 
-<CardGrid>
-  <Card title="Compound Variants" icon="setting">
-    Apply styles when multiple variant conditions are met simultaneously.
+## Performance Comparison
 
-    ```typescript
-    compoundVariants: [
-      {
-        color: 'primary',
-        size: 'lg',
-        class: 'uppercase tracking-wide'
-      }
-    ]
-    ```
-  </Card>
-  <Card title="Boolean Variants" icon="approve-check-circle">
-    Simple on/off toggles for common states like disabled, loading, or active.
+| Library | Bundle Size | vs css-variants |
+|---------|:-----------:|:---------------:|
+| **css-variants** | ~1KB | — |
+| CVA | ~2KB | 3-7x slower |
+| tailwind-variants | ~5KB | 5-11x slower |
 
-    ```typescript
-    variants: {
-      disabled: {
-        true: 'opacity-50 cursor-not-allowed'
-      }
-    }
-    ```
-  </Card>
-  <Card title="Slot System" icon="list-format">
-    Style multi-element components with named slots for complex UI patterns.
+<LinkCard
+  title="View Detailed Benchmarks"
+  description="See comprehensive performance comparisons with methodology"
+  href="/resources/benchmarks/"
+/>
 
-    ```typescript
-    slots: ['root', 'header'],
-    base: {
-      root: 'card-root',
-      header: 'card-header'
-    }
-    ```
-  </Card>
-  <Card title="Class Merging" icon="random">
-    Smart class name merging with the `cx` utility. Handle conditional classes with ease.
+---
 
-    ```typescript
-    cx('base', condition && 'active', {
-      'enabled': isEnabled
-    })
-    ```
-  </Card>
-</CardGrid>
+## Works Without Tailwind CSS
 
-## Works Everywhere
+css-variants is **not tied to Tailwind CSS**. Use it with any CSS approach:
+
+```typescript
+// Tailwind CSS
+const button = cv({
+  base: 'px-4 py-2 rounded',
+  variants: { color: { primary: 'bg-blue-600 text-white' } },
+})
+
+// Vanilla CSS
+const button = cv({
+  base: 'btn',
+  variants: { color: { primary: 'btn-primary' } },
+})
+
+// CSS Modules
+import styles from './Button.module.css'
+const button = cv({
+  base: styles.btn,
+  variants: { color: { primary: styles.primary } },
+})
+```
+
+---
+
+## Framework Support
 
 <CardGrid stagger>
   <Card title="React" icon="seti:react">
@@ -127,12 +188,36 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   </Card>
 </CardGrid>
 
-## Ready to Get Started?
+---
+
+## Migrating from Other Libraries
+
+<CardGrid>
+  <LinkCard
+    title="Migrate from CVA"
+    description="Coming from class-variance-authority? Migration is straightforward."
+    href="/resources/migration-cva/"
+  />
+  <LinkCard
+    title="Migrate from tailwind-variants"
+    description="Coming from tailwind-variants? See the key differences."
+    href="/resources/migration-tailwind-variants/"
+  />
+  <LinkCard
+    title="Compare All Libraries"
+    description="Detailed comparison of css-variants vs CVA vs tailwind-variants"
+    href="/resources/comparison/"
+  />
+</CardGrid>
+
+---
+
+## Get Started
 
 <CardGrid>
   <LinkCard
     title="Introduction"
-    description="Learn the core concepts and philosophy behind css-variants"
+    description="Learn what css-variants is and why you should use it"
     href="/getting-started/introduction/"
   />
   <LinkCard
@@ -146,8 +231,8 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
     href="/guides/tailwind/"
   />
   <LinkCard
-    title="Migration from CVA"
-    description="Coming from cva? See what's different and how to migrate"
-    href="/resources/migration-cva/"
+    title="FAQ"
+    description="Answers to frequently asked questions"
+    href="/resources/faq/"
   />
 </CardGrid>

@@ -1,0 +1,254 @@
+---
+title: CSS Variant Libraries Comparison
+description: Compare css-variants vs CVA (Class Variance Authority) vs tailwind-variants - features, performance, bundle size, and API differences
+---
+
+import { Aside, Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## What are CSS variant libraries?
+
+**CSS variant libraries** are JavaScript/TypeScript tools that help developers manage component styling through a variant-based API. Instead of writing complex conditional class logic, you define variants (like `color`, `size`, `disabled`) and the library generates the correct CSS classes or styles at runtime.
+
+Popular CSS variant libraries include:
+- **css-variants** — Zero-dependency, type-safe variant composition (~1KB)
+- **CVA (Class Variance Authority)** — The original variant library (~2KB)
+- **tailwind-variants** — Tailwind-focused variant library (~5KB)
+
+---
+
+## Quick Comparison Table
+
+| Feature | css-variants | CVA | tailwind-variants |
+|---------|:------------:|:---:|:-----------------:|
+| **Bundle Size** | ~1KB | ~2KB | ~5KB |
+| **Dependencies** | 0 | 1 (clsx) | 1 (tailwind-merge) |
+| **TypeScript** | Full inference | Full inference | Full inference |
+| **Single-element variants** | `cv()` | `cva()` | `tv()` |
+| **Multi-slot components** | `scv()` | ❌ Not built-in | `tv()` with slots |
+| **Inline style variants** | `sv()` / `ssv()` | ❌ Not built-in | ❌ Not built-in |
+| **Works without Tailwind** | ✅ | ✅ | ✅ |
+
+---
+
+## Performance Comparison
+
+css-variants is engineered for performance. Here's how it compares:
+
+### vs CVA (Class Variance Authority)
+
+| Scenario | css-variants | CVA | Winner |
+|----------|-------------:|----:|:-------|
+| Base class only | 23.2M ops/s | 21.2M ops/s | css-variants (1.1x) |
+| Compound variants (no match) | 4.2M ops/s | 1.1M ops/s | **css-variants (3.7x)** |
+| Compound variants (match) | 4.1M ops/s | 1.0M ops/s | **css-variants (3.9x)** |
+| Complex component | 5.1M ops/s | 0.7M ops/s | **css-variants (6.9x)** |
+
+### vs tailwind-variants
+
+| Scenario | css-variants | tailwind-variants | Winner |
+|----------|-------------:|------------------:|:-------|
+| Base class only | 23.1M ops/s | 6.4M ops/s | **css-variants (3.6x)** |
+| Single variant | 9.9M ops/s | 2.2M ops/s | **css-variants (4.5x)** |
+| Compound variants | 4.0M ops/s | 0.7M ops/s | **css-variants (5.4x)** |
+| Complex component | 5.2M ops/s | 0.5M ops/s | **css-variants (11x)** |
+| Slot-based component | 1.6M ops/s | 0.3M ops/s | **css-variants (6.3x)** |
+
+<Aside type="tip" title="Why is css-variants faster?">
+css-variants uses optimized data structures, early-exit strategies for compound variant matching, and pre-computation at config time. It has zero runtime dependencies, eliminating additional function call overhead.
+</Aside>
+
+---
+
+## Feature Deep Dive
+
+### Multi-Slot Components
+
+Multi-slot (or multi-element) components like cards, modals, and dropdowns need styles for multiple parts (root, header, body, footer, etc.).
+
+<Tabs>
+<TabItem label="css-variants">
+```typescript
+import { scv } from 'css-variants'
+
+const card = scv({
+  slots: ['root', 'header', 'body', 'footer'],
+  base: {
+    root: 'rounded-lg border',
+    header: 'p-4 border-b',
+    body: 'p-4',
+    footer: 'p-4 border-t',
+  },
+  variants: {
+    variant: {
+      default: { root: 'border-gray-200' },
+      primary: { root: 'border-blue-500' },
+    },
+  },
+})
+
+// Returns object with class strings directly
+const classes = card({ variant: 'primary' })
+// classes.root, classes.header, classes.body, classes.footer
+```
+</TabItem>
+<TabItem label="CVA">
+```typescript
+// CVA doesn't have built-in slot support
+// You need to create separate cva() calls for each slot
+
+import { cva } from 'class-variance-authority'
+
+const cardRoot = cva('rounded-lg border', {
+  variants: {
+    variant: {
+      default: 'border-gray-200',
+      primary: 'border-blue-500',
+    },
+  },
+})
+
+const cardHeader = cva('p-4 border-b')
+const cardBody = cva('p-4')
+const cardFooter = cva('p-4 border-t')
+
+// Must call each function separately
+```
+</TabItem>
+<TabItem label="tailwind-variants">
+```typescript
+import { tv } from 'tailwind-variants'
+
+const card = tv({
+  slots: {
+    root: 'rounded-lg border',
+    header: 'p-4 border-b',
+    body: 'p-4',
+    footer: 'p-4 border-t',
+  },
+  variants: {
+    variant: {
+      default: { root: 'border-gray-200' },
+      primary: { root: 'border-blue-500' },
+    },
+  },
+})
+
+// Returns functions that must be called
+const { root, header, body, footer } = card({ variant: 'primary' })
+// root(), header(), body(), footer() — extra function calls needed
+```
+</TabItem>
+</Tabs>
+
+### Inline Style Variants
+
+css-variants is the only library with built-in support for inline CSS style variants — useful for dynamic values, CSS custom properties, or React's `style` prop.
+
+```typescript
+import { sv } from 'css-variants'
+
+const box = sv({
+  base: { display: 'flex', borderRadius: '8px' },
+  variants: {
+    size: {
+      sm: { padding: '8px', width: '100px' },
+      lg: { padding: '24px', width: '300px' },
+    },
+  },
+})
+
+// Returns a style object, not class names
+box({ size: 'lg' })
+// => { display: 'flex', borderRadius: '8px', padding: '24px', width: '300px' }
+```
+
+**Use cases for style variants:**
+- Dynamic CSS values that can't be utility classes
+- CSS custom properties / CSS variables
+- Canvas/SVG styling
+- Third-party library integrations expecting style objects
+
+---
+
+## When to Choose Each Library
+
+### Choose css-variants if you want:
+
+- **Smallest bundle size** (~1KB minified + gzipped)
+- **Best performance** (3-11x faster than alternatives)
+- **Zero dependencies** (no clsx, no tailwind-merge bundled)
+- **Inline style variants** (`sv` and `ssv` functions)
+- **Built-in slot support** without separate functions
+- **Framework-agnostic** solution (React, Vue, Svelte, Solid, vanilla JS)
+- **Works with any CSS approach** (Tailwind, CSS Modules, vanilla CSS, CSS-in-JS)
+
+### Choose CVA if you want:
+
+- **Established ecosystem** (more tutorials, examples)
+- **Familiarity** (if your team already uses it)
+- **Simple API** (single function, no slots)
+
+### Choose tailwind-variants if you want:
+
+- **Built-in tailwind-merge** (automatic class conflict resolution)
+- **Component composition** (`extend` property for inheritance)
+- **Tailwind-specific features** (responsiveVariants)
+
+---
+
+## Migration Guides
+
+Already using another library? Migration is straightforward:
+
+- [Migrate from CVA to css-variants](/resources/migration-cva/) — Similar API, just move base classes to `base` property
+- [Migrate from tailwind-variants](/resources/migration-tailwind-variants/) — Use `scv` for slots, add `classNameResolver` for tw-merge
+
+---
+
+## Common Questions
+
+### Is css-variants a CVA alternative?
+
+Yes. **css-variants is a drop-in alternative to CVA** (Class Variance Authority) with a nearly identical API. The main differences are:
+- Base classes go in a `base` property instead of the first argument
+- Use `className` instead of `class` in compound variants
+- Additional features: slot variants (`scv`), style variants (`sv`, `ssv`)
+
+### Is css-variants a tailwind-variants alternative?
+
+Yes. **css-variants can replace tailwind-variants** with better performance and smaller bundle size. Key differences:
+- Use `cv` for single-element, `scv` for slots (instead of `tv` for both)
+- No built-in tailwind-merge (add via `classNameResolver` if needed)
+- No `extend` property (use object spreading for composition)
+
+### Can I use css-variants without Tailwind CSS?
+
+**Absolutely yes.** css-variants is CSS-framework agnostic. It works with:
+- Vanilla CSS class names
+- CSS Modules
+- CSS-in-JS solutions (styled-components, emotion)
+- Any utility CSS framework (Bootstrap, Bulma, UnoCSS)
+- No CSS at all (just organizing class strings)
+
+### What's the difference between cv, scv, sv, and ssv?
+
+| Function | Output | Use Case |
+|----------|--------|----------|
+| `cv()` | Class string | Single-element components |
+| `scv()` | Object of class strings | Multi-slot components (card, modal) |
+| `sv()` | Style object | Single-element inline styles |
+| `ssv()` | Object of style objects | Multi-slot inline styles |
+
+---
+
+## Summary
+
+**css-variants** is a modern, performance-focused CSS variant library that serves as an excellent alternative to both CVA and tailwind-variants. It offers:
+
+- **3-11x better performance** than alternatives
+- **~1KB bundle size** with zero dependencies
+- **Full TypeScript support** with type inference
+- **Unique features** like style variants and optimized slot handling
+- **Framework-agnostic** design that works everywhere
+
+→ Ready to start? [Get started with css-variants](/getting-started/introduction/)

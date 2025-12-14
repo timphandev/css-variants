@@ -91,11 +91,34 @@ export default defineConfig({
         {
           label: 'Resources',
           items: [
-            { label: 'Migration from CVA', slug: 'resources/migration-cva' },
-            { label: 'Migration from Tailwind Variants', slug: 'resources/migration-tailwind-variants' },
-            { label: 'Performance', slug: 'resources/performance' },
-            { label: 'Benchmarks', slug: 'resources/benchmarks' },
-            { label: 'FAQ', slug: 'resources/faq' },
+            {
+              label: 'When Should You Use css-variants?',
+              slug: 'resources/when-to-use',
+            },
+            {
+              label: 'css-variants vs Other Libraries',
+              slug: 'resources/comparison',
+            },
+            {
+              label: 'Migrating from Class Variance Authority (CVA)',
+              slug: 'resources/migration-cva',
+            },
+            {
+              label: 'Migrating from tailwind-variants',
+              slug: 'resources/migration-tailwind-variants',
+            },
+            {
+              label: 'Performance Characteristics',
+              slug: 'resources/performance',
+            },
+            {
+              label: 'Benchmarks',
+              slug: 'resources/benchmarks',
+            },
+            {
+              label: 'Frequently Asked Questions (FAQ)',
+              slug: 'resources/faq',
+            },
           ],
         },
       ],
