@@ -46,6 +46,7 @@ describe('cv - Comprehensive Test Suite', () => {
           },
         },
       })
+
       expect(variantFn({ color: 'primary' })).toBe('btn bg-blue-500')
       expect(variantFn({ color: 'secondary' })).toBe('btn bg-gray-500')
     })
@@ -937,6 +938,98 @@ describe('cv - Comprehensive Test Suite', () => {
       })
       const result = variantFn({ color: 'primary', size: 'lg' })
       expect(result.split(' ').length).toBe(23) // base + 2 variants + 20 compounds
+    })
+  })
+
+  describe('Configuration Composition (Extend Pattern)', () => {
+    it('should support extending configuration via shared config object', () => {
+      const baseButtonConfig = {
+        base: 'rounded font-medium',
+        variants: {
+          size: {
+            sm: 'px-2 py-1 text-sm',
+            lg: 'px-4 py-2 text-lg',
+          },
+        },
+      } as const
+
+      const baseButton = cv(baseButtonConfig)
+
+      // Extend by spreading and adding new styles
+      const primaryButton = cv({
+        base: [baseButtonConfig.base, 'bg-blue-600 text-white'],
+        variants: {
+          ...baseButtonConfig.variants,
+        },
+      })
+
+      expect(baseButton({ size: 'sm' })).toBe('rounded font-medium px-2 py-1 text-sm')
+      expect(primaryButton({ size: 'sm' })).toBe('rounded font-medium bg-blue-600 text-white px-2 py-1 text-sm')
+    })
+
+    it('should support overriding variants in extended config', () => {
+      const baseConfig = {
+        base: 'btn',
+        variants: {
+          color: {
+            primary: 'bg-blue-500',
+            secondary: 'bg-gray-500',
+          },
+          size: {
+            sm: 'text-sm',
+            lg: 'text-lg',
+          },
+        },
+        defaultVariants: {
+          color: 'primary',
+          size: 'sm',
+        },
+      } as const
+
+      // Extend and override color variants
+      const extendedButton = cv({
+        base: baseConfig.base,
+        variants: {
+          ...baseConfig.variants,
+          color: {
+            ...baseConfig.variants.color,
+            primary: 'bg-indigo-600', // Override primary
+            danger: 'bg-red-600', // Add new variant
+          },
+        },
+        defaultVariants: baseConfig.defaultVariants,
+      })
+
+      expect(extendedButton({ color: 'primary' })).toBe('btn bg-indigo-600 text-sm')
+      expect(extendedButton({ color: 'secondary' })).toBe('btn bg-gray-500 text-sm')
+      expect(extendedButton({ color: 'danger' })).toBe('btn bg-red-600 text-sm')
+    })
+
+    it('should support adding compound variants to extended config', () => {
+      const baseConfig = {
+        base: 'btn',
+        variants: {
+          color: {
+            primary: 'bg-blue-500',
+          },
+          size: {
+            lg: 'text-lg',
+          },
+        },
+      } as const
+
+      const extendedButton = cv({
+        ...baseConfig,
+        compoundVariants: [
+          {
+            color: 'primary',
+            size: 'lg',
+            className: 'font-bold shadow-lg',
+          },
+        ],
+      })
+
+      expect(extendedButton({ color: 'primary', size: 'lg' })).toBe('btn bg-blue-500 text-lg font-bold shadow-lg')
     })
   })
 
