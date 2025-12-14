@@ -36,7 +36,8 @@ css-variants is a lightweight (~1KB) library for building powerful, flexible com
 ### Resources
 
 - [FAQ](https://css-variants.vercel.app/resources/faq/): Frequently asked questions
-- [Migration from CVA](https://css-variants.vercel.app/resources/migration/): How to migrate from Class Variance Authority
+- [Migration from CVA](https://css-variants.vercel.app/resources/migration-cva/): How to migrate from Class Variance Authority
+- [Migration from Tailwind Variants](https://css-variants.vercel.app/resources/migration-tailwind-variants/): How to migrate from Tailwind Variants
 - [Performance](https://css-variants.vercel.app/resources/performance/): Performance characteristics and optimization tips
 
 ## Optional

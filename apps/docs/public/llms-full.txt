@@ -433,14 +433,17 @@ export function Button({ color, size, className, children, ...props }: ButtonPro
 }
 ```
 
-## Migration from CVA
+## Migration from CVA (class-variance-authority)
 
-Key differences from Class Variance Authority (CVA):
+css-variants is 3-4x faster than CVA for compound variants, has a smaller bundle size (~1KB vs ~2KB), and includes additional features like slot variants and style variants.
+
+Key differences:
 
 | Feature | CVA | css-variants |
 |---------|-----|--------------|
 | Base styles | First argument | `base` property |
 | Compound class key | `class` | `className` |
+| Runtime override key | `class` | `className` |
 | Custom merger | `class` in call | `classNameResolver` in config |
 | Slot variants | Not built-in | `scv` function |
 | Style variants | Not built-in | `sv` and `ssv` functions |
@@ -448,7 +451,7 @@ Key differences from Class Variance Authority (CVA):
 ### Before (CVA)
 
 ```typescript
-import { cva } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority'
 
 const button = cva('btn base-styles', {
   variants: { /* ... */ },
@@ -456,6 +459,10 @@ const button = cva('btn base-styles', {
     { color: 'primary', size: 'lg', class: 'shadow-lg' },
   ],
 })
+
+button({ color: 'primary', class: 'mt-4' })
+
+type ButtonProps = VariantProps<typeof button>
 ```
 
 ### After (css-variants)
@@ -469,6 +476,93 @@ const button = cv({
   compoundVariants: [
     { color: 'primary', size: 'lg', className: 'shadow-lg' },
   ],
+})
+
+button({ color: 'primary', className: 'mt-4' })
+
+type ButtonProps = Parameters<typeof button>[0]
+```
+
+## Migration from Tailwind Variants (tailwind-variants)
+
+css-variants is 5-11x faster than Tailwind Variants, especially for complex components with compound variants. It's also smaller (~1KB vs ~5KB) and has zero dependencies.
+
+Key differences:
+
+| Feature | Tailwind Variants | css-variants |
+|---------|-------------------|--------------|
+| Function name | `tv` | `cv` (single) / `scv` (slots) |
+| Slots definition | `slots` object in `tv` | Separate `scv` function |
+| Compound class key | `class` | `className` |
+| Compound slots | `compoundSlots` | Use `compoundVariants` with slot keys |
+| Built-in tw-merge | Yes (default) | No (use `classNameResolver`) |
+| Component composition | `extend` property | Use shared config objects |
+
+### Before (Tailwind Variants)
+
+```typescript
+import { tv } from 'tailwind-variants'
+
+const card = tv({
+  slots: {
+    root: 'rounded-lg border bg-white',
+    header: 'border-b p-4',
+    content: 'p-4',
+  },
+  variants: {
+    variant: {
+      default: { root: 'border-gray-200' },
+      primary: { root: 'border-blue-200' },
+    },
+  },
+})
+
+const { root, header, content } = card({ variant: 'primary' })
+```
+
+### After (css-variants)
+
+```typescript
+import { scv } from 'css-variants'
+
+const card = scv({
+  slots: ['root', 'header', 'content'],
+  base: {
+    root: 'rounded-lg border bg-white',
+    header: 'border-b p-4',
+    content: 'p-4',
+  },
+  variants: {
+    variant: {
+      default: { root: 'border-gray-200' },
+      primary: { root: 'border-blue-200' },
+    },
+  },
+})
+
+const classes = card({ variant: 'primary' })
+// classes.root, classes.header, classes.content
+```
+
+### Component Composition (Extend Pattern)
+
+Tailwind Variants has `extend`, css-variants uses shared config objects:
+
+```typescript
+const baseButtonConfig = {
+  base: 'rounded font-medium',
+  variants: {
+    size: { sm: 'px-2 py-1', lg: 'px-4 py-2' },
+  },
+} as const
+
+const baseButton = cv(baseButtonConfig)
+
+const primaryButton = cv({
+  base: [baseButtonConfig.base, 'bg-blue-600 text-white'],
+  variants: {
+    ...baseButtonConfig.variants,
+  },
 })
 ```
 

@@ -15,7 +15,7 @@ css-variants has a very similar API to [CVA (Class Variance Authority)](https://
 - Built-in style variants (`sv`, `ssv`) for inline styles
 - Use `classNameResolver` for custom class merging
 
-See the [Migration Guide](/resources/migration/) for detailed differences.
+See the [Migration Guide](/resources/migration-cva/) for detailed differences.
 
 ### Can I use css-variants without Tailwind CSS?
 

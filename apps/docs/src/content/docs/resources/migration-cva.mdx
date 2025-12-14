@@ -1,9 +1,15 @@
 ---
-title: Migration from CVA
+title: Migration from CVA (class-variance-authority)
 description: How to migrate from Class Variance Authority (CVA) to css-variants
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 css-variants has a similar API to [CVA (Class Variance Authority)](https://cva.style/docs), making migration straightforward.
+
+:::tip[Why migrate?]
+css-variants is **3-4x faster** than CVA for compound variants, has a smaller bundle size (~1KB vs ~2KB), and includes additional features like slot variants and style variants.
+:::
 
 ## Key Differences
 
@@ -17,7 +23,8 @@ css-variants has a similar API to [CVA (Class Variance Authority)](https://cva.s
 
 ## Basic Migration
 
-### Before (CVA)
+<Tabs>
+<TabItem label="Before (CVA)">
 
 ```typescript
 import { cva } from 'class-variance-authority'
@@ -40,7 +47,8 @@ const button = cva('btn base-styles', {
 })
 ```
 
-### After (css-variants)
+</TabItem>
+<TabItem label="After (css-variants)">
 
 ```typescript
 import { cv } from 'css-variants'
@@ -64,9 +72,17 @@ const button = cv({
 })
 ```
 
+</TabItem>
+</Tabs>
+
+:::note[Key change]
+The main difference is that base classes move from the first argument to the `base` property inside the config object.
+:::
+
 ## Compound Variants
 
-### Before (CVA)
+<Tabs>
+<TabItem label="Before (CVA)">
 
 ```typescript
 const button = cva('btn', {
@@ -81,7 +97,8 @@ const button = cva('btn', {
 })
 ```
 
-### After (css-variants)
+</TabItem>
+<TabItem label="After (css-variants)">
 
 ```typescript
 const button = cv({
@@ -97,23 +114,32 @@ const button = cv({
 })
 ```
 
+</TabItem>
+</Tabs>
+
 ## Runtime Class Overrides
 
-### Before (CVA)
+<Tabs>
+<TabItem label="Before (CVA)">
 
 ```typescript
 button({ color: 'primary', class: 'mt-4' })
 ```
 
-### After (css-variants)
+</TabItem>
+<TabItem label="After (css-variants)">
 
 ```typescript
 button({ color: 'primary', className: 'mt-4' })
 ```
 
+</TabItem>
+</Tabs>
+
 ## Type Extraction
 
-### Before (CVA)
+<Tabs>
+<TabItem label="Before (CVA)">
 
 ```typescript
 import { type VariantProps } from 'class-variance-authority'
@@ -123,7 +149,8 @@ const button = cva('btn', { /* ... */ })
 type ButtonProps = VariantProps<typeof button>
 ```
 
-### After (css-variants)
+</TabItem>
+<TabItem label="After (css-variants)">
 
 ```typescript
 const button = cv({ /* ... */ })
@@ -131,11 +158,20 @@ const button = cv({ /* ... */ })
 type ButtonProps = Parameters<typeof button>[0]
 ```
 
+</TabItem>
+</Tabs>
+
+:::tip[No extra import needed]
+css-variants doesn't require a separate `VariantProps` type import — just use TypeScript's built-in `Parameters` utility type.
+:::
+
 ## New Features in css-variants
 
 After migrating, you can take advantage of features not available in CVA:
 
 ### Slot Variants
+
+For multi-element components, use `scv` to define styles for each slot:
 
 ```typescript
 import { scv } from 'css-variants'
@@ -155,9 +191,15 @@ const card = scv({
     },
   },
 })
+
+// Usage
+const classes = card({ variant: 'primary' })
+// classes.root, classes.header, classes.content, classes.footer
 ```
 
 ### Style Variants
+
+For inline CSS styles (React's `style` prop), use `sv`:
 
 ```typescript
 import { sv } from 'css-variants'
@@ -174,6 +216,9 @@ const box = sv({
     },
   },
 })
+
+// Returns CSS style object instead of class string
+box({ size: 'lg' }) // => { display: 'flex', borderRadius: '8px', padding: '24px' }
 ```
 
 ## Migration Checklist
@@ -184,3 +229,4 @@ const box = sv({
 - [ ] Change `class` to `className` in runtime overrides
 - [ ] Update `VariantProps` type extraction to use `Parameters<typeof fn>[0]`
 - [ ] (Optional) Convert multi-element components to use `scv`
+- [ ] (Optional) Convert inline style components to use `sv` or `ssv`

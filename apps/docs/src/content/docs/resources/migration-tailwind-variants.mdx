@@ -1,0 +1,423 @@
+---
+title: Migration from Tailwind Variants (tailwind-variants)
+description: How to migrate from Tailwind Variants to css-variants
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+css-variants provides a similar API to [Tailwind Variants](https://www.tailwind-variants.org/), making migration straightforward. Both libraries support slots, variants, and compound variants.
+
+## Key Differences
+
+| Feature | Tailwind Variants | css-variants |
+|---------|-------------------|--------------|
+| Function name | `tv` | `cv` (single) / `scv` (slots) |
+| Slots definition | `slots` object in `tv` | Separate `scv` function |
+| Compound class key | `class` | `className` |
+| Compound slots | `compoundSlots` | Use `compoundVariants` with slot keys |
+| Built-in tw-merge | Yes (default) | No (use `classNameResolver`) |
+| Component composition | `extend` property | Not built-in |
+| Style variants | Not built-in | `sv` and `ssv` functions |
+
+:::tip[Why migrate?]
+css-variants is **5-11x faster** than Tailwind Variants in benchmarks, especially for complex components with compound variants. It's also smaller (~1KB vs ~5KB) and has zero dependencies.
+:::
+
+## Basic Migration (No Slots)
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+import { tv } from 'tailwind-variants'
+
+const button = tv({
+  base: 'font-semibold rounded-lg transition-colors',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white',
+      secondary: 'bg-gray-200 text-gray-900',
+    },
+    size: {
+      sm: 'px-3 py-1 text-sm',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'sm',
+  },
+})
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({
+  base: 'font-semibold rounded-lg transition-colors',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white',
+      secondary: 'bg-gray-200 text-gray-900',
+    },
+    size: {
+      sm: 'px-3 py-1 text-sm',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'sm',
+  },
+})
+```
+
+</TabItem>
+</Tabs>
+
+:::note
+For components without slots, the migration is nearly identical — just change `tv` to `cv`!
+:::
+
+## Compound Variants
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+const button = tv({
+  base: 'btn',
+  variants: {
+    color: { primary: '...', secondary: '...' },
+    size: { sm: '...', lg: '...' },
+  },
+  compoundVariants: [
+    {
+      color: 'primary',
+      size: 'lg',
+      class: 'shadow-lg font-bold', // TV uses 'class'
+    },
+  ],
+})
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+const button = cv({
+  base: 'btn',
+  variants: {
+    color: { primary: '...', secondary: '...' },
+    size: { sm: '...', lg: '...' },
+  },
+  compoundVariants: [
+    {
+      color: 'primary',
+      size: 'lg',
+      className: 'shadow-lg font-bold', // css-variants uses 'className'
+    },
+  ],
+})
+```
+
+</TabItem>
+</Tabs>
+
+## Slots Migration
+
+In Tailwind Variants, slots are defined within the `tv` function. In css-variants, use the separate `scv` function for multi-element components.
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+import { tv } from 'tailwind-variants'
+
+const card = tv({
+  slots: {
+    root: 'rounded-lg border bg-white',
+    header: 'border-b p-4 font-semibold',
+    content: 'p-4',
+    footer: 'border-t p-4',
+  },
+  variants: {
+    variant: {
+      default: {
+        root: 'border-gray-200',
+      },
+      primary: {
+        root: 'border-blue-200',
+        header: 'bg-blue-50',
+      },
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+})
+
+// Usage
+const { root, header, content, footer } = card({ variant: 'primary' })
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+import { scv } from 'css-variants'
+
+const card = scv({
+  slots: ['root', 'header', 'content', 'footer'], // Define slot names as array
+  base: {
+    root: 'rounded-lg border bg-white',
+    header: 'border-b p-4 font-semibold',
+    content: 'p-4',
+    footer: 'border-t p-4',
+  },
+  variants: {
+    variant: {
+      default: {
+        root: 'border-gray-200',
+      },
+      primary: {
+        root: 'border-blue-200',
+        header: 'bg-blue-50',
+      },
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+})
+
+// Usage - returns object with class strings directly
+const classes = card({ variant: 'primary' })
+// classes.root, classes.header, etc.
+```
+
+</TabItem>
+</Tabs>
+
+:::caution[Key difference]
+In Tailwind Variants, calling `card()` returns functions for each slot that you then call. In css-variants, `card()` returns an object with class strings directly — no extra function calls needed!
+:::
+
+## Compound Slots
+
+Tailwind Variants has a dedicated `compoundSlots` feature. In css-variants, achieve the same result using `compoundVariants` with slot-specific classes.
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+const card = tv({
+  slots: {
+    root: 'rounded-lg',
+    header: 'p-4',
+    footer: 'p-4',
+  },
+  variants: {
+    color: {
+      primary: {},
+      secondary: {},
+    },
+  },
+  compoundSlots: [
+    {
+      slots: ['header', 'footer'],
+      color: 'primary',
+      class: 'bg-blue-100',
+    },
+  ],
+})
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+const card = scv({
+  slots: ['root', 'header', 'footer'],
+  base: {
+    root: 'rounded-lg',
+    header: 'p-4',
+    footer: 'p-4',
+  },
+  variants: {
+    color: {
+      primary: {},
+      secondary: {},
+    },
+  },
+  compoundVariants: [
+    {
+      color: 'primary',
+      className: {
+        header: 'bg-blue-100',
+        footer: 'bg-blue-100',
+      },
+    },
+  ],
+})
+```
+
+</TabItem>
+</Tabs>
+
+## Runtime Class Overrides
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+button({ color: 'primary', class: 'mt-4' })
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+button({ color: 'primary', className: 'mt-4' })
+```
+
+</TabItem>
+</Tabs>
+
+## Tailwind Merge Integration
+
+Tailwind Variants includes `tailwind-merge` by default. css-variants is dependency-free but supports custom class merging via `classNameResolver`.
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+import { tv } from 'tailwind-variants'
+
+// tw-merge is enabled by default
+const button = tv({
+  base: 'p-4',
+  variants: {
+    size: {
+      sm: 'p-2', // tw-merge handles p-4 vs p-2 conflict
+    },
+  },
+})
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+import { cv } from 'css-variants'
+import { twMerge } from 'tailwind-merge'
+
+const button = cv({
+  base: 'p-4',
+  variants: {
+    size: {
+      sm: 'p-2',
+    },
+  },
+  classNameResolver: twMerge, // Opt-in to tw-merge
+})
+```
+
+</TabItem>
+</Tabs>
+
+:::tip[Performance consideration]
+If you don't have conflicting Tailwind classes, you can skip `tailwind-merge` entirely for better performance. css-variants is designed to be fast without it.
+:::
+
+## Type Extraction
+
+<Tabs>
+<TabItem label="Before (TV)">
+
+```typescript
+import { tv, type VariantProps } from 'tailwind-variants'
+
+const button = tv({ /* ... */ })
+
+type ButtonProps = VariantProps<typeof button>
+```
+
+</TabItem>
+<TabItem label="After (css-variants)">
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({ /* ... */ })
+
+type ButtonProps = Parameters<typeof button>[0]
+```
+
+</TabItem>
+</Tabs>
+
+## Features Not Directly Supported
+
+### Component Composition (`extend`)
+
+Tailwind Variants supports extending components with the `extend` property. css-variants doesn't have this built-in, but you can achieve similar results by defining shared configuration:
+
+```typescript
+// Define shared configuration
+const baseButtonConfig = {
+  base: 'rounded font-medium',
+  variants: {
+    size: { sm: 'px-2 py-1', lg: 'px-4 py-2' },
+  },
+} as const
+
+const baseButton = cv(baseButtonConfig)
+
+// Extend by spreading and overriding
+const primaryButton = cv({
+  base: [baseButtonConfig.base, 'bg-blue-600 text-white'],
+  variants: {
+    ...baseButtonConfig.variants,
+    // Add or override variants
+  },
+})
+```
+
+## New Features in css-variants
+
+After migrating, you can take advantage of features not available in Tailwind Variants:
+
+### Style Variants (Inline CSS)
+
+```typescript
+import { sv } from 'css-variants'
+
+const box = sv({
+  base: { display: 'flex', borderRadius: '8px' },
+  variants: {
+    size: {
+      sm: { padding: '8px' },
+      lg: { padding: '24px' },
+    },
+  },
+})
+
+// Returns CSS style object instead of class string
+box({ size: 'lg' }) // => { display: 'flex', borderRadius: '8px', padding: '24px' }
+```
+
+## Migration Checklist
+
+- [ ] Replace `tv` imports with `cv` from `css-variants`
+- [ ] For components with slots, use `scv` instead and define `slots` as an array
+- [ ] Move slot base styles from `slots` object to `base` object
+- [ ] Change `class` to `className` in compound variants
+- [ ] Change `class` to `className` in runtime overrides
+- [ ] Convert `compoundSlots` to `compoundVariants` with slot-keyed `className`
+- [ ] If using tw-merge, add `classNameResolver: twMerge` to your config
+- [ ] Update type extraction from `VariantProps<>` to `Parameters<typeof fn>[0]`
+- [ ] (Optional) Convert inline style components to use `sv` or `ssv`
