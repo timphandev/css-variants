@@ -1,6 +1,6 @@
 import { bench, describe } from 'vitest'
 import { tv } from 'tailwind-variants/dist/lite'
-import { cv } from '../dist/esm/cv'
+import { cv } from '../dist/cv'
 
 describe('css-variants vs tailwind-variants', () => {
   // ===========================================

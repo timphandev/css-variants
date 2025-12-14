@@ -1,6 +1,6 @@
 import { bench, describe } from 'vitest'
 import { cva } from 'class-variance-authority'
-import { cv } from '../dist/esm/cv'
+import { cv } from '../dist/cv'
 
 describe('css-variants vs class-variance-authority', () => {
   // ===========================================

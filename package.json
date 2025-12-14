@@ -46,8 +46,8 @@
     "lint": "eslint .",
     "test": "vitest run --coverage",
     "bench": "vitest bench ./src",
-    "bench:cva": "yarn add class-variance-authority --no-save && vitest bench ./benchmark/cva.bench.ts --outputJson ./benchmark/cva.bench.json --run",
-    "bench:tailwind-variants": "yarn add tailwind-variants --no-save && vitest bench ./benchmark/tailwind-variants.bench.ts --outputJson ./benchmark/tailwind-variants.bench.json --run",
+    "bench:cva": "npm install class-variance-authority --no-save --no-package-lock && vitest bench ./benchmark/cva.bench.ts --outputJson ./benchmark/cva.bench.json --run",
+    "bench:tailwind-variants": "npm install tailwind-variants --no-save --no-package-lock && vitest bench ./benchmark/tailwind-variants.bench.ts --outputJson ./benchmark/tailwind-variants.bench.json --run",
     "build": "tsup"
   },
   "repository": {
