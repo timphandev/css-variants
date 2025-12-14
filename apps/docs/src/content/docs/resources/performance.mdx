@@ -17,6 +17,10 @@ css-variants is extremely lightweight:
 
 Each function can be imported independently:
 
+:::note[TypeScript Version Requirement]
+Subpath imports require **TypeScript 5.0+** with `moduleResolution: "bundler"`, or **TypeScript 4.7+** with `moduleResolution: "node16"` or `"nodenext"`. For older TypeScript versions, use the main entry point: `import { cv } from 'css-variants'`.
+:::
+
 ```typescript
 // Only imports cv (~400 bytes)
 import { cv } from 'css-variants/cv'
