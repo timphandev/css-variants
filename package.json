@@ -3,17 +3,40 @@
   "version": "2.2.2",
   "description": "Lightweight helpers to compose class names and inline styles using variants. Zero runtime deps, small bundle, and first-class TypeScript support.",
   "homepage": "https://css-variants.vercel.app",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     },
-    "./*": {
-      "require": "./dist/cjs/*.js",
-      "import": "./dist/esm/*.js"
+    "./cx": {
+      "types": "./dist/cx.d.ts",
+      "require": "./dist/cx.cjs",
+      "import": "./dist/cx.js"
+    },
+    "./cv": {
+      "types": "./dist/cv.d.ts",
+      "require": "./dist/cv.cjs",
+      "import": "./dist/cv.js"
+    },
+    "./scv": {
+      "types": "./dist/scv.d.ts",
+      "require": "./dist/scv.cjs",
+      "import": "./dist/scv.js"
+    },
+    "./sv": {
+      "types": "./dist/sv.d.ts",
+      "require": "./dist/sv.cjs",
+      "import": "./dist/sv.js"
+    },
+    "./ssv": {
+      "types": "./dist/ssv.d.ts",
+      "require": "./dist/ssv.cjs",
+      "import": "./dist/ssv.js"
     }
   },
   "files": [
@@ -25,9 +48,7 @@
     "bench": "vitest bench ./src",
     "bench:cva": "yarn add class-variance-authority --no-save && vitest bench ./benchmark/cva.bench.ts --outputJson ./benchmark/cva.bench.json --run",
     "bench:tailwind-variants": "yarn add tailwind-variants --no-save && vitest bench ./benchmark/tailwind-variants.bench.ts --outputJson ./benchmark/tailwind-variants.bench.json --run",
-    "build:cjs": "tsc --project tsconfig.cjs.json",
-    "build:esm": "tsc --project tsconfig.esm.json",
-    "build": "rimraf ./dist && yarn build:cjs && yarn build:esm"
+    "build": "tsup"
   },
   "repository": {
     "type": "git",
@@ -65,7 +86,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.7.4",
-    "rimraf": "^5.0.7",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0",
     "vitest": "^4.0.15"
