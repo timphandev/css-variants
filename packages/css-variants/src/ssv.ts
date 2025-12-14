@@ -38,7 +38,7 @@ export type SlotStyleVariantCreatorFn = <S extends string, T extends SlotStyleVa
  *
  * @example
  * ```ts
- * const buttonStyles = csv({
+ * const buttonStyles = ssv({
  *   slots: ['root', 'icon'],
  *   base: {
  *     root: { padding: '8px' },
