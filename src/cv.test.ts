@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { cv } from './cv'
-import { cx } from './cx'
+import { cv } from './cv.js'
+import { cx } from './cx.js'
 
 describe('cv - Comprehensive Test Suite', () => {
   describe('Base Functionality', () => {

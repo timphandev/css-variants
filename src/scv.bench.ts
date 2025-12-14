@@ -1,5 +1,5 @@
 import { bench, describe } from 'vitest'
-import { scv } from './scv'
+import { scv } from './scv.js'
 
 describe('scv benchmarks', () => {
   // Simple base classes only

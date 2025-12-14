@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { sv } from './sv'
+import { sv } from './sv.js'
 
 describe('sv - Comprehensive Test Suite', () => {
   describe('Base Functionality', () => {

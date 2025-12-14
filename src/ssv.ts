@@ -1,5 +1,5 @@
-import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord, CssProperties } from './utils/types'
-import { mergeProps } from './utils/merge-props'
+import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord, CssProperties } from './utils/types.js'
+import { mergeProps } from './utils/merge-props.js'
 
 export type SlotStyleRecord<S extends string> = PartialRecord<S, CssProperties>
 

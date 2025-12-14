@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { scv } from './scv'
-import { cx } from './cx'
+import { scv } from './scv.js'
+import { cx } from './cx.js'
 
 describe('scv - Comprehensive Test Suite', () => {
   describe('Base Functionality', () => {
