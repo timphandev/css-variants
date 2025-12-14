@@ -5,22 +5,22 @@ description: Learn about css-variants and why you should use it for your compone
 
 **css-variants** is a zero-dependency, type-safe CSS variant composition library for modern JavaScript. It helps you build powerful, flexible component style systems with variants.
 
-## Why css-variants?
-
+:::tip[Why css-variants?]
 - ⚡ **Tiny & Fast** — Zero dependencies, ~1KB minified+gzipped
 - 🔒 **Type-Safe** — First-class TypeScript support with complete type inference
 - 🧩 **Flexible** — Works with Tailwind, CSS modules, vanilla CSS, or inline styles
 - 👨‍💻 **Developer-Friendly** — Intuitive API inspired by CVA and Panda CSS
 - 🚀 **Production-Ready** — Battle-tested, fully tested, dual CJS/ESM builds
+:::
 
 ## What problems does it solve?
 
-When building component libraries or design systems, you often need to manage multiple style variations for components. Without a structured approach, this can lead to:
-
+:::caution[Without a structured approach, styling components can lead to...]
 - **Messy conditional class logic** scattered throughout your components
 - **Inconsistent styling patterns** across your codebase
 - **Poor TypeScript support** for component props
 - **Difficult maintenance** as your component library grows
+:::
 
 css-variants solves these problems by providing a clean, declarative API for defining component variants.
 
@@ -103,4 +103,6 @@ cx('foo', { active: true, disabled: false }) // => 'foo active'
 
 ## Ready to get started?
 
-Head over to the [Installation](/getting-started/installation/) guide to add css-variants to your project.
+:::note[Next Steps]
+Head over to the [Installation](/getting-started/installation/) guide to add css-variants to your project, or explore the [API Reference](/api-reference/cv/) to dive deeper into each function.
+:::
