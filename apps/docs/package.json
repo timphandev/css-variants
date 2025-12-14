@@ -1,7 +1,8 @@
 {
-  "name": "@css-variants/docs",
+  "name": "docs",
   "type": "module",
-  "version": "2.2.0",
+  "private": true,
+  "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",

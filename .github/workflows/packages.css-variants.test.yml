@@ -1,0 +1,39 @@
+name: packages/css-variants / test
+
+on:
+  push:
+    paths:
+      - 'packages/css-variants/**'
+      - 'package.json'
+      - 'yarn.lock'
+  pull_request:
+    paths:
+      - 'packages/css-variants/**'
+      - 'package.json'
+      - 'yarn.lock'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v5
+
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          check-latest: true
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: Build 🏗️
+        run: yarn css-variants build
+
+      - name: Lint 🧐
+        run: yarn css-variants lint
+
+      - name: Test 🚨
+        run: yarn css-variants test

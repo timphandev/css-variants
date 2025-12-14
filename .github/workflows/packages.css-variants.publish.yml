@@ -1,4 +1,4 @@
-name: publish
+name: packages/css-variants / publish
 
 on:
   push:
@@ -24,15 +24,10 @@ jobs:
           node-version: 24.x
           check-latest: true
 
-      - run: npm -v
-
       - name: Install 🔧
         run: yarn install --frozen-lockfile
-
-      - name: Build 🏗️
-        run: yarn build
 
       - name: NPM PKG Publish 🎉
         env:
           NPM_CONFIG_PROVENANCE: true
-        run: npm publish --access public
+        run: yarn css-variants publish --access public

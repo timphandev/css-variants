@@ -1,12 +1,16 @@
-name: docs
+name: apps/docs / build
 
 on:
   push:
-    branches:
-      - main
     paths:
-      - 'docs/**'
-      - '.github/workflows/docs.yml'
+      - 'apps/docs/**'
+      - 'package.json'
+      - 'yarn.lock'
+  pull_request:
+    paths:
+      - 'apps/docs/**'
+      - 'package.json'
+      - 'yarn.lock'
 
 jobs:
   build:
@@ -23,9 +27,7 @@ jobs:
           check-latest: true
 
       - name: Install 🔧
-        working-directory: docs
         run: yarn install --frozen-lockfile
 
       - name: Build 🏗️
-        working-directory: docs
-        run: yarn build
+        run: yarn docs build

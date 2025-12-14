@@ -1,8 +1,8 @@
 import { bench, describe } from 'vitest'
-import { cva } from 'class-variance-authority'
-import { cv } from '../dist/cv'
+import { tv } from 'tailwind-variants/lite'
+import { cv } from 'css-variants'
 
-describe('css-variants vs class-variance-authority', () => {
+describe('css-variants vs tailwind-variants', () => {
   // ===========================================
   // Simple base class only
   // ===========================================
@@ -11,14 +11,16 @@ describe('css-variants vs class-variance-authority', () => {
       base: 'base-class',
     })
 
-    const cvaVariants = cva('base-class')
+    const tailwindVariants = tv({
+      base: 'base-class',
+    })
 
     bench('css-variants', () => {
       cssVariants()
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants()
+    bench('tailwind-variants', () => {
+      tailwindVariants()
     })
   })
 
@@ -37,7 +39,8 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva('btn', {
+    const tailwindVariants = tv({
+      base: 'btn',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white',
@@ -51,8 +54,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ color: 'primary' })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ color: 'primary' })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ color: 'primary' })
     })
   })
 
@@ -81,7 +84,8 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva('btn rounded transition', {
+    const tailwindVariants = tv({
+      base: 'btn rounded transition',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white hover:bg-blue-600',
@@ -105,8 +109,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ color: 'primary', size: 'md', variant: 'solid' })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ color: 'primary', size: 'md', variant: 'solid' })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ color: 'primary', size: 'md', variant: 'solid' })
     })
   })
 
@@ -134,7 +138,8 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva('btn rounded transition', {
+    const tailwindVariants = tv({
+      base: 'btn rounded transition',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white hover:bg-blue-600',
@@ -157,8 +162,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants()
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants()
+    bench('tailwind-variants', () => {
+      tailwindVariants()
     })
   })
 
@@ -186,7 +191,8 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva('btn rounded transition', {
+    const tailwindVariants = tv({
+      base: 'btn rounded transition',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white hover:bg-blue-600',
@@ -209,8 +215,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ size: 'lg' })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ size: 'lg' })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ size: 'lg' })
     })
   })
 
@@ -255,7 +261,8 @@ describe('css-variants vs class-variance-authority', () => {
       ],
     })
 
-    const cvaVariants = cva('btn rounded transition', {
+    const tailwindVariants = tv({
+      base: 'btn rounded transition',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white',
@@ -276,17 +283,17 @@ describe('css-variants vs class-variance-authority', () => {
         {
           size: 'lg',
           color: 'primary',
-          className: 'font-bold shadow-lg',
+          class: 'font-bold shadow-lg',
         },
         {
           size: ['sm', 'md'],
           color: 'danger',
-          className: 'font-semibold',
+          class: 'font-semibold',
         },
         {
           disabled: true,
           color: ['primary', 'secondary', 'danger'],
-          className: 'pointer-events-none',
+          class: 'pointer-events-none',
         },
       ],
     })
@@ -295,8 +302,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ color: 'secondary', size: 'sm', disabled: false })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ color: 'secondary', size: 'sm', disabled: false })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ color: 'secondary', size: 'sm', disabled: false })
     })
   })
 
@@ -341,7 +348,8 @@ describe('css-variants vs class-variance-authority', () => {
       ],
     })
 
-    const cvaVariants = cva('btn rounded transition', {
+    const tailwindVariants = tv({
+      base: 'btn rounded transition',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white',
@@ -362,17 +370,17 @@ describe('css-variants vs class-variance-authority', () => {
         {
           size: 'lg',
           color: 'primary',
-          className: 'font-bold shadow-lg',
+          class: 'font-bold shadow-lg',
         },
         {
           size: ['sm', 'md'],
           color: 'danger',
-          className: 'font-semibold',
+          class: 'font-semibold',
         },
         {
           disabled: true,
           color: ['primary', 'secondary', 'danger'],
-          className: 'pointer-events-none',
+          class: 'pointer-events-none',
         },
       ],
     })
@@ -381,8 +389,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ color: 'primary', size: 'lg', disabled: false })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ color: 'primary', size: 'lg', disabled: false })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ color: 'primary', size: 'lg', disabled: false })
     })
   })
 
@@ -427,7 +435,8 @@ describe('css-variants vs class-variance-authority', () => {
       ],
     })
 
-    const cvaVariants = cva('btn rounded transition', {
+    const tailwindVariants = tv({
+      base: 'btn rounded transition',
       variants: {
         color: {
           primary: 'bg-blue-500 text-white',
@@ -448,17 +457,17 @@ describe('css-variants vs class-variance-authority', () => {
         {
           size: 'lg',
           color: 'primary',
-          className: 'font-bold shadow-lg',
+          class: 'font-bold shadow-lg',
         },
         {
           size: ['sm', 'md'],
           color: 'danger',
-          className: 'font-semibold',
+          class: 'font-semibold',
         },
         {
           disabled: true,
           color: ['primary', 'secondary', 'danger'],
-          className: 'pointer-events-none',
+          class: 'pointer-events-none',
         },
       ],
     })
@@ -467,8 +476,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ color: 'danger', size: 'sm', disabled: true })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ color: 'danger', size: 'sm', disabled: true })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ color: 'danger', size: 'sm', disabled: true })
     })
   })
 
@@ -486,7 +495,8 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva('btn', {
+    const tailwindVariants = tv({
+      base: 'btn',
       variants: {
         color: {
           primary: 'bg-blue-500',
@@ -499,8 +509,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ color: 'primary', className: 'custom-class extra-class' })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ color: 'primary', className: 'custom-class extra-class' })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ color: 'primary', class: 'custom-class extra-class' })
     })
   })
 
@@ -544,50 +554,48 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva(
-      'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-      {
-        variants: {
-          variant: {
-            default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-            destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-            outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-            secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-            ghost: 'hover:bg-accent hover:text-accent-foreground',
-            link: 'text-primary underline-offset-4 hover:underline',
-          },
-          size: {
-            default: 'h-10 px-4 py-2',
-            sm: 'h-9 rounded-md px-3',
-            lg: 'h-11 rounded-md px-8',
-            icon: 'h-10 w-10',
-          },
+    const tailwindVariants = tv({
+      base: 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+      variants: {
+        variant: {
+          default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+          destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+          outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+          secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+          ghost: 'hover:bg-accent hover:text-accent-foreground',
+          link: 'text-primary underline-offset-4 hover:underline',
         },
-        compoundVariants: [
-          {
-            variant: 'destructive',
-            size: 'lg',
-            className: 'font-bold',
-          },
-          {
-            variant: ['outline', 'ghost'],
-            size: ['sm', 'default'],
-            className: 'font-normal',
-          },
-        ],
-        defaultVariants: {
-          variant: 'default',
-          size: 'default',
+        size: {
+          default: 'h-10 px-4 py-2',
+          sm: 'h-9 rounded-md px-3',
+          lg: 'h-11 rounded-md px-8',
+          icon: 'h-10 w-10',
         },
-      }
-    )
+      },
+      compoundVariants: [
+        {
+          variant: 'destructive',
+          size: 'lg',
+          class: 'font-bold',
+        },
+        {
+          variant: ['outline', 'ghost'],
+          size: ['sm', 'default'],
+          class: 'font-normal',
+        },
+      ],
+      defaultVariants: {
+        variant: 'default',
+        size: 'default',
+      },
+    })
 
     bench('css-variants', () => {
       cssVariants()
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants()
+    bench('tailwind-variants', () => {
+      tailwindVariants()
     })
   })
 
@@ -631,50 +639,48 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva(
-      'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-      {
-        variants: {
-          variant: {
-            default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-            destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-            outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-            secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-            ghost: 'hover:bg-accent hover:text-accent-foreground',
-            link: 'text-primary underline-offset-4 hover:underline',
-          },
-          size: {
-            default: 'h-10 px-4 py-2',
-            sm: 'h-9 rounded-md px-3',
-            lg: 'h-11 rounded-md px-8',
-            icon: 'h-10 w-10',
-          },
+    const tailwindVariants = tv({
+      base: 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+      variants: {
+        variant: {
+          default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+          destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+          outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+          secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+          ghost: 'hover:bg-accent hover:text-accent-foreground',
+          link: 'text-primary underline-offset-4 hover:underline',
         },
-        compoundVariants: [
-          {
-            variant: 'destructive',
-            size: 'lg',
-            className: 'font-bold',
-          },
-          {
-            variant: ['outline', 'ghost'],
-            size: ['sm', 'default'],
-            className: 'font-normal',
-          },
-        ],
-        defaultVariants: {
-          variant: 'default',
-          size: 'default',
+        size: {
+          default: 'h-10 px-4 py-2',
+          sm: 'h-9 rounded-md px-3',
+          lg: 'h-11 rounded-md px-8',
+          icon: 'h-10 w-10',
         },
-      }
-    )
+      },
+      compoundVariants: [
+        {
+          variant: 'destructive',
+          size: 'lg',
+          class: 'font-bold',
+        },
+        {
+          variant: ['outline', 'ghost'],
+          size: ['sm', 'default'],
+          class: 'font-normal',
+        },
+      ],
+      defaultVariants: {
+        variant: 'default',
+        size: 'default',
+      },
+    })
 
     bench('css-variants', () => {
       cssVariants({ variant: 'destructive', size: 'lg', className: 'w-full' })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ variant: 'destructive', size: 'lg', className: 'w-full' })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ variant: 'destructive', size: 'lg', class: 'w-full' })
     })
   })
 
@@ -700,7 +706,8 @@ describe('css-variants vs class-variance-authority', () => {
       },
     })
 
-    const cvaVariants = cva('btn', {
+    const tailwindVariants = tv({
+      base: 'btn',
       variants: {
         disabled: {
           true: 'opacity-50 cursor-not-allowed',
@@ -721,8 +728,8 @@ describe('css-variants vs class-variance-authority', () => {
       cssVariants({ disabled: true, loading: false, fullWidth: true })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ disabled: true, loading: false, fullWidth: true })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ disabled: true, loading: false, fullWidth: true })
     })
   })
 
@@ -734,14 +741,16 @@ describe('css-variants vs class-variance-authority', () => {
       base: 'simple-class',
     })
 
-    const cvaVariants = cva('simple-class')
+    const tailwindVariants = tv({
+      base: 'simple-class',
+    })
 
     bench('css-variants', () => {
       cssVariants({ className: 'extra' })
     })
 
-    bench('class-variance-authority', () => {
-      cvaVariants({ className: 'extra' })
+    bench('tailwind-variants', () => {
+      tailwindVariants({ class: 'extra' })
     })
   })
 })

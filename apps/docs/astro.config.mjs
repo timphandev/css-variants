@@ -45,7 +45,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/timphandev/css-variants/edit/main/docs/',
+        baseUrl: 'https://github.com/timphandev/css-variants/edit/main/apps/docs/',
       },
       customCss: ['./src/styles/custom.css'],
       head,

@@ -1,0 +1,96 @@
+{
+  "name": "css-variants",
+  "version": "2.3.1",
+  "description": "Lightweight helpers to compose class names and inline styles using variants. Zero runtime deps, small bundle, and first-class TypeScript support.",
+  "homepage": "https://css-variants.vercel.app",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./cx": {
+      "types": "./dist/cx.d.ts",
+      "require": "./dist/cx.cjs",
+      "import": "./dist/cx.js"
+    },
+    "./cv": {
+      "types": "./dist/cv.d.ts",
+      "require": "./dist/cv.cjs",
+      "import": "./dist/cv.js"
+    },
+    "./scv": {
+      "types": "./dist/scv.d.ts",
+      "require": "./dist/scv.cjs",
+      "import": "./dist/scv.js"
+    },
+    "./sv": {
+      "types": "./dist/sv.d.ts",
+      "require": "./dist/sv.cjs",
+      "import": "./dist/sv.js"
+    },
+    "./ssv": {
+      "types": "./dist/ssv.d.ts",
+      "require": "./dist/ssv.cjs",
+      "import": "./dist/ssv.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run --coverage",
+    "bench": "vitest bench",
+    "build": "tsup",
+    "prepublishOnly": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timphandev/css-variants.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "javascript",
+    "typescript",
+    "js",
+    "ts",
+    "css variants",
+    "class variants",
+    "classname variants",
+    "style variants",
+    "cva",
+    "class variance authority",
+    "tw",
+    "tailwind variants",
+    "stitches"
+  ],
+  "authors": [
+    {
+      "name": "Tim Phan",
+      "email": "timphan.dev@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^20.12.12",
+    "@vitest/coverage-v8": "^4.0.15",
+    "csstype": "^3.1.3",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.7.4",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0",
+    "vitest": "^4.0.15"
+  }
+}

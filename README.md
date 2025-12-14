@@ -139,7 +139,7 @@ box({ size: 'lg' }) // => { display: 'flex', borderRadius: '8px', padding: '24px
 ```bash
 git clone https://github.com/timphandev/css-variants.git
 cd css-variants && yarn install
-yarn test && yarn build
+yarn css-variants test && yarn css-variants build
 ```
 
 ## License

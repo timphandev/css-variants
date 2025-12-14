@@ -9,7 +9,7 @@ export default defineConfig({
       exclude: ['**/*.bench.ts', '**/*.test.ts'],
     },
     benchmark: {
-      include: ['src/*.bench.ts', 'benchmark/*.bench.ts'],
+      include: ['src/*.bench.ts'],
     },
   },
 })

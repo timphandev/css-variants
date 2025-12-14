@@ -1,0 +1,32 @@
+{
+  "name": "benchmark",
+  "type": "module",
+  "private": true,
+  "version": "0.0.0",
+  "authors": [
+    {
+      "name": "Tim Phan",
+      "email": "timphan.dev@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "scripts": {
+    "prebench": "yarn workspace css-variants build",
+    "bench": "vitest bench --outputJson ./dist/benchmark.json --run"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0",
+    "vitest": "^4.0.15"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "css-variants": "*",
+    "tailwind-variants": "^3.2.2"
+  }
+}
