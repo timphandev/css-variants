@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ssv } from './ssv'
+import { ssv } from './ssv.js'
 
 describe('ssv - Comprehensive Test Suite', () => {
   describe('Base Functionality', () => {

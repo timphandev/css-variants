@@ -1,6 +1,6 @@
-import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord } from './utils/types'
-import { cx, ClassValue } from './cx'
-import { mergeProps } from './utils/merge-props'
+import { ObjectKeyPicker, ObjectKeyArrayPicker, PartialRecord } from './utils/types.js'
+import { cx, ClassValue } from './cx.js'
+import { mergeProps } from './utils/merge-props.js'
 
 export type SlotClassRecord<S extends string> = PartialRecord<S, ClassValue>
 

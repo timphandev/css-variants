@@ -1,5 +1,5 @@
 import { bench, describe } from 'vitest'
-import { sv } from './sv'
+import { sv } from './sv.js'
 
 describe('sv benchmarks', () => {
   // Simple base style only

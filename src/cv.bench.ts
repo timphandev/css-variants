@@ -1,5 +1,5 @@
 import { bench, describe } from 'vitest'
-import { cv } from './cv'
+import { cv } from './cv.js'
 
 describe('cv benchmarks', () => {
   // Simple base class only

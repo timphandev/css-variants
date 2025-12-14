@@ -1,5 +1,5 @@
-import { CssProperties, ObjectKeyArrayPicker, ObjectKeyPicker } from './utils/types'
-import { mergeProps } from './utils/merge-props'
+import { CssProperties, ObjectKeyArrayPicker, ObjectKeyPicker } from './utils/types.js'
+import { mergeProps } from './utils/merge-props.js'
 
 export type StyleVariantRecord = Record<string, Record<string, CssProperties>>
 
