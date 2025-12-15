@@ -1,32 +1,36 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
-const SITE = 'https://css-variants.vercel.app'
+const site = 'https://css-variants.vercel.app'
 
 /** @type {import('@astrojs/starlight/types').StarlightConfig['head']} */
 const head = [
   {
     tag: 'meta',
-    attrs: { property: 'og:image', content: SITE + '/og-image.svg' },
+    attrs: { property: 'og:image', content: site + '/og-image.svg' },
   },
   {
     tag: 'meta',
-    attrs: { name: 'twitter:image', content: SITE + '/og-image.svg' },
+    attrs: { name: 'twitter:image', content: site + '/og-image.svg' },
   },
 ]
 
-if (process.env.GOOGLE_SITE_VERIFICATION) {
-  head.push({
-    tag: 'meta',
-    attrs: {
-      name: 'google-site-verification',
-      content: process.env.GOOGLE_SITE_VERIFICATION,
-    },
-  })
+const siteVerifications = [
+  { name: 'google-site-verification', env: 'GOOGLE_SITE_VERIFICATION' },
+  { name: 'msvalidate.01', env: 'BING_SITE_VERIFICATION' },
+  { name: 'yandex-verification', env: 'YANDEX_SITE_VERIFICATION' },
+  { name: 'baidu-site-verification', env: 'BAIDU_SITE_VERIFICATION' },
+]
+for (const { name, env } of siteVerifications) {
+  const value = process.env[env]
+
+  if (value) {
+    head.push({ tag: 'meta', attrs: { name, content: value } })
+  }
 }
 
 export default defineConfig({
-  site: SITE,
+  site,
   integrations: [
     starlight({
       title: 'css-variants',
