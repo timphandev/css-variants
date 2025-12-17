@@ -57,7 +57,7 @@ export default defineConfig({
         {
           label: 'Getting Started',
           items: [
-            { label: 'Introduction', link: 'getting-started/introduction', slug: 'getting-started/introduction' },
+            { label: 'What is css-variants?', link: 'getting-started/introduction', slug: 'getting-started/introduction' },
             { label: 'Installation', slug: 'getting-started/installation' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
             { label: 'llms.txt', slug: 'resources/llms' },
@@ -66,7 +66,7 @@ export default defineConfig({
         {
           label: 'Core Concepts',
           items: [
-            { label: 'Variants', slug: 'core-concepts/variants' },
+            { label: 'Defining Variants', slug: 'core-concepts/variants' },
             { label: 'Base Styles', slug: 'core-concepts/base-styles' },
             { label: 'Default Variants', slug: 'core-concepts/default-variants' },
             { label: 'Compound Variants', slug: 'core-concepts/compound-variants' },
@@ -76,19 +76,19 @@ export default defineConfig({
         {
           label: 'API Reference',
           items: [
-            { label: 'cv - Class Variants', slug: 'api/cv' },
-            { label: 'scv - Slot Class Variants', slug: 'api/scv' },
-            { label: 'sv - Style Variants', slug: 'api/sv' },
-            { label: 'ssv - Slot Style Variants', slug: 'api/ssv' },
-            { label: 'cx - Class Name Merger', slug: 'api/cx' },
+            { label: 'cv() — Class Variants', slug: 'api/cv' },
+            { label: 'scv() — Slot Variants', slug: 'api/scv' },
+            { label: 'sv() — Style Variants', slug: 'api/sv' },
+            { label: 'ssv() — Slot Style Variants', slug: 'api/ssv' },
+            { label: 'cx() — Class Merger', slug: 'api/cx' },
           ],
         },
         {
           label: 'Guides',
           items: [
-            { label: 'Tailwind CSS Integration', slug: 'guides/tailwind' },
+            { label: 'Tailwind CSS', slug: 'guides/tailwind' },
             { label: 'CSS Modules', slug: 'guides/css-modules' },
-            { label: 'Framework Integration', slug: 'guides/frameworks' },
+            { label: 'React, Vue, Svelte', slug: 'guides/frameworks' },
             { label: 'TypeScript', slug: 'guides/typescript' },
           ],
         },
@@ -96,23 +96,23 @@ export default defineConfig({
           label: 'Resources',
           items: [
             {
-              label: 'When Should You Use css-variants?',
+              label: 'When to Use css-variants',
               slug: 'resources/when-to-use',
             },
             {
-              label: 'css-variants vs Other Libraries',
+              label: 'css-variants vs CVA vs tailwind-variants',
               slug: 'resources/comparison',
             },
             {
-              label: 'Migrating from Class Variance Authority (CVA)',
+              label: 'Migrate from CVA',
               slug: 'resources/migration-cva',
             },
             {
-              label: 'Migrating from tailwind-variants',
+              label: 'Migrate from tailwind-variants',
               slug: 'resources/migration-tailwind-variants',
             },
             {
-              label: 'Performance Characteristics',
+              label: 'Performance',
               slug: 'resources/performance',
             },
             {
@@ -120,7 +120,7 @@ export default defineConfig({
               slug: 'resources/benchmarks',
             },
             {
-              label: 'Frequently Asked Questions (FAQ)',
+              label: 'FAQ',
               slug: 'resources/faq',
             },
           ],

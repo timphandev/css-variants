@@ -1,9 +1,9 @@
 ---
-title: scv - Slot Class Variants
-description: API reference for the scv function
+title: scv() Function API Reference — Slot Class Variants
+description: Complete API reference for the scv() function. Create CSS variants for multi-element components like cards, modals, and dropdowns.
 ---
 
-Create variants for **multi-element components** using CSS class names. Perfect for complex UI components like cards, modals, or navigation menus.
+The `scv()` function creates variants for multi-element components using CSS class names. Use it for cards, modals, dropdowns, and other components with multiple styled parts.
 
 ## Import
 

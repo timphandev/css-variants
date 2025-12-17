@@ -1,13 +1,13 @@
 ---
-title: Installation
-description: How to install css-variants in your project
+title: How to Install css-variants
+description: Install css-variants with npm, pnpm, or yarn. Zero dependencies, ~1KB gzipped, works with ESM and CommonJS.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-## Package Managers
+## How to Install css-variants
 
-Install css-variants using your preferred package manager:
+Run one of the following commands to install css-variants:
 
 <Tabs syncKey="pkg">
 <TabItem label="npm" icon="npm">
@@ -35,11 +35,12 @@ yarn add css-variants
 
 ## Requirements
 
-Works with any modern JavaScript environment
+- Node.js 14+ or any modern JavaScript runtime
+- Zero dependencies required
 
-## Module Formats
+## ESM and CommonJS Support
 
-css-variants ships with dual CJS/ESM builds, so it works in any environment:
+css-variants ships with dual ESM and CommonJS builds:
 
 ```typescript
 // ESM
@@ -49,9 +50,9 @@ import { cv, scv, sv, ssv, cx } from 'css-variants'
 const { cv, scv, sv, ssv, cx } = require('css-variants')
 ```
 
-## What's included
+## What Functions Are Included?
 
-The package exports five main functions:
+The package exports five functions:
 
 | Export | Description |
 |--------|-------------|
@@ -59,8 +60,8 @@ The package exports five main functions:
 | `scv` | Slot class variants for multi-element components |
 | `sv` | Style variants for inline CSS styles |
 | `ssv` | Slot style variants for multi-element inline styles |
-| `cx` | Class name merger utility |
+| `cx` | Class name merger utility (like clsx) |
 
 ## Next Steps
 
-Now that you have `css-variants` installed, check out the [Quick Start](/getting-started/quick-start/) guide to create your first variant.
+Create your first variant with the [Quick Start](/getting-started/quick-start/) guide.

@@ -1,11 +1,11 @@
 ---
-title: css-variants — The Fastest CSS Variant Library
-description: Zero-dependency, type-safe CSS variant composition for JavaScript. A faster, smaller alternative to CVA and tailwind-variants.
+title: css-variants — Fastest CSS Variant Library for JavaScript
+description: Type-safe CSS variant composition in ~1KB. 3-11x faster than CVA and tailwind-variants. Zero dependencies. Works with React, Vue, Svelte, Tailwind CSS.
 template: splash
 hero:
-  tagline: The fastest, smallest CSS variant library for JavaScript. Zero dependencies, full TypeScript support, 3-11x faster than CVA and tailwind-variants.
+  tagline: Type-safe CSS variants in ~1KB. 3-11x faster than CVA and tailwind-variants. Zero dependencies.
   image:
-    alt: css-variants
+    alt: css-variants logo
     dark: ../../assets/banner-dark.svg
     light: ../../assets/banner-light.svg
   actions:
@@ -22,22 +22,25 @@ import { Card, CardGrid, LinkCard, Aside, Badge } from '@astrojs/starlight/compo
 
 ## What is css-variants?
 
-**css-variants** is a zero-dependency, type-safe library for managing CSS class variants in JavaScript and TypeScript. Define style variations (color, size, state) declaratively, and let the library generate the correct CSS classes at runtime.
+**css-variants** is a JavaScript library for managing CSS class variants with full TypeScript support. It generates CSS classes at runtime based on declarative variant definitions like color, size, and state.
 
-**Key facts:**
+**Why developers choose css-variants:**
+
 - **~1KB gzipped** — smallest variant library available
-- **3-11x faster** — outperforms CVA and tailwind-variants
-- **Zero dependencies** — no clsx, no tailwind-merge bundled
-- **Framework-agnostic** — works with React, Vue, Svelte, Solid, vanilla JS
-- **CSS-agnostic** — works with Tailwind, CSS Modules, vanilla CSS, CSS-in-JS
+- **3-11x faster** — outperforms CVA and tailwind-variants in benchmarks
+- **Zero dependencies** — no clsx or tailwind-merge bundled
+- **Framework-agnostic** — React, Vue, Svelte, Solid, vanilla JS
+- **CSS-agnostic** — Tailwind, CSS Modules, vanilla CSS, CSS-in-JS
 
-<Aside type="tip" title="Alternative to CVA and tailwind-variants">
-If you're using CVA (Class Variance Authority) or tailwind-variants, css-variants is a drop-in replacement with better performance and additional features like slot variants and style variants.
+<Aside type="tip" title="Drop-in CVA and tailwind-variants replacement">
+css-variants is a drop-in replacement for CVA (Class Variance Authority) and tailwind-variants with better performance plus additional features like slot variants and style variants.
 </Aside>
 
 ---
 
-## Quick Example
+## How to Define a CSS Variant
+
+Use the `cv()` function to define variants declaratively. The function returns a callable that generates CSS class strings.
 
 ```typescript
 import { cv } from 'css-variants'
@@ -60,77 +63,77 @@ const button = cv({
   },
 })
 
-button()                     // Primary + Small (defaults)
-button({ color: 'secondary', size: 'lg' }) // Secondary + Large
+button()                                   // Uses defaults: primary + sm
+button({ color: 'secondary', size: 'lg' }) // Overrides: secondary + lg
 ```
 
 ---
 
-## Why css-variants?
+## Why Use css-variants Over CVA or tailwind-variants?
 
 <CardGrid>
-  <Card title="~1KB Bundle" icon="rocket">
+  <Card title="~1KB Bundle Size" icon="rocket">
     Smallest variant library available. Zero dependencies means nothing else to download.
   </Card>
-  <Card title="3-11x Faster" icon="star">
+  <Card title="3-11x Faster Runtime" icon="star">
     Optimized algorithms outperform CVA and tailwind-variants in all benchmarks.
   </Card>
-  <Card title="Type-Safe" icon="approve-check-circle">
-    Full TypeScript inference. Get autocomplete for variant props without extra type definitions.
+  <Card title="Full TypeScript Support" icon="approve-check-circle">
+    Complete type inference. Get autocomplete for variant props without manual type definitions.
   </Card>
-  <Card title="Works Everywhere" icon="puzzle">
-    Framework-agnostic (React, Vue, Svelte) and CSS-agnostic (Tailwind, CSS Modules, vanilla).
+  <Card title="Framework and CSS Agnostic" icon="puzzle">
+    Works with React, Vue, Svelte, Solid and any CSS approach (Tailwind, CSS Modules, vanilla).
   </Card>
 </CardGrid>
 
 ---
 
-## Complete Toolkit
+## API Functions
 
 <CardGrid>
   <LinkCard
-    title="cv — Class Variants"
-    description="Single-element component styling with class names"
+    title="cv() — Class Variants"
+    description="Generate CSS class strings for single-element components"
     href="/api/cv/"
   />
   <LinkCard
-    title="scv — Slot Class Variants"
-    description="Multi-element components with named slots (cards, modals)"
+    title="scv() — Slot Class Variants"
+    description="Generate class strings for multi-element components (cards, modals)"
     href="/api/scv/"
   />
   <LinkCard
-    title="sv — Style Variants"
-    description="Inline CSS style objects with variants"
+    title="sv() — Style Variants"
+    description="Generate inline CSS style objects with variant support"
     href="/api/sv/"
   />
   <LinkCard
-    title="cx — Class Merger"
-    description="Lightweight conditional class name merging"
+    title="cx() — Class Merger"
+    description="Merge and conditionally apply CSS class names (like clsx)"
     href="/api/cx/"
   />
 </CardGrid>
 
 ---
 
-## Performance Comparison
+## css-variants vs CVA vs tailwind-variants
 
-| Library | Bundle Size | vs css-variants |
-|---------|:-----------:|:---------------:|
-| **css-variants** | ~1KB | — |
+| Library | Bundle Size | Performance |
+|---------|:-----------:|:-----------:|
+| **css-variants** | ~1KB | Baseline |
 | CVA | ~2KB | 3-7x slower |
 | tailwind-variants | ~5KB | 5-11x slower |
 
 <LinkCard
   title="View Detailed Benchmarks"
-  description="See comprehensive performance comparisons with methodology"
+  description="See benchmark methodology and complete performance comparison data"
   href="/resources/benchmarks/"
 />
 
 ---
 
-## Works Without Tailwind CSS
+## Does css-variants Work Without Tailwind CSS?
 
-css-variants is **not tied to Tailwind CSS**. Use it with any CSS approach:
+Yes. css-variants is **CSS-framework agnostic**. Use it with any CSS approach:
 
 ```typescript
 // Tailwind CSS
@@ -155,7 +158,7 @@ const button = cv({
 
 ---
 
-## Framework Support
+## How to Use css-variants with React, Vue, Svelte
 
 <CardGrid stagger>
   <Card title="React" icon="seti:react">
@@ -190,22 +193,22 @@ const button = cv({
 
 ---
 
-## Migrating from Other Libraries
+## How to Migrate from CVA or tailwind-variants
 
 <CardGrid>
   <LinkCard
     title="Migrate from CVA"
-    description="Coming from class-variance-authority? Migration is straightforward."
+    description="Step-by-step guide to migrate from class-variance-authority"
     href="/resources/migration-cva/"
   />
   <LinkCard
     title="Migrate from tailwind-variants"
-    description="Coming from tailwind-variants? See the key differences."
+    description="Step-by-step guide to migrate from tailwind-variants"
     href="/resources/migration-tailwind-variants/"
   />
   <LinkCard
-    title="Compare All Libraries"
-    description="Detailed comparison of css-variants vs CVA vs tailwind-variants"
+    title="Full Library Comparison"
+    description="Feature-by-feature comparison: css-variants vs CVA vs tailwind-variants"
     href="/resources/comparison/"
   />
 </CardGrid>

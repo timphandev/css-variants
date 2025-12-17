@@ -1,11 +1,11 @@
 ---
-title: Tailwind CSS Integration
-description: How to use css-variants with Tailwind CSS
+title: How to Use css-variants with Tailwind CSS
+description: Complete guide to using css-variants with Tailwind CSS. Learn how to handle class conflicts with tailwind-merge, set up VS Code IntelliSense, and implement dark mode.
 ---
 
-css-variants works seamlessly with Tailwind CSS. This guide covers best practices and how to handle class conflicts.
+css-variants works seamlessly with Tailwind CSS. Use Tailwind utility classes directly in your variant definitions.
 
-## Basic Usage
+## Basic Tailwind CSS Usage
 
 Use Tailwind classes directly in your variants:
 
@@ -33,9 +33,9 @@ const button = cv({
 })
 ```
 
-## Handling Class Conflicts
+## How to Handle Tailwind Class Conflicts
 
-By default, css-variants concatenates all classes. This can cause issues with Tailwind when classes conflict:
+By default, css-variants concatenates all classes. This can cause issues when Tailwind classes conflict:
 
 ```typescript
 const button = cv({
@@ -52,9 +52,9 @@ button({ size: 'lg' })
 // Both px-4 and px-6 are present - last one wins in CSS, but it's messy
 ```
 
-### Using tailwind-merge
+### How to Use tailwind-merge with css-variants
 
-Install `tailwind-merge` to properly resolve conflicts:
+Install `tailwind-merge` to resolve class conflicts:
 
 ```bash
 npm install tailwind-merge
@@ -121,7 +121,7 @@ const button = cv({
 })
 ```
 
-## Responsive Variants
+## How to Create Responsive Variants
 
 Use Tailwind's responsive prefixes in your variant classes:
 
@@ -155,9 +155,9 @@ import { cx } from '@/lib/variants'
 </div>
 ```
 
-## Dark Mode
+## How to Implement Dark Mode
 
-### Using Tailwind's dark: prefix
+### Using Tailwind's dark: Prefix
 
 ```typescript
 const card = cv({
@@ -171,9 +171,9 @@ const card = cv({
 })
 ```
 
-### Theme Variants
+### Creating Explicit Theme Variants
 
-Alternatively, create explicit theme variants:
+Alternatively, create explicit theme variants for more control:
 
 ```typescript
 const card = cv({
@@ -198,9 +198,9 @@ const card = cv({
 })
 ```
 
-## Arbitrary Values
+## Using Tailwind Arbitrary Values
 
-Use Tailwind's arbitrary value syntax:
+Use Tailwind's arbitrary value syntax `w-[42px]` in variants:
 
 ```typescript
 const avatar = cv({
@@ -217,7 +217,7 @@ const avatar = cv({
 })
 ```
 
-## Group and Peer Modifiers
+## Using Tailwind Group and Peer Modifiers
 
 ```typescript
 const card = cv({
@@ -241,7 +241,7 @@ const cardTitle = cv({
 })
 ```
 
-## Slot Variants with Tailwind
+## Using Slot Variants with Tailwind
 
 ```typescript
 import { scv } from '@/lib/variants'
@@ -269,7 +269,7 @@ const dropdown = scv({
 })
 ```
 
-## VS Code IntelliSense
+## How to Set Up VS Code IntelliSense for css-variants
 
 For Tailwind CSS autocomplete in VS Code, install the [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension.
 
@@ -284,9 +284,9 @@ Add to your `.vscode/settings.json`:
 
 This enables autocomplete for Tailwind classes inside `cv()`, `scv()`, and `cx()` function calls.
 
-## Prettier Plugin
+## How to Configure Prettier for css-variants
 
-If you use [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) to sort your Tailwind classes, add `cv`, `scv`, and `cx` to the list of functions:
+If you use [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) to sort Tailwind classes, add `cv`, `scv`, and `cx` to the plugin configuration:
 
 ```javascript
 // prettier.config.js

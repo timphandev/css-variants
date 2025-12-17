@@ -1,9 +1,9 @@
 ---
-title: cx - Class Name Merger
-description: API reference for the cx utility function
+title: cx() Function API Reference — clsx Alternative
+description: Complete API reference for the cx() function. A lightweight clsx alternative for conditional class name merging in JavaScript and TypeScript.
 ---
 
-A lightweight utility for merging class names. Supports strings, arrays, objects, and nested combinations.
+The `cx()` function is a lightweight utility for merging CSS class names. It's a clsx/classnames alternative that supports strings, arrays, objects, and nested combinations.
 
 ## Import
 
@@ -216,9 +216,9 @@ const inputClass = cx(
 )
 ```
 
-## Comparison with Other Libraries
+## cx() vs clsx vs classnames
 
-`cx` is similar to `clsx` and `classnames`, but optimized for css-variants:
+`cx` is similar to `clsx` and `classnames`, but bundled with css-variants so you don't need an extra dependency:
 
 ```typescript
 // css-variants cx
@@ -236,9 +236,9 @@ clsx('foo', 'bar')      // => 'foo bar'
 classNames('foo', 'bar') // => 'foo bar'
 ```
 
-## Integration with tailwind-merge
+## How to Use cx() with tailwind-merge
 
-For Tailwind CSS projects, combine `cx` with `tailwind-merge` to handle class conflicts:
+For Tailwind CSS projects, combine `cx` with `tailwind-merge` to resolve class conflicts:
 
 ```typescript
 import { cx } from 'css-variants'

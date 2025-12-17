@@ -1,17 +1,17 @@
 ---
-title: cv - Class Variants
-description: API reference for the cv function
+title: cv() Function API Reference
+description: Complete API reference for the cv() function. Create type-safe CSS class variants for single-element components in JavaScript and TypeScript.
 ---
 
-Create variants for **single-element components** using CSS class names.
+The `cv()` function creates variants for single-element components using CSS class names.
 
-## Import
+## How to Import cv()
 
 ```typescript
 import { cv } from 'css-variants'
 ```
 
-## Type Signature
+## cv() Type Signature
 
 ```typescript
 function cv<T extends ClassVariantRecord | undefined>(
@@ -27,7 +27,7 @@ interface ClassVariantDefinition<T> {
 }
 ```
 
-## Parameters
+## cv() Parameters
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
@@ -37,17 +37,17 @@ interface ClassVariantDefinition<T> {
 | `defaultVariants` | `Object` | Default variant selections |
 | `classNameResolver` | `Function` | Custom class merger (default: `cx`) |
 
-## Return Value
+## What Does cv() Return?
 
-Returns a function that accepts variant props and returns a class name string.
+Returns a function that accepts variant props and returns a CSS class name string.
 
 ```typescript
 type ClassVariantFn<T> = (props?: VariantProps<T> & { className?: ClassValue }) => string
 ```
 
-## Examples
+## cv() Examples
 
-### Basic Variant
+### Basic Variant Example
 
 ```typescript
 const badge = cv({
@@ -66,7 +66,7 @@ badge({ variant: 'success' })
 // => 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800'
 ```
 
-### Complex Variant with Compound Rules
+### Compound Variants Example
 
 ```typescript
 const toast = cv({
@@ -103,7 +103,7 @@ const toast = cv({
 })
 ```
 
-### Array and Object ClassValues
+### Using Arrays and Objects as ClassValues
 
 ```typescript
 const container = cv({
@@ -118,7 +118,7 @@ const container = cv({
 })
 ```
 
-### Runtime Class Overrides
+### Adding Classes at Runtime
 
 ```typescript
 const button = cv({
@@ -134,7 +134,7 @@ button({ color: 'primary', className: 'mt-4 w-full' })
 // => 'px-4 py-2 rounded bg-blue-600 text-white mt-4 w-full'
 ```
 
-### Custom Class Resolver
+### Using tailwind-merge with cv()
 
 ```typescript
 import { cv, cx } from 'css-variants'
@@ -156,9 +156,9 @@ button({ size: 'lg' })
 // With twMerge: 'px-6 py-3 text-lg' (conflicts resolved)
 ```
 
-## TypeScript
+## TypeScript Usage
 
-### Extract Variant Props
+### How to Extract Variant Props Types
 
 ```typescript
 const button = cv({
@@ -172,7 +172,7 @@ type ButtonVariants = Parameters<typeof button>[0]
 // => { color?: 'primary' | 'secondary', size?: 'sm' | 'md' | 'lg', className?: ClassValue }
 ```
 
-### Use in Components
+### How to Use cv() in React Components
 
 ```typescript
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &

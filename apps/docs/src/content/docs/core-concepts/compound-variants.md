@@ -1,11 +1,11 @@
 ---
-title: Compound Variants
-description: Apply styles when multiple variants match simultaneously
+title: How to Use Compound Variants
+description: Apply conditional styles when multiple CSS variants match simultaneously. Handle edge cases and variant interactions in css-variants.
 ---
 
-Compound variants let you apply additional styles when **multiple variants match simultaneously**. This is useful for handling edge cases and variant interactions.
+**Compound variants** apply additional styles when multiple variants match simultaneously. Use them for edge cases and variant interactions.
 
-## Basic Compound Variants
+## How to Define Compound Variants
 
 Use the `compoundVariants` array to define conditional styles:
 
@@ -47,9 +47,9 @@ button({ color: 'primary', size: 'lg' })
 // => 'rounded font-medium bg-blue-600 text-white px-6 py-3 text-lg font-bold shadow-lg'
 ```
 
-## Array Matching
+## How to Match Multiple Variant Values
 
-Match against multiple variant values using arrays:
+Use arrays to match multiple values in a single compound rule:
 
 ```typescript
 const text = cv({
@@ -85,7 +85,7 @@ text({ size: 'md', weight: 'bold' })
 // => 'text-base font-bold' (no tracking-tight)
 ```
 
-## Multiple Conditions
+## Matching Three or More Conditions
 
 Compound variants can match any number of variant conditions:
 
@@ -107,9 +107,9 @@ const button = cv({
 })
 ```
 
-## Order Matters
+## Does Order Matter for Compound Variants?
 
-Compound variants are applied in order, so later rules can override earlier ones:
+Yes. Compound variants apply in order, so later rules can override earlier ones:
 
 ```typescript
 const card = cv({
@@ -126,7 +126,7 @@ const card = cv({
 })
 ```
 
-## Compound Variants in Slot Variants
+## How to Use Compound Variants with Slots
 
 For slot variants (`scv`), use `classNames` instead of `className`:
 
@@ -169,7 +169,7 @@ const button = scv({
 })
 ```
 
-## Style Variants Compound
+## How to Use Compound Variants with Style Variants
 
 For style variants (`sv`), use `style` instead of `className`:
 

@@ -1,13 +1,13 @@
 ---
-title: Variants
-description: Understanding variants in css-variants
+title: How to Define CSS Variants
+description: Learn how to define CSS variants in css-variants. Create color, size, and state variations for your components with full TypeScript support.
 ---
 
-Variants are named groups of style options. Each variant has a set of possible values that map to different styles.
+**Variants** are named groups of style options. Each variant has a set of possible values that map to different CSS classes.
 
-## Basic Variants
+## How to Define a Basic Variant
 
-Define variants as an object where keys are variant names and values are objects mapping option names to styles:
+Define variants as an object where keys are variant names and values map option names to CSS classes:
 
 ```typescript
 import { cv } from 'css-variants'
@@ -25,7 +25,7 @@ const alert = cv({
 alert({ variant: 'error' }) // => 'bg-red-100 text-red-900'
 ```
 
-## Multiple Variants
+## How to Add Multiple Variants
 
 Components can have any number of variants:
 
@@ -53,9 +53,9 @@ button({ color: 'primary', size: 'lg', rounded: 'full' })
 // => 'bg-blue-600 text-white px-6 py-3 text-lg rounded-full'
 ```
 
-## Variant Values
+## What Types of Values Can Variants Have?
 
-Variant values can be:
+Variant values support multiple formats:
 
 ### Strings
 
@@ -111,9 +111,9 @@ const container = cv({
 })
 ```
 
-## Optional Variants
+## Are Variants Required or Optional?
 
-All variants are optional by default. If you don't pass a value, and there's no default, the variant simply won't contribute any classes:
+All variants are optional by default. If you don't pass a value and there's no default, the variant won't contribute any classes:
 
 ```typescript
 const text = cv({

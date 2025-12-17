@@ -1,17 +1,15 @@
 ---
-title: Introduction
-description: css-variants is a zero-dependency, type-safe CSS variant library for JavaScript — the fastest alternative to CVA and tailwind-variants
+title: What is css-variants? Introduction and Overview
+description: css-variants is a zero-dependency, type-safe CSS variant library for JavaScript. Learn what it does, why to use it, and how it compares to CVA and tailwind-variants.
 ---
 
 ## What is css-variants?
 
-**css-variants** is a zero-dependency, type-safe CSS variant composition library for modern JavaScript and TypeScript. It helps you build powerful, flexible component style systems using a declarative variant-based API.
+**css-variants** is a JavaScript library for managing CSS class variants with full TypeScript support. It provides a declarative API for defining style variations (color, size, state) and generates the correct CSS classes at runtime.
 
-### Definition
+**Definition:** A CSS variant library manages conditional styling in components. Instead of writing ternary expressions or switch statements, you define named variants and the library generates the correct classes.
 
-A **CSS variant library** provides a clean way to manage conditional styling in components. Instead of writing complex ternary expressions or switch statements to determine which CSS classes to apply, you define named variants (like `color`, `size`, `disabled`) and the library generates the correct classes at runtime.
-
-### Example
+### Basic Example
 
 ```typescript
 import { cv } from 'css-variants'
@@ -45,13 +43,13 @@ button({ size: 'lg' })          // => '... text-lg px-6 py-3'
 
 ---
 
-## Why css-variants?
+## Why Use css-variants?
 
 :::tip[Key Benefits]
 | Feature | Description |
 |---------|-------------|
-| **~1KB gzipped** | Smallest variant library — zero dependencies |
-| **Type-safe** | Full TypeScript inference for variants and props |
+| **~1KB gzipped** | Smallest variant library available — zero dependencies |
+| **Full TypeScript support** | Complete type inference for variants and props |
 | **3-11x faster** | Outperforms CVA and tailwind-variants in benchmarks |
 | **Framework-agnostic** | Works with React, Vue, Svelte, Solid, or vanilla JS |
 | **CSS-agnostic** | Works with Tailwind, CSS Modules, vanilla CSS, or any CSS solution |
@@ -59,27 +57,25 @@ button({ size: 'lg' })          // => '... text-lg px-6 py-3'
 
 ---
 
-## What problems does css-variants solve?
+## What Problems Does css-variants Solve?
 
-:::caution[Without a structured approach, styling components leads to...]
-- **Messy conditional class logic** scattered throughout components
-- **Inconsistent styling patterns** across your codebase
-- **Poor TypeScript support** for component variant props
-- **Difficult maintenance** as your component library grows
-- **Performance overhead** from complex class computation
-:::
+css-variants addresses common pain points in component styling:
 
-css-variants solves these problems by providing a clean, declarative API for defining component variants with full type safety.
+- **Messy conditional class logic** — Replaces scattered ternaries with a declarative API
+- **Inconsistent styling patterns** — Enforces consistent variant structure across components
+- **Poor TypeScript support** — Provides full type inference for variant props
+- **Difficult maintenance** — Centralizes style logic in one place
+- **Performance overhead** — Optimized algorithms minimize runtime cost
 
 ---
 
-## Core Functions
+## What Functions Does css-variants Provide?
 
-css-variants provides five functions to cover different styling needs:
+css-variants exports five functions for different use cases:
 
 ### `cv()` — Class Variants
 
-For single-element components. Returns a class name string.
+Use for single-element components. Returns a class name string.
 
 ```typescript
 import { cv } from 'css-variants'
@@ -100,7 +96,7 @@ badge({ color: 'blue' }) // => 'inline-flex items-center rounded-full px-2 py-1 
 
 ### `scv()` — Slot Class Variants
 
-For multi-element components (cards, modals, dropdowns). Returns an object with class strings for each slot.
+Use for multi-element components (cards, modals, dropdowns). Returns an object with class strings for each slot.
 
 ```typescript
 import { scv } from 'css-variants'
@@ -130,7 +126,7 @@ const classes = card({ variant: 'primary' })
 
 ### `sv()` — Style Variants
 
-For inline CSS styles (React's `style` prop). Returns a CSS style object.
+Use for inline CSS styles (React's `style` prop). Returns a CSS style object.
 
 ```typescript
 import { sv } from 'css-variants'
@@ -150,7 +146,7 @@ box({ size: 'lg' }) // => { display: 'flex', borderRadius: '8px', padding: '24px
 
 ### `ssv()` — Slot Style Variants
 
-For multi-element inline styles. Returns an object with style objects for each slot.
+Use for multi-element inline styles. Returns an object with style objects for each slot.
 
 ```typescript
 import { ssv } from 'css-variants'
@@ -172,7 +168,7 @@ const tooltip = ssv({
 
 ### `cx()` — Class Name Merger
 
-A lightweight utility for conditional class merging (like clsx):
+A lightweight alternative to clsx for conditional class merging:
 
 ```typescript
 import { cx } from 'css-variants'
@@ -185,11 +181,11 @@ cx(['btn', 'rounded'], 'shadow')            // => 'btn rounded shadow'
 
 ---
 
-## css-variants vs Other Libraries
+## css-variants vs CVA vs tailwind-variants
 
-### vs CVA (Class Variance Authority)
+### css-variants vs CVA (Class Variance Authority)
 
-css-variants is a **faster, smaller alternative to CVA** with additional features:
+css-variants is a faster, smaller alternative to CVA with additional features:
 
 | Feature | css-variants | CVA |
 |---------|:------------:|:---:|
@@ -199,9 +195,9 @@ css-variants is a **faster, smaller alternative to CVA** with additional feature
 | Style variants | Built-in (`sv`, `ssv`) | Not available |
 | API style | `base` property | First argument |
 
-### vs tailwind-variants
+### css-variants vs tailwind-variants
 
-css-variants is a **much faster, smaller alternative to tailwind-variants**:
+css-variants is a faster, smaller alternative to tailwind-variants:
 
 | Feature | css-variants | tailwind-variants |
 |---------|:------------:|:-----------------:|
@@ -213,9 +209,9 @@ css-variants is a **much faster, smaller alternative to tailwind-variants**:
 
 ---
 
-## Works Without Tailwind CSS
+## Can I Use css-variants Without Tailwind CSS?
 
-css-variants is **not tied to Tailwind CSS**. It works with any CSS approach:
+Yes. css-variants is CSS-framework agnostic and works with any CSS approach:
 
 - **Tailwind CSS** — The most common use case
 - **Vanilla CSS** — Regular class names like `.btn`, `.btn-primary`
@@ -251,9 +247,9 @@ const button = cv({
 
 ---
 
-## Framework Support
+## What Frameworks Does css-variants Support?
 
-css-variants works with any JavaScript framework:
+css-variants works with all JavaScript frameworks:
 
 | Framework | Support |
 |-----------|:-------:|
@@ -264,7 +260,7 @@ css-variants works with any JavaScript framework:
 | Preact | Full support |
 | Vanilla JS | Full support |
 
-See the [Framework Guide](/guides/frameworks/) for detailed examples.
+See the [Framework Guide](/guides/frameworks/) for implementation examples.
 
 ---
 
