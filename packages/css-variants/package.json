@@ -1,6 +1,6 @@
 {
   "name": "css-variants",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Lightweight helpers to compose class names and inline styles using variants. Zero runtime deps, small bundle, and first-class TypeScript support.",
   "homepage": "https://css-variants.vercel.app",
   "type": "module",

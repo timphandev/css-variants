@@ -1,6 +1,7 @@
 // credit: https://github.com/lukeed/clsx
 
-export type ClassDictionary = Record<string, unknown>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ClassDictionary = Record<string, any>
 export type ClassValue = ClassValue[] | string | number | bigint | ClassDictionary | null | boolean | undefined
 export type ClassArray = ClassValue[]
 
