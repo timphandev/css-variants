@@ -27,6 +27,10 @@ export type ClassVariantCreatorFn = <T extends ClassVariantRecord | undefined>(
 /**
  * Creates a class variant function that combines base classes, variants, compound variants, and default variants.
  *
+ * css-variants is no longer maintained: it keeps working, but receives no new features or fixes.
+ * Use `cva` from `@lynstack/class-recipe` instead.
+ * See https://css-variants.vercel.app/resources/migration-class-recipe/
+ *
  * @template T - Type of the variant record
  * @param config - Configuration object for creating class variants
  * @returns A function that accepts variant props and returns a combined class string

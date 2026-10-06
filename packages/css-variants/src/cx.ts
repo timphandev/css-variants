@@ -46,6 +46,21 @@ function toVal(input: ClassValue): string {
   return result
 }
 
+/**
+ * Joins class names, skipping falsy values, like clsx.
+ *
+ * css-variants is no longer maintained: it keeps working, but receives no new features or fixes.
+ * Use `cx` from `@lynstack/class-recipe` instead.
+ * See https://css-variants.vercel.app/resources/migration-class-recipe/
+ *
+ * @param args - Class values: strings, numbers, arrays, or objects whose truthy keys are added
+ * @returns The joined class string
+ *
+ * @example
+ * ```typescript
+ * cx('btn', { 'btn-active': true, 'btn-disabled': false }, ['px-4', null]) // => 'btn btn-active px-4'
+ * ```
+ */
 export function cx(...args: ClassValue[]): string {
   let result = ''
   let i = 0

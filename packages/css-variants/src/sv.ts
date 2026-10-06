@@ -25,6 +25,10 @@ export type StyleVariantCreatorFn = <T extends StyleVariantRecord | undefined>(
 /**
  * Creates a style variant function based on the provided configuration.
  *
+ * css-variants is no longer maintained: it keeps working, but receives no new features or fixes.
+ * Use `createStyleRecipe` from `@lynstack/native-recipe` for React Native, or a recipe kind of `@lynstack/recipe` on the web.
+ * See https://css-variants.vercel.app/resources/migration-class-recipe/
+ *
  * @template T - The type of the style variant record.
  * @param {StyleVariantDefinition<T>} config - The configuration object for style variants.
  * @returns {StyleVariantFn<T>} A function that takes props and returns the computed CSS properties.

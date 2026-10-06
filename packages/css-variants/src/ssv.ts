@@ -33,6 +33,10 @@ export type SlotStyleVariantCreatorFn = <S extends string, T extends SlotStyleVa
 /**
  * Creates a slot-based style variant function that composes CSS properties based on variants and compound variants.
  *
+ * css-variants is no longer maintained: it keeps working, but receives no new features or fixes.
+ * Use `createSlotStyleRecipe` from `@lynstack/native-recipe` for React Native, or a slot recipe kind of `@lynstack/recipe` on the web.
+ * See https://css-variants.vercel.app/resources/migration-class-recipe/
+ *
  * @param config - Configuration object for creating style variants
  * @returns A function that accepts variant props and returns composed styles for each slot
  *

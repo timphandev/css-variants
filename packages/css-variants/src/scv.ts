@@ -35,6 +35,10 @@ export type SlotClassVariantCreatorFn = <S extends string, T extends SlotClassVa
 /**
  * Creates a slot-based class variant function that manages class names for multiple slots with variants.
  *
+ * css-variants is no longer maintained: it keeps working, but receives no new features or fixes.
+ * Use `sva` from `@lynstack/class-recipe` instead.
+ * See https://css-variants.vercel.app/resources/migration-class-recipe/
+ *
  * @param config - Configuration object for creating the variant function
  * @returns A function that accepts variant props and returns class names for each slot
  *
