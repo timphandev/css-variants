@@ -1,0 +1,100 @@
+---
+title: Migrate to class-recipe
+description: css-variants is no longer maintained. How to move from css-variants to @lynstack/class-recipe and @lynstack/native-recipe.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+:::caution[css-variants is no longer maintained]
+css-variants keeps working, and existing versions stay on npm, but it will receive no new features or fixes. Its successor is [`@lynstack/class-recipe`](https://lynstack.github.io/recipe/class-recipe/), by the same author.
+:::
+
+## Why class-recipe?
+
+- **Faster.** A recipe compiles its config once and caches the result of each selection, so most calls are a lookup. See its [benchmarks](https://lynstack.github.io/recipe/class-recipe/performance/).
+- **Stricter types.** Variant names, options, and slots are inferred from the config. An unknown option or slot is a type error, and a variant without a default is required, so a component cannot forget to choose it.
+- **Better structure.** Class names, style objects, and React Native styles share one engine, [`@lynstack/recipe`](https://lynstack.github.io/recipe/recipe/), with the same config everywhere.
+- **React Native.** [`@lynstack/native-recipe`](https://lynstack.github.io/recipe/native-recipe/) builds React Native style objects, and returns the same frozen style for the same variants, so the `style` prop keeps its identity between renders.
+- **Maintained**, with docs, migration guides, and an agent skill for coding agents.
+
+## Install
+
+```bash
+npm uninstall css-variants
+npm install @lynstack/class-recipe
+```
+
+class-recipe ships as an ES module only and requires TypeScript 5.4 or newer for its types.
+
+## What replaces each function
+
+| css-variants | Replacement |
+|--------------|-------------|
+| `cx()` | [`cx`](https://lynstack.github.io/recipe/class-recipe/cx/) from `@lynstack/class-recipe` |
+| `cv()` | [`cva`](https://lynstack.github.io/recipe/class-recipe/cva/) from `@lynstack/class-recipe` |
+| `scv()` | [`sva`](https://lynstack.github.io/recipe/class-recipe/sva/) from `@lynstack/class-recipe` |
+| `classNameResolver` option | [`createRecipes({ join })`](https://lynstack.github.io/recipe/class-recipe/create-recipes/), such as `createRecipes({ join: twMerge })` |
+| `sv()`, `ssv()` in React Native | [`createStyleRecipe`](https://lynstack.github.io/recipe/native-recipe/create-style-recipe/) and [`createSlotStyleRecipe`](https://lynstack.github.io/recipe/native-recipe/create-slot-style-recipe/) from `@lynstack/native-recipe` |
+| `sv()`, `ssv()` on the web | A recipe kind of [`@lynstack/recipe`](https://lynstack.github.io/recipe/recipe/) that merges style objects |
+
+## Recipes
+
+The config keeps `base`, `variants`, `compoundVariants`, and `defaultVariants`. A compound variant moves its conditions under `variants`:
+
+<Tabs>
+<TabItem label="Before (css-variants)">
+
+```typescript
+import { cv } from 'css-variants'
+
+const button = cv({
+  base: 'rounded font-medium',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white',
+      secondary: 'bg-gray-200 text-gray-800',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  compoundVariants: [{ color: 'primary', size: 'lg', className: 'shadow-lg' }],
+  defaultVariants: { color: 'primary', size: 'sm' },
+})
+```
+
+</TabItem>
+<TabItem label="After (class-recipe)">
+
+```typescript
+import { cva } from '@lynstack/class-recipe'
+
+const button = cva({
+  base: 'rounded font-medium',
+  variants: {
+    color: {
+      primary: 'bg-blue-600 text-white',
+      secondary: 'bg-gray-200 text-gray-800',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      lg: 'px-6 py-3 text-lg',
+    },
+  },
+  compoundVariants: [{ variants: { color: 'primary', size: 'lg' }, className: 'shadow-lg' }],
+  defaultVariants: { color: 'primary', size: 'sm' },
+})
+```
+
+</TabItem>
+</Tabs>
+
+Slot recipes move the same way: `scv` becomes `sva`, with the same `slots`, and a compound variant keeps its `classNames` and moves its conditions under `variants`.
+
+## Behaviors to check
+
+- **A variant without a default is required.** Give it a default, or pass it on every call.
+- **Classes are strings.** Wherever the config takes classes, pass one string; `cx(...)` turns an array or an object into one.
+
+The [class-recipe docs](https://lynstack.github.io/recipe/class-recipe/quick-start/) describe every option, and its guides to migrating from [class-variance-authority](https://lynstack.github.io/recipe/class-recipe/migrating-from-cva/) and [tailwind-variants](https://lynstack.github.io/recipe/class-recipe/migrating-from-tailwind-variants/) cover the same concepts in more detail.

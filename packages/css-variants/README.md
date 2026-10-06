@@ -16,6 +16,11 @@ Type-safe alternative to CVA (Class Variance Authority) and tailwind-variants.
 
 </div>
 
+> [!WARNING]
+> **css-variants is no longer maintained.** It keeps working, and existing versions stay on npm, but it will receive no new features or fixes.
+> Use [`@lynstack/class-recipe`](https://lynstack.github.io/recipe/class-recipe/) instead: it is faster, has stricter types and slots, and its sibling [`@lynstack/native-recipe`](https://lynstack.github.io/recipe/native-recipe/) supports React Native.
+> See [Migrate to class-recipe](https://css-variants.vercel.app/resources/migration-class-recipe/).
+
 ---
 
 ## What is css-variants?

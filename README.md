@@ -1,5 +1,10 @@
 # css-variants
 
+> [!WARNING]
+> **css-variants is no longer maintained.** It keeps working, and existing versions stay on npm, but it will receive no new features or fixes.
+> Use [`@lynstack/class-recipe`](https://lynstack.github.io/recipe/class-recipe/) instead: it is faster, has stricter types and slots, and its sibling [`@lynstack/native-recipe`](https://lynstack.github.io/recipe/native-recipe/) supports React Native.
+> See [Migrate to class-recipe](https://css-variants.vercel.app/resources/migration-class-recipe/).
+
 **Fastest CSS variant library for JavaScript and TypeScript.**
 
 A zero-dependency, type-safe alternative to CVA (Class Variance Authority) and tailwind-variants. ~1KB gzipped. 3-11x faster. Works with Tailwind CSS, vanilla CSS, CSS Modules, or any styling solution.
@@ -65,6 +70,7 @@ button({ color: 'primary', size: 'lg' })
 - [API Reference](https://css-variants.vercel.app/api/cv/)
 - [Tailwind CSS Guide](https://css-variants.vercel.app/guides/tailwind/)
 - [css-variants vs CVA vs tailwind-variants](https://css-variants.vercel.app/resources/comparison/)
+- [Migrate to class-recipe](https://css-variants.vercel.app/resources/migration-class-recipe/)
 - [Migrate from CVA](https://css-variants.vercel.app/resources/migration-cva/)
 - [FAQ](https://css-variants.vercel.app/resources/faq/)
 

@@ -52,6 +52,9 @@ export default defineConfig({
         baseUrl: 'https://github.com/timphandev/css-variants/edit/main/apps/docs/',
       },
       customCss: ['./src/styles/custom.css'],
+      components: {
+        Header: './src/components/Header.astro',
+      },
       head,
       sidebar: [
         {
@@ -95,6 +98,10 @@ export default defineConfig({
         {
           label: 'Resources',
           items: [
+            {
+              label: 'Migrate to class-recipe',
+              slug: 'resources/migration-class-recipe',
+            },
             {
               label: 'When to Use css-variants',
               slug: 'resources/when-to-use',

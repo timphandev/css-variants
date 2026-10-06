@@ -1,0 +1,93 @@
+---
+import Default from '@astrojs/starlight/components/Header.astro'
+---
+
+<div class="maintenance-notice" role="note" data-pagefind-ignore>
+  <p class="notice-long">
+    <strong>css-variants is no longer maintained.</strong> Use
+    <a href="https://lynstack.github.io/recipe/class-recipe/">@lynstack/class-recipe</a>: faster, stricter types, and React
+    Native support. <a href="/resources/migration-class-recipe/">Migrate →</a>
+  </p>
+  <p class="notice-short">
+    <strong>No longer maintained.</strong> <a href="/resources/migration-class-recipe/">Migrate to class-recipe →</a>
+  </p>
+</div>
+<Default />
+
+<style is:global>
+  :root {
+    --notice-height: 2.25rem;
+    --notice-bg: #451a03;
+    --notice-text: #fde68a;
+    --notice-border: #92400e;
+    --sl-nav-height: calc(3.5rem + var(--notice-height));
+  }
+
+  :root[data-theme='light'] {
+    --notice-bg: #fef3c7;
+    --notice-text: #78350f;
+    --notice-border: #fcd34d;
+  }
+
+  @media (min-width: 50em) {
+    :root {
+      --sl-nav-height: calc(4rem + var(--notice-height));
+    }
+  }
+
+  header.header {
+    padding-top: calc(var(--notice-height) + var(--sl-nav-pad-y));
+  }
+
+  .site-title img {
+    height: calc(var(--sl-nav-height) - var(--notice-height) - 2 * var(--sl-nav-pad-y));
+  }
+
+  starlight-menu-button button {
+    top: calc(var(--notice-height) + (var(--sl-nav-height) - var(--notice-height) - var(--sl-menu-button-size)) / 2);
+  }
+</style>
+
+<style>
+  .maintenance-notice {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--notice-height);
+    padding-inline: var(--sl-nav-pad-x);
+    border-bottom: 1px solid var(--notice-border);
+    background-color: var(--notice-bg);
+    color: var(--notice-text);
+    font-size: var(--sl-text-sm);
+  }
+
+  .maintenance-notice p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .maintenance-notice a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .notice-long {
+    display: none;
+  }
+
+  @media (min-width: 72rem) {
+    .notice-long {
+      display: block;
+    }
+
+    .notice-short {
+      display: none;
+    }
+  }
+</style>
